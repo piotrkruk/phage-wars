@@ -7,6 +7,18 @@ package model;
  */
 
 public class Cell {
-	public double posX, posY, rad;
-
+	public int posX, posY, size;
+	public int units;
+	
+	public final Race race;
+	
+	
+	public Cell(Race race) {
+		this.race = race;
+		units = race.initUnits(size);
+	}
+	
+	public void grow() {
+		units += race.growthRate();
+	}
 }

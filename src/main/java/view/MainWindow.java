@@ -3,7 +3,8 @@ package view;
 
 import controller.PhageWars;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+
 
 /**
  * Class representing the main window
@@ -11,11 +12,11 @@ import javax.swing.JFrame;
  * 
  */
 
-public class MainWindow {
+public class MainWindow implements Runnable {
 
-	private JFrame frame;
+	private volatile boolean running;
 	
-	@SuppressWarnings("unused")
+	private JFrame frmPhageWars;
 	private PhageWars wars;
 	
 	public MainWindow(PhageWars wars) {
@@ -23,17 +24,37 @@ public class MainWindow {
 	}
 	
 	public void start() {
-		frame = new JFrame();
+		running = true;
+		new Thread(this).start();
+	}
+	
+	public void stop() {
+		running = false;
+	}
+	
+
+	public void run() {
+		frmPhageWars = new JFrame();
+		frmPhageWars.setResizable(false);
 		
-		frame.setTitle("Baczus");
-		frame.setSize(1000, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		frmPhageWars.setTitle("Phage Wars");
+		frmPhageWars.setSize(1200, 800);
+		frmPhageWars.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {}
+		JLabel lblBackground = new JLabel();
+		lblBackground.setIcon(new ImageIcon(MainWindow.class.getResource("/background.jpg")));
+		frmPhageWars.getContentPane().add(lblBackground);
+
+		frmPhageWars.setVisible(true);
+				
+		int time = 0;
+		while (running) {
+			frmPhageWars.setTitle("Phage Wars " + " time: " + time++);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {}
+		}
 		
-		frame.dispose();
+		frmPhageWars.dispose();
 	}
 }
