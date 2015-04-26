@@ -10,15 +10,8 @@ import view.MainWindow;
  */
 
 public class PhageWars {
-	
-	private MainWindow mainWindow;
-	
-	public void start() {
-		mainWindow = new MainWindow(this);
-		mainWindow.start();
-	}
 
 	public static void main(String[] args) {
-		new PhageWars().start();
+		new MainWindow().start();
 	}
 }
