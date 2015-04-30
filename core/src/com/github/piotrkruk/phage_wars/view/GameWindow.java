@@ -7,11 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /**
- * Main menu of the game
+ * Main window of the game
  *
  */
 
-public class MainMenu implements Screen {
+public class GameWindow implements Screen {
     private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
     private Image background = new Image(texture);
     
