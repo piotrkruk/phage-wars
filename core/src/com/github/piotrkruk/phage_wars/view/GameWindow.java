@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.github.piotrkruk.phage_wars.model.GameStage;
 
 /**
  * Main window of the game
@@ -16,6 +17,12 @@ public class GameWindow implements Screen {
     private Image background = new Image(texture);
     
     private Stage stage = new Stage();
+    
+    private GameStage game = new GameStage();
+    
+    public GameWindow() {
+    	game.genRandom();
+    }
 
     @Override
     public void render(float delta) {        

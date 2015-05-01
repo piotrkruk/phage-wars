@@ -1,6 +1,7 @@
 package com.github.piotrkruk.phage_wars.model;
 
 import java.util.*;
+import com.github.piotrkruk.phage_wars.PhageWars;
 
 /**
  * Models the game,
@@ -9,20 +10,21 @@ import java.util.*;
  *
  */
 
-public class Game {
+public class GameStage {
 	
 	final private Random rand = new Random();
 	
 	// for positioning of the cells:
-	final int HEIGHT = 800;
-	final int WIDTH = 1200;
+	final int HEIGHT = PhageWars.HEIGHT;
+	final int WIDTH = PhageWars.WIDTH;
 	
 	// for cell's generating:
-	final int MIN_RADIUS = 10;
-	final int MAX_RADIUS = 50;
-	final int MAX_INIT_UNITS = 100;
+	private final int MIN_RADIUS = 10;
+	private final int MAX_RADIUS = 50;
+	private final int MAX_INIT_UNITS = 100;
+	private final int CELLS_PER_PLAYER = 3;
 	
-	final int NO_OF_AI = 1;
+	final int NO_OF_PLAYERS = 2;
 	
 	
 	List <Player> players = new ArrayList <Player> ();
@@ -35,27 +37,41 @@ public class Game {
 	Race race;
 	
 	
-	public Game() {
-		player = new Player();
-		race = new Race(player);
-
-		players.add(player);
-		races.add(race);
+	public GameStage() {
 		
-		for (int i = 1; i <= NO_OF_AI; i++) {
+		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();
 			
 			players.add(p);
 			races.add( new Race(p) );
 		}
 		
-		/**
-		 * TODO: create random cells
-		 * all over the board
-		 * using randCell()
-		 * and checking if the generated cell
-		 * doesn't collide with others
-		 */
+		player = players.get(0);
+		race = races.get(0);
+	}
+	
+	/**
+	 * Generates a random stage filled with cells
+	 */
+	public void genRandom() {
+		
+		for (int i = 0; i < NO_OF_PLAYERS; i++) {
+			for (int j = 0; j < CELLS_PER_PLAYER;) {
+				Cell c = randCell(races.get(i), players.get(i));
+				
+				boolean collision = false;
+				
+				for (Cell cl : cells)
+					if (c.doesCollide(cl))
+						collision = true;
+				
+				if (!collision) {
+					cells.add(c);
+					j++;
+				}
+			}
+		}
+		
 	}
 	
 	
