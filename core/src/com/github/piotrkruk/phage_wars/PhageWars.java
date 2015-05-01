@@ -2,7 +2,7 @@ package com.github.piotrkruk.phage_wars;
 
 
 import com.badlogic.gdx.Game;
-import com.github.piotrkruk.phage_wars.view.MainMenu;
+import com.github.piotrkruk.phage_wars.view.*;
 
 
 public class PhageWars extends Game {
@@ -12,6 +12,6 @@ public class PhageWars extends Game {
 	
 	@Override
 	public void create () {
-		setScreen(new MainMenu());
+		setScreen(new GameWindow());
 	}
 }

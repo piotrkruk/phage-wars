@@ -33,8 +33,8 @@ public class GameStage {
 	public List <Cell> cells = new ArrayList <Cell> ();
 	
 	// player playing the game and his race:
-	Player player;
-	Race race;
+	public Player player;
+	public Race race;
 	
 	
 	public GameStage() {
@@ -81,10 +81,11 @@ public class GameStage {
 	
 	/**
 	 * Grows all the cells on the board
+	 * after delta second have passed
 	 */
-	public void update() {
+	public void update(float delta) {
 		for (Cell c : cells)
-			c.grow();
+			c.grow(delta);
 	}
 	
 	public Cell randCell(Race race, Player owner) {

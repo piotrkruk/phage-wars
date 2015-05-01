@@ -12,7 +12,7 @@ public class Cell {
 	public final int id;
 	
 	public int posX, posY, radius;
-	public int units;
+	public double units;
 	
 	public final Race race;
 	public Player owner;
@@ -20,7 +20,7 @@ public class Cell {
 	public boolean selected = false;
 	
 	
-	public Cell(int x, int y, int radius, int initUnits, Race race, Player owner) {
+	public Cell(int x, int y, int radius, double initUnits, Race race, Player owner) {
 		this.id = idCnt++;
 		
 		this.posX = x;
@@ -32,11 +32,15 @@ public class Cell {
 		this.units = initUnits;
 	}
 	
-	public void grow() {
-		units += race.growthRate;
+	public int getUnits() {
+		return (int) units;
 	}
 	
-	public void addUnits(int units, Player from) {
+	public void grow(float delta) {
+		units += delta * race.growthRate;
+	}
+	
+	public void addUnits(double units, Player from) {
 		if (from.id == owner.id)
 			this.units += units;
 		else {
@@ -49,8 +53,8 @@ public class Cell {
 		}
 	}
 	
-	public int sendUnits() {
-		int toGive = race.givesAway(units);
+	public double sendUnits() {
+		double toGive = race.givesAway(units);
 		
 		units -= toGive;
 		deselect();
