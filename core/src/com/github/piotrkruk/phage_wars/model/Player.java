@@ -10,7 +10,7 @@ package com.github.piotrkruk.phage_wars.model;
 public class Player {
 	private static int idCnt = 0;
 	
-	final int id;
+	public final int id;
 	
 	public Player() {
 		id = idCnt++;

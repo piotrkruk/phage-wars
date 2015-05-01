@@ -19,18 +19,18 @@ public class GameStage {
 	final int WIDTH = PhageWars.WIDTH;
 	
 	// for cell's generating:
-	private final int MIN_RADIUS = 10;
-	private final int MAX_RADIUS = 50;
+	private final int MIN_RADIUS = 40;
+	private final int MAX_RADIUS = 120;
 	private final int MAX_INIT_UNITS = 100;
 	private final int CELLS_PER_PLAYER = 3;
 	
 	final int NO_OF_PLAYERS = 2;
 	
 	
-	List <Player> players = new ArrayList <Player> ();
-	List <Race> races = new ArrayList <Race> ();
+	public List <Player> players = new ArrayList <Player> ();
+	public List <Race> races = new ArrayList <Race> ();
 	
-	List <Cell> cells = new ArrayList <Cell> ();
+	public List <Cell> cells = new ArrayList <Cell> ();
 	
 	// player playing the game and his race:
 	Player player;
@@ -60,6 +60,10 @@ public class GameStage {
 				Cell c = randCell(races.get(i), players.get(i));
 				
 				boolean collision = false;
+				
+				if (c.posX < c.radius || c.posX + c.radius > WIDTH ||
+					c.posY < c.radius || c.posY + c.radius > HEIGHT)
+					collision = true;
 				
 				for (Cell cl : cells)
 					if (c.doesCollide(cl))

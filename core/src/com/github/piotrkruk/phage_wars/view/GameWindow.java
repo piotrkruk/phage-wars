@@ -2,10 +2,13 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.github.piotrkruk.phage_wars.model.GameStage;
+import com.github.piotrkruk.phage_wars.model.*;
 
 /**
  * Main window of the game
@@ -17,6 +20,7 @@ public class GameWindow implements Screen {
     private Image background = new Image(texture);
     
     private Stage stage = new Stage();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
     private GameStage game = new GameStage();
     
@@ -28,6 +32,19 @@ public class GameWindow implements Screen {
     public void render(float delta) {        
         stage.act();
         stage.draw();
+        
+        shapeRenderer.begin(ShapeType.Filled);
+        
+        for (Cell c : game.cells) {
+        	if (c.owner.id == 0)
+        		shapeRenderer.setColor(Color.BLUE);
+        	else
+        		shapeRenderer.setColor(Color.RED);
+        	
+        	shapeRenderer.circle(c.posX, c.posY, c.radius);
+        }
+        	
+        shapeRenderer.end();
     }
 
     @Override

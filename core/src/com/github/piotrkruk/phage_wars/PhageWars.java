@@ -2,7 +2,6 @@ package com.github.piotrkruk.phage_wars;
 
 
 import com.badlogic.gdx.Game;
-
 import com.github.piotrkruk.phage_wars.view.MainMenu;
 
 
