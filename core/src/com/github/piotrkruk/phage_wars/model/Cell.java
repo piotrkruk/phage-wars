@@ -41,7 +41,7 @@ public class Cell {
 	}
 	
 	public void addUnits(double units, Player from) {
-		if (from.id == owner.id)
+		if (from == owner)
 			this.units += units;
 		else {
 			this.units -= units;

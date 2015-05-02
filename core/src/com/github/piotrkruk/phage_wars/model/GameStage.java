@@ -12,21 +12,19 @@ import com.github.piotrkruk.phage_wars.PhageWars;
 
 public class GameStage {
 	
-	final private Random rand = new Random();
+	private final static Random rand = new Random();
 	
 	// for positioning of the cells:
 	final int HEIGHT = PhageWars.HEIGHT;
 	final int WIDTH = PhageWars.WIDTH;
 	
-	// for cell's generating:
-	private final int MIN_RADIUS = 40;
-	private final int MAX_RADIUS = 120;
-	private final int MAX_INIT_UNITS = 100;
+	// for generating the stage:
 	private final int CELLS_PER_PLAYER = 3;
+	private final int EMPTY_CELLS = 4;
 	
 	final int NO_OF_PLAYERS = 2;
 	
-	
+	// objects present on the stage:
 	public List <Player> players = new ArrayList <Player> ();
 	public List <Race> races = new ArrayList <Race> ();
 	
@@ -76,21 +74,41 @@ public class GameStage {
 			}
 		}
 		
+		for (int j = 0; j < EMPTY_CELLS;) {
+			Cell c = randCell(new Race(), null);
+			
+			boolean collision = false;
+			
+			if (c.posX < c.radius || c.posX + c.radius > WIDTH ||
+				c.posY < c.radius || c.posY + c.radius > HEIGHT)
+				collision = true;
+			
+			for (Cell cl : cells)
+				if (c.doesCollide(cl))
+					collision = true;
+			
+			if (!collision) {
+				cells.add(c);
+				j++;
+			}
+		}
+		
 	}
 	
 	
 	/**
 	 * Grows all the cells on the board
 	 * after delta second have passed
+	 * but omits empty ones (with no owner)
 	 */
 	public void update(float delta) {
 		for (Cell c : cells)
-			c.grow(delta);
+			if (c.owner != null)
+				c.grow(delta);
 	}
 	
 	public Cell randCell(Race race, Player owner) {
-		return
-			new Cell(randX(), randY(), randRad(), randUnits(), race, owner);
+		return new Cell(randX(), randY(), randRad(race), randUnits(race), race, owner);
 	}
 	
 	private int randX() {
@@ -101,12 +119,12 @@ public class GameStage {
 		return rand.nextInt(HEIGHT);
 	}
 	
-	private int randRad() {
-		return MIN_RADIUS + rand.nextInt(MAX_RADIUS - MIN_RADIUS);
+	private int randRad(Race race) {
+		return race.minRadius + rand.nextInt(race.maxRadius - race.minRadius + 1);
 	}
 	
-	private int randUnits() {
-		return rand.nextInt(MAX_INIT_UNITS);
+	private int randUnits(Race race) {
+		return rand.nextInt(race.maxInitUnits + 1);
 	}
 	
 	
