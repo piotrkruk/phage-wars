@@ -116,11 +116,11 @@ public class GameWindow implements Screen, InputProcessor {
     		}
     			
     		if (clicked == null)
-    			game.deselectAll();
+    			game.deselectAll(game.player);
     		else if (clicked.owner == game.player)
     			clicked.select();
     		else
-    			game.send(clicked);
+    			game.send(clicked, game.player);
     	}
     	
     	return false;

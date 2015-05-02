@@ -114,21 +114,21 @@ public class GameStage {
 	 * Sends units from all selected cells
 	 * to destination cell
 	 */
-	public void send(Cell destination) {
+	public void send(Cell destination, Player p) {
 		int sum = 0;
 		
 		for (Cell c : cells)
-			if (c.selected)
+			if (c.owner == p && c.selected)
 				sum += c.sendUnits();
 		
-		if (sum > 0)
-			destination.addUnits(sum, player);
+		destination.addUnits(sum, p);
 	}
 	
 
-	public void deselectAll() {
+	public void deselectAll(Player p) {
 		for (Cell c : cells)
-			c.deselect();
+			if (c.owner == p)
+				c.deselect();
 	}
 
 }
