@@ -12,6 +12,10 @@ public class PhageWars extends Game {
 	
 	@Override
 	public void create () {
+		setScreen(new MainMenu(this));
+	}
+	
+	public void startGame() {
 		setScreen(new GameWindow());
 	}
 }
