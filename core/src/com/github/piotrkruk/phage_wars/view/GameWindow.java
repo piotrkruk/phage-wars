@@ -30,7 +30,7 @@ public class GameWindow implements Screen, InputProcessor {
     private Image background = new Image(texture);
     
     private Stage stage = new Stage();
-    private BitmapFont font = new BitmapFont();
+    private BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
     private SpriteBatch batch = new SpriteBatch();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
