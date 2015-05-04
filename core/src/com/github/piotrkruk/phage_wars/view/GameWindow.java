@@ -90,8 +90,15 @@ public class GameWindow implements Screen, InputProcessor {
         
         batch.begin();
         
-        for (Cell c : game.cells)
-        	font.draw(batch, String.valueOf(c.getUnits()), c.posX, c.posY + font.getCapHeight() / 2);
+        for (Cell c : game.cells) {
+        	String temp = String.valueOf(c.getUnits());
+        	
+        	float approxHeight = font.getCapHeight(),
+        		  approxWidth = 2.4f * font.getSpaceWidth() * temp.length();
+        	
+        	font.draw(batch, temp,
+        			c.posX - approxWidth / 2, c.posY + approxHeight / 2);
+        }
         	
         batch.end();    	
     }
@@ -128,6 +135,9 @@ public class GameWindow implements Screen, InputProcessor {
     	
         int posX = screenX,
             posY = Gdx.graphics.getHeight() - screenY;
+        		/* screenY is reversed in respect to the coordinates
+        		 * of drawing
+        		 */
     	
 		Cell clicked = null;
 		
