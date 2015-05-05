@@ -19,7 +19,7 @@ public class GameStage {
 	final int WIDTH = PhageWars.WIDTH;
 	
 	// for generating the stage:
-	private final int CELLS_PER_PLAYER = 3;
+	private final int CELLS_PER_PLAYER = 1;
 	private final int EMPTY_CELLS = 4;
 	
 	final int NO_OF_PLAYERS = 2;
@@ -34,6 +34,28 @@ public class GameStage {
 	public Player player;
 	public Race race;
 	
+	public boolean isRunning() {
+		/*
+		 * The game is still running
+		 * if there is at least active player still alive
+		 * and at least one other player
+		 */
+		
+		int playingCount = 0;
+		
+		for (Player p : players)
+			if (p.isPlaying())
+				playingCount++;
+		
+		if (playingCount <= 1)
+			return false;
+		
+		for (Player p : players)
+			if (p.isActive && p.isPlaying())
+				return true;
+		
+		return false;
+	}
 	
 	public GameStage() {
 		
@@ -46,6 +68,8 @@ public class GameStage {
 		
 		player = players.get(0);
 		race = races.get(0);
+		
+		player.setActive();
 	}
 	
 	/**
@@ -72,6 +96,8 @@ public class GameStage {
 					j++;
 				}
 			}
+			
+			players.get(i).ownCount = CELLS_PER_PLAYER;
 		}
 		
 		for (int j = 0; j < EMPTY_CELLS;) {

@@ -11,7 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.*;
 
 /**
@@ -26,6 +29,9 @@ import com.github.piotrkruk.phage_wars.model.*;
  */
 
 public class GameWindow implements Screen, InputProcessor {
+	private final PhageWars phageWars;
+	private boolean paused = false;
+	
     private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
     private Image background = new Image(texture);
     
@@ -33,22 +39,50 @@ public class GameWindow implements Screen, InputProcessor {
     private BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
     private SpriteBatch batch = new SpriteBatch();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
     
     private GameStage game = new GameStage();
     
-    public GameWindow() {
+    public GameWindow(PhageWars phageWars) {
+    	this.phageWars = phageWars;
+    	
     	game.genRandom();
     	Gdx.input.setInputProcessor(this);
     }
 
     @Override
-    public void render(float delta) {        
-        stage.act();
-        stage.draw();
-        
-        drawCells(delta);
+    public void render(float delta) {    	
+	    stage.act();
+	    stage.draw();
+	        
+	    if (!paused) {
+	        checkGameStatus();
+	        drawCells(delta);
+	    }
     }
     
+    private void checkGameStatus() {
+    	if (!game.isRunning()) {
+    		paused = true;
+    		System.out.println("The game has finished.");
+    		
+    		boolean hasPlayerWon = game.player.isPlaying();
+    		    		
+    		Dialog msgGameFinished = new Dialog("Infection complete.", defaultSkin);
+    		
+    		if (hasPlayerWon) {
+    			System.out.println("The player has won.");
+    			msgGameFinished.text("You have won!\nClick anywhere to continue.");    		
+    		}
+    		else {
+    			System.out.println("The player has lost.");
+    			msgGameFinished.text("You have lost!\nClick anywhere to continue.");   
+    		}
+    		
+    		stage.addActor(msgGameFinished);
+    		msgGameFinished.show(stage);
+    	}
+    }
 
     private void drawCells(float delta) {
         game.update(delta);
@@ -119,10 +153,12 @@ public class GameWindow implements Screen, InputProcessor {
 
     @Override
     public void pause() {
+    	paused = true;
     }
 
     @Override
     public void resume() {
+    	paused = false;
     }
 
     @Override
@@ -132,6 +168,10 @@ public class GameWindow implements Screen, InputProcessor {
    
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    	if (paused) {
+    		phageWars.backToMenu();
+    		return false;
+    	}
     	
         int posX = screenX,
             posY = Gdx.graphics.getHeight() - screenY;

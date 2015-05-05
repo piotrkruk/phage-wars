@@ -16,6 +16,10 @@ public class PhageWars extends Game {
 	}
 	
 	public void startGame() {
-		setScreen(new GameWindow());
+		setScreen(new GameWindow(this));
+	}
+	
+	public void backToMenu() {
+		setScreen(new MainMenu(this));
 	}
 }

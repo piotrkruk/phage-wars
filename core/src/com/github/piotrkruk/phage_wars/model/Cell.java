@@ -47,8 +47,15 @@ public class Cell {
 			this.units -= units;
 			
 			if (this.units <= 0) {
+				Player previousOwner = this.owner;
+				
 				this.units *= -1;
 				this.owner = from;
+				
+				if (previousOwner != null)
+					previousOwner.ownCount--;
+				
+				this.owner.ownCount++;
 			}
 		}
 	}

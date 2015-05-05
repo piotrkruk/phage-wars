@@ -25,10 +25,10 @@ public class MainMenu implements Screen {
     
     private Stage stage = new Stage();
     
-    private Skin btnSkin = new Skin(Gdx.files.internal("uiskin.json"));
-    private TextButton btnNewGame = new TextButton(String.valueOf("New Game"), btnSkin);
-    private TextButton btnSettings = new TextButton(String.valueOf("Settings"), btnSkin);
-    private TextButton btnExit = new TextButton(String.valueOf("Exit"), btnSkin);
+    private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
+    private TextButton btnNewGame = new TextButton(String.valueOf("New Game"), defaultSkin);
+    private TextButton btnSettings = new TextButton(String.valueOf("Settings"), defaultSkin);
+    private TextButton btnExit = new TextButton(String.valueOf("Exit"), defaultSkin);
     
     public MainMenu(PhageWars phageWars) {
     	this.phageWars = phageWars;
