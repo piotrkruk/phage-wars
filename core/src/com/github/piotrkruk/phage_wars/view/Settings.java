@@ -13,55 +13,35 @@ import com.github.piotrkruk.phage_wars.PhageWars;
 
 
 /**
- * Main menu of the game
+ * Settings window
  *
  */
 
-public class MainMenu implements Screen {
+public class Settings implements Screen {
 	private final PhageWars phageWars;
 	
     private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
     private Image background = new Image(texture);
     
     private Stage stage = new Stage();
-    
     private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
-    private TextButton btnNewGame = new TextButton(String.valueOf("New Game"), defaultSkin);
-    private TextButton btnSettings = new TextButton(String.valueOf("Settings"), defaultSkin);
-    private TextButton btnExit = new TextButton(String.valueOf("Exit"), defaultSkin);
     
-    public MainMenu(PhageWars phageWars) {
+    private TextButton btnBack = new TextButton(String.valueOf("Back to menu"), defaultSkin);
+    
+    public Settings(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
-    	btnNewGame.setBounds(800, 360, 300, 100);
-    	btnSettings.setBounds(800, 230, 300, 100);
-    	btnExit.setBounds(800, 100, 300, 100);
+    	btnBack.setBounds(800, 100, 300, 100);
     	
-        btnNewGame.addListener( new ClickListener() {
+        btnBack.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                MainMenu.this.phageWars.setToGame();
+                Settings.this.phageWars.setToMenu();
             }
         } );
         
-        btnSettings.addListener( new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                MainMenu.this.phageWars.setToSettings();
-            }
-        } );
-        
-        btnExit.addListener( new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                Gdx.app.exit();
-            }
-        } );
-    	
-    	Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
     }
     
     @Override
@@ -78,9 +58,7 @@ public class MainMenu implements Screen {
     public void show() {
     	stage.addActor(background);
     	
-    	stage.addActor(btnNewGame);
-    	stage.addActor(btnSettings);
-    	stage.addActor(btnExit);
+    	stage.addActor(btnBack);
     }
 
     @Override
