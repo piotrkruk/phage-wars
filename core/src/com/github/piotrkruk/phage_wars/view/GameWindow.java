@@ -87,6 +87,19 @@ public class GameWindow implements Screen, InputProcessor {
     private void drawCells(float delta) {
         game.update(delta);
         
+        shapeRenderer.begin(ShapeType.Filled);
+        
+        for (Bacteria b : game.bacterias) {
+        	if (b.from == game.player)
+        		shapeRenderer.setColor(Color.BLUE);
+        	else
+        		shapeRenderer.setColor(Color.RED);	
+        	
+        	shapeRenderer.circle(b.posX, b.posY, b.radius);
+        }
+        
+        shapeRenderer.end();
+        
         shapeRenderer.begin(ShapeType.Line);
         
         for (Cell c : game.cells)

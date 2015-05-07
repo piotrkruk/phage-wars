@@ -18,11 +18,6 @@ import java.util.Random;
  *
  */
 
-/**
- * WARNING!
- * 		THIS CLASS HAS NOT BEEN TESTED
- * 		AS THERE ARE NO BACTERIA-SENDING FUNCTIONALITIES IMPLEMENTED YET
- */
 
 public class Grid {
 	
@@ -49,16 +44,9 @@ public class Grid {
 		
 		distance = new int[this.widthInPoints][this.heightInPoints];
 		src = new Point[this.widthInPoints][this.heightInPoints];
-		
 		locked = new boolean[this.widthInPoints][this.heightInPoints];
 		
-		for (int i = 0; i < this.widthInPoints; i++)
-			for (int j = 0; j < this.heightInPoints; j++) {
-				distance[i][j] = -1;
-				src[i][j] = null;
-				
-				locked[i][j] = false;
-			}
+		clear();
 	}
 	
 	/**
@@ -85,18 +73,42 @@ public class Grid {
 	}
 	
 	/**
+	 * Clears the search params
+	 */
+	private void clear() {
+		for (int i = 0; i < this.widthInPoints; i++)
+			for (int j = 0; j < this.heightInPoints; j++) {
+				distance[i][j] = -1;
+				src[i][j] = null;
+				
+				locked[i][j] = false;
+			}
+	}
+	
+	/**
 	 * Runs BFS to find the path
 	 * from 'source' to 'destination'
 	 */
 	public void runSearch(Cell source, Cell destination) {
+		clear();
+		
 		this.destination = new Point(destination.posX, destination.posY).roundToGrid();
 		lock(Arrays.asList(source, destination));
 		
 		Queue <Point> queue = new LinkedList <Point> ();
 		queue.offer( new Point(source.posX, source.posY).roundToGrid() );
 		
-		int movesX[] = {-1, 0, 1, 0},
-			movesY[] = {0, 1, 0, -1};
+		/*
+		 * The allowed moves are as follows:
+		 * 		- one step in any direction
+		 * 		- one diagonal step in any direction
+		 */
+		
+		int movesX[] = {-1, 0, 1, 0,
+						-1, 1, 1, -1},
+						
+			movesY[] = {0, 1, 0, -1,
+						1, 1, -1, -1};
 		
 		while (!queue.isEmpty()) {
 			Point pt = queue.poll();
@@ -108,7 +120,7 @@ public class Grid {
 				int newX = idX + movesX[move],
 					newY = idY + movesY[move];
 				
-				if (newX < 0 || newX >= width || newY < 0 || newY >= height)
+				if (newX < 0 || newX >= widthInPoints || newY < 0 || newY >= heightInPoints)
 					continue;
 				
 				if (!locked[newX][newY] && (distance[newX][newY] == -1)) {
@@ -142,10 +154,11 @@ public class Grid {
 	 * Represents one point on the board
 	 * not necessarily lying on the grid
 	 */
-	public class Point implements Cloneable {		
+	public class Point implements Cloneable {
+		public static final int disturbBy = 15;
 		public int posX, posY;
 		
-		public Point(int posX, int posY) {			
+		public Point(int posX, int posY) {
 			this.posX = posX;
 			this.posY = posY;
 		}
@@ -171,10 +184,10 @@ public class Grid {
 		}
 		
 		public void moveRandomly(Random rand) {
-			posX += rand.nextInt(pointDist);
+			posX += rand.nextInt(disturbBy);
 			posX -= pointDist / 2;
 			
-			posY += rand.nextInt(pointDist);
+			posY += rand.nextInt(disturbBy);
 			posY -= pointDist / 2;
 		}
 	}

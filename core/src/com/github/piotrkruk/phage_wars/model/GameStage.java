@@ -15,8 +15,8 @@ public class GameStage {
 	private final static Random rand = new Random();
 	
 	// for positioning of the cells:
-	final int HEIGHT = PhageWars.HEIGHT;
 	final int WIDTH = PhageWars.WIDTH;
+	final int HEIGHT = PhageWars.HEIGHT;
 	
 	// for generating the stage:
 	private final int CELLS_PER_PLAYER = 1;
@@ -29,10 +29,29 @@ public class GameStage {
 	public List <Race> races = new ArrayList <Race> ();
 	
 	public List <Cell> cells = new ArrayList <Cell> ();
+	public List <Bacteria> bacterias = new ArrayList <Bacteria> ();
+	
+	public Grid grid;
 	
 	// player playing the game and his race:
 	public Player player;
 	public Race race;
+	
+	public GameStage() {
+		
+		for (int i = 0; i < NO_OF_PLAYERS; i++) {
+			Player p = new Player();
+			
+			players.add(p);
+			races.add( new Race(p) );
+		}
+		
+		player = players.get(0);
+		race = races.get(0);
+		grid = new Grid(WIDTH, HEIGHT, this);
+		
+		player.setActive();
+	}
 	
 	public boolean isRunning() {
 		/*
@@ -55,21 +74,6 @@ public class GameStage {
 				return true;
 		
 		return false;
-	}
-	
-	public GameStage() {
-		
-		for (int i = 0; i < NO_OF_PLAYERS; i++) {
-			Player p = new Player();
-			
-			players.add(p);
-			races.add( new Race(p) );
-		}
-		
-		player = players.get(0);
-		race = races.get(0);
-		
-		player.setActive();
 	}
 	
 	/**
@@ -123,14 +127,30 @@ public class GameStage {
 	
 	
 	/**
-	 * Grows all the cells on the board
-	 * after delta second have passed
-	 * but omits empty ones (with no owner)
+	 * Updates:
+	 * 		- sizes of all the cells on the board
+	 * 			after delta second have passed
+	 * 			but omits empty ones (with no owner)
+	 * 		- positions of the bacterias
+	 * 
 	 */
 	public void update(float delta) {
 		for (Cell c : cells)
 			if (c.owner != null)
 				c.grow(delta);
+		
+		Iterator <Bacteria> it = bacterias.iterator();
+		
+		while (it.hasNext()) {
+			Bacteria b = it.next();
+	
+			if (b.move(delta)) {
+				// the bacteria has reached it's destination
+				
+				b.destination.addUnits(b.units, b.from);
+				it.remove();
+			}
+		}
 	}
 	
 	public Cell randCell(Race race, Player owner) {
@@ -159,13 +179,17 @@ public class GameStage {
 	 * to destination cell
 	 */
 	public void send(Cell destination, Player p) {
-		int sum = 0;
 		
 		for (Cell c : cells)
-			if (c.owner == p && c.selected)
-				sum += c.sendUnits();
-		
-		destination.addUnits(sum, p);
+			if (c.owner == p && c.selected) {
+				grid.runSearch(c, destination);
+				
+				double units = c.sendUnits();		
+				double unitsPerBacteria = units / Bacteria.BACTERIAS_PER_SHOT;
+				
+				for (int i = 0; i < Bacteria.BACTERIAS_PER_SHOT; i++)
+					bacterias.add( new Bacteria(unitsPerBacteria, p, destination, grid) );
+			}
 	}
 	
 
