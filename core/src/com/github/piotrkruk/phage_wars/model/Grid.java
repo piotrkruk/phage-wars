@@ -21,6 +21,9 @@ import java.util.Random;
 
 public class Grid {
 	
+	private static final int AVOID_BY = 15;
+		// avoid the border of a cell by this margin
+	
 	public final int width, height;
 	public final int widthInPoints, heightInPoints;
 	
@@ -47,6 +50,10 @@ public class Grid {
 		locked = new boolean[this.widthInPoints][this.heightInPoints];
 		
 		clear();
+	}
+	
+	public static int distSquared(int x1, int y1, int x2, int y2) {
+		return (int) Math.pow(x1 - x2, 2) + (int) Math.pow(y1 - y2, 2);
 	}
 	
 	/**
@@ -100,15 +107,20 @@ public class Grid {
 		
 		/*
 		 * The allowed moves are as follows:
-		 * 		- one step in any direction
-		 * 		- one diagonal step in any direction
+		 * 		- two steps in any of the four directions
+		 * 		- chess knight moves in any of the eight directions
+		 * 
+		 * This set of moves experimentally proved to generate the smoothest paths
+		 * 
 		 */
 		
-		int movesX[] = {-1, 0, 1, 0,
-						-1, 1, 1, -1},
-						
-			movesY[] = {0, 1, 0, -1,
-						1, 1, -1, -1};
+		int movesX[] = {-2, 0, 2, 0,
+						-2, -2, -1, 1,
+						2, 2, 1, -1},
+		
+			movesY[] = {0, 2, 0, -2,
+						-1, 1, 2, 2,
+						1, -1, -2, -2};
 		
 		while (!queue.isEmpty()) {
 			Point pt = queue.poll();
@@ -144,9 +156,12 @@ public class Grid {
 		for (Cell c : game.cells) if (!except.contains(c)) {
 		
 			for (int i = 0; i < widthInPoints; i++)
-				for (int j = 0; j < heightInPoints; j++)
-					if (c.isInside(i * pointDist, j * pointDist))
+				for (int j = 0; j < heightInPoints; j++) {
+					int dist = distSquared(i * pointDist, j * pointDist, c.posX, c.posY);
+					
+					if (dist <= Math.pow(c.radius + AVOID_BY, 2))
 						locked[i][j] = true;
+				}
 		}
 	}
 
@@ -155,7 +170,7 @@ public class Grid {
 	 * not necessarily lying on the grid
 	 */
 	public class Point implements Cloneable {
-		public static final int disturbBy = 15;
+		public static final int DISTURB_BY = 7;
 		public int posX, posY;
 		
 		public Point(int posX, int posY) {
@@ -184,10 +199,10 @@ public class Grid {
 		}
 		
 		public void moveRandomly(Random rand) {
-			posX += rand.nextInt(disturbBy);
+			posX += rand.nextInt(DISTURB_BY);
 			posX -= pointDist / 2;
 			
-			posY += rand.nextInt(disturbBy);
+			posY += rand.nextInt(DISTURB_BY);
 			posY -= pointDist / 2;
 		}
 	}

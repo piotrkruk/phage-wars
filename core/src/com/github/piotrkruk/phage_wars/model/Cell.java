@@ -69,14 +69,6 @@ public class Cell {
 		return toGive;
 	}
 	
-	public static int square(int x) {
-		return x * x;
-	}
-	
-	public static int distSquared(int x1, int y1, int x2, int y2) {
-		return square(x1 - x2) + square(y1 - y2);
-	}
-	
 	/**
 	 * A function checking if some event
 	 * (ie a mouse click)
@@ -84,13 +76,13 @@ public class Cell {
 	 * 
 	 */
 	public boolean isInside(int x, int y) {
-		return distSquared(x, y, this.posX, this.posY) <= square(radius);
+		return Grid.distSquared(x, y, this.posX, this.posY) <= Math.pow(radius, 2);
 	}
 	
 	public boolean doesCollide(Cell c) {
-		int dist = distSquared(posX, posY, c.posX, c.posY);
+		int dist = Grid.distSquared(posX, posY, c.posX, c.posY);
 		
-		return dist <= square(radius + c.radius);
+		return dist <= Math.pow(radius + c.radius, 2);
 	}
 	
 	public void select() {
