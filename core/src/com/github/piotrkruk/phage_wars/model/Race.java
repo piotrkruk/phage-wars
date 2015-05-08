@@ -44,7 +44,7 @@ public class Race {
 		this(DEFAULT_GROWTH, DEFAULT_GIVES, DEFAULT_MIN_RADIUS, DEFAULT_MAX_RADIUS, 0, null);
 	}
 	
-	double givesAway(double units) {
+	public double givesAway(double units) {
 		return givesAway * units;
 	}
 }

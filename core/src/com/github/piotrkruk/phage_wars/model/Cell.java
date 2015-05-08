@@ -15,9 +15,9 @@ public class Cell {
 	public double units;
 	
 	public final Race race;
-	public Player owner;
+	public volatile Player owner;
 	
-	public boolean selected = false;
+	public volatile boolean selected = false;
 	
 	
 	public Cell(int x, int y, int radius, double initUnits, Race race, Player owner) {
@@ -32,7 +32,7 @@ public class Cell {
 		this.units = initUnits;
 	}
 	
-	public int getUnits() {
+	public synchronized int getUnits() {
 		return (int) units;
 	}
 	
@@ -40,13 +40,14 @@ public class Cell {
 		units += delta * race.growthRate;
 	}
 	
-	public void addUnits(double units, Player from) {
+	public synchronized void addUnits(double units, Player from) {
 		if (from == owner)
 			this.units += units;
 		else {
 			this.units -= units;
 			
 			if (this.units <= 0) {
+				this.deselect();
 				Player previousOwner = this.owner;
 				
 				this.units *= -1;
@@ -60,7 +61,7 @@ public class Cell {
 		}
 	}
 	
-	public double sendUnits() {
+	public synchronized double sendUnits() {
 		double toGive = race.givesAway(units);
 		
 		units -= toGive;
@@ -85,11 +86,11 @@ public class Cell {
 		return dist <= Math.pow(radius + c.radius, 2);
 	}
 	
-	public void select() {
+	public synchronized void select() {
 		selected = true;
 	}
 	
-	public void deselect() {
+	public synchronized void deselect() {
 		selected = false;
 	}
 }

@@ -47,6 +47,8 @@ public class GameWindow implements Screen, InputProcessor {
     	this.phageWars = phageWars;
     	
     	game.genRandom();
+    	game.startGame();
+    	
     	Gdx.input.setInputProcessor(this);
     }
 
@@ -103,7 +105,7 @@ public class GameWindow implements Screen, InputProcessor {
         shapeRenderer.begin(ShapeType.Line);
         
         for (Cell c : game.cells)
-        	if (c.selected) {        		
+        	if (c.owner == game.player && c.selected) {        		
         		int posX = Gdx.input.getX(),
         			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
         		

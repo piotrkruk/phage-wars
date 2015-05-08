@@ -53,7 +53,12 @@ public class GameStage {
 		player.setActive();
 	}
 	
-	public boolean isRunning() {
+	public void startGame() {
+		for (int i = 1; i < NO_OF_PLAYERS; i++)
+			new Thread( new AI(this, players.get(i)) ).start();
+	}
+	
+	public synchronized boolean isRunning() {
 		/*
 		 * The game is still running
 		 * if there is at least active player still alive
@@ -178,7 +183,7 @@ public class GameStage {
 	 * Sends units from all selected cells
 	 * to destination cell
 	 */
-	public void send(Cell destination, Player p) {
+	public synchronized void send(Cell destination, Player p) {
 		
 		for (Cell c : cells)
 			if (c.owner == p && c.selected) {
@@ -193,7 +198,7 @@ public class GameStage {
 	}
 	
 
-	public void deselectAll(Player p) {
+	public synchronized void deselectAll(Player p) {
 		for (Cell c : cells)
 			if (c.owner == p)
 				c.deselect();

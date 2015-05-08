@@ -9,9 +9,9 @@ package com.github.piotrkruk.phage_wars.model;
 
 public class Player {
 	private static int idCnt = 0;
-	
 	public final int id;
-	public int ownCount = 0; // number of owned cells at some moment
+	
+	public volatile int ownCount = 0; // number of owned cells at some moment
 	public boolean isActive = false; // does this player keep the game running while being alive
 							 		 // (only human players by default)
 	
@@ -23,7 +23,7 @@ public class Player {
 		isActive = true;
 	}
 	
-	public boolean isPlaying() {
+	public synchronized boolean isPlaying() {
 		return (ownCount != 0);
 	}
 }
