@@ -17,7 +17,7 @@ public class Bacteria {
 	public static final int DEFAULT_RADIUS = 8;
 	public static final int BACTERIAS_PER_SHOT = 10;
 	private static final double MAX_WAIT_TIME = 0.6;
-	private static final double TIME_PER_PIXEL = 0.005;
+	private static final double TIME_PER_PIXEL = 0.01;
 	
 	public int posX, posY;
 	public final int radius = DEFAULT_RADIUS;
