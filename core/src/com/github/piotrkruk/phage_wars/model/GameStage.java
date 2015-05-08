@@ -1,6 +1,8 @@
 package com.github.piotrkruk.phage_wars.model;
 
 import java.util.*;
+
+import com.badlogic.gdx.graphics.Color;
 import com.github.piotrkruk.phage_wars.PhageWars;
 
 /**
@@ -19,14 +21,23 @@ public class GameStage {
 	final int HEIGHT = PhageWars.HEIGHT;
 	
 	// for generating the stage:
-	private final int CELLS_PER_PLAYER = 1;
-	private final int EMPTY_CELLS = 4;
+	private static final int CELLS_PER_PLAYER = 1;
+	private static final int EMPTY_CELLS = 4;
 	
-	final int NO_OF_PLAYERS = 2;
+	public static final int NO_OF_PLAYERS = 3;
 	
 	// objects present on the stage:
 	public List <Player> players = new ArrayList <Player> ();
 	public List <Race> races = new ArrayList <Race> ();
+	
+	Color[] colors =
+		{
+			Color.BLUE,
+			Color.RED,
+			Color.PURPLE,
+			Color.CYAN,
+			Color.GREEN
+		};
 	
 	public List <Cell> cells = new ArrayList <Cell> ();
 	public List <Bacteria> bacterias = new ArrayList <Bacteria> ();
@@ -41,6 +52,7 @@ public class GameStage {
 		
 		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();
+			p.color = colors[i];
 			
 			players.add(p);
 			races.add( new Race(p) );

@@ -15,7 +15,7 @@ public class Race {
 	final int maxInitUnits;
 	
 	// default values for race's parameters
-	final static double DEFAULT_GROWTH = 5;
+	final static double DEFAULT_GROWTH = 3;
 	final static double DEFAULT_GIVES = 0.3;
 	final static int DEFAULT_MIN_RADIUS = 40;
 	final static int DEFAULT_MAX_RADIUS = 120;

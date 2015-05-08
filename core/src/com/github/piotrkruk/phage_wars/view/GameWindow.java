@@ -92,11 +92,7 @@ public class GameWindow implements Screen, InputProcessor {
         shapeRenderer.begin(ShapeType.Filled);
         
         for (Bacteria b : game.bacterias) {
-        	if (b.from == game.player)
-        		shapeRenderer.setColor(Color.BLUE);
-        	else
-        		shapeRenderer.setColor(Color.RED);	
-        	
+        	shapeRenderer.setColor(b.from.color);        	
         	shapeRenderer.circle(b.posX, b.posY, b.radius);
         }
         
@@ -127,10 +123,8 @@ public class GameWindow implements Screen, InputProcessor {
         	
         	if (c.owner == null)
         		shapeRenderer.setColor(Color.GRAY);
-        	else if (c.owner == game.player)
-        		shapeRenderer.setColor(Color.BLUE);
         	else
-        		shapeRenderer.setColor(Color.RED);
+        		shapeRenderer.setColor(c.owner.color);
         	
         	shapeRenderer.circle(c.posX, c.posY, c.radius);
         }

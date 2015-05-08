@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AI implements Runnable {
 	
-	private static final int MAX_MOVE_DELAY = 2000;
+	private static final int MAX_MOVE_DELAY = 4000;
 	private static final Random rand = new Random();
 	
 	private final GameStage game;
