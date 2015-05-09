@@ -18,6 +18,8 @@ public class Player {
 	public Color color = Color.GRAY;
 	
 	public volatile int ownCount = 0; // number of owned cells at some moment
+	public volatile int bacteriaCount = 0; // number of owned bacterias
+	
 	public boolean isActive = false; // does this player keep the game running while being alive
 							 		 // (only human players by default)
 	
@@ -30,6 +32,6 @@ public class Player {
 	}
 	
 	public synchronized boolean isPlaying() {
-		return (ownCount != 0);
+		return (ownCount != 0 || bacteriaCount != 0);
 	}
 }

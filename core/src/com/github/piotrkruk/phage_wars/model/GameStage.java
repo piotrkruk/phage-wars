@@ -24,6 +24,7 @@ public class GameStage {
 	private static final int CELLS_PER_PLAYER = 1;
 	private static final int EMPTY_CELLS = 4;
 	
+	public static final boolean HUMAN_PLAYER = true;
 	public static final int NO_OF_PLAYERS = 3;
 	
 	// objects present on the stage:
@@ -44,9 +45,9 @@ public class GameStage {
 	
 	public Grid grid;
 	
-	// player playing the game and his race:
-	public Player player;
-	public Race race;
+	// if there is a human player - his player class and race:
+	public Player player = null;
+	public Race race = null;
 	
 	public GameStage() {
 		
@@ -58,15 +59,28 @@ public class GameStage {
 			races.add( new Race(p) );
 		}
 		
-		player = players.get(0);
-		race = races.get(0);
 		grid = new Grid(WIDTH, HEIGHT, this);
 		
-		player.setActive();
+		if (HUMAN_PLAYER) {
+			player = players.get(0);
+			race = races.get(0);
+			
+			player.setActive();
+		}
+		else
+			for (Player p : players)
+				p.setActive();
 	}
 	
 	public void startGame() {
-		for (int i = 1; i < NO_OF_PLAYERS; i++)
+		int i;
+		
+		if (HUMAN_PLAYER)
+			i = 1;
+		else
+			i = 0;
+		
+		for (; i < NO_OF_PLAYERS; i++)
 			new Thread( new AI(this, players.get(i)) ).start();
 	}
 	
@@ -165,6 +179,8 @@ public class GameStage {
 				// the bacteria has reached it's destination
 				
 				b.destination.addUnits(b.units, b.from);
+				b.from.bacteriaCount--;
+				
 				it.remove();
 			}
 		}
@@ -206,6 +222,8 @@ public class GameStage {
 				
 				for (int i = 0; i < Bacteria.BACTERIAS_PER_SHOT; i++)
 					bacterias.add( new Bacteria(unitsPerBacteria, p, destination, grid) );
+				
+				p.bacteriaCount += Bacteria.BACTERIAS_PER_SHOT;
 			}
 	}
 	

@@ -30,7 +30,7 @@ import com.github.piotrkruk.phage_wars.model.*;
 
 public class GameWindow implements Screen, InputProcessor {
 	private final PhageWars phageWars;
-	private boolean paused = false;
+	private volatile boolean paused = false;
 	
     private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
     private Image background = new Image(texture);
@@ -58,28 +58,35 @@ public class GameWindow implements Screen, InputProcessor {
 	    stage.draw();
 	        
 	    if (!paused) {
-	        checkGameStatus();
-	        drawCells(delta);
+	    	synchronized (game) {
+	    		checkGameStatus();
+	    		drawCells(delta);
+	    	}
 	    }
     }
     
     private void checkGameStatus() {
     	if (!game.isRunning()) {
     		paused = true;
+    		
     		System.out.println("The game has finished.");
     		
-    		boolean hasPlayerWon = game.player.isPlaying();
-    		    		
     		Dialog msgGameFinished = new Dialog("Infection complete.", defaultSkin);
     		
-    		if (hasPlayerWon) {
-    			System.out.println("The player has won.");
-    			msgGameFinished.text("You have won!\nClick anywhere to continue.");    		
+    		if (GameStage.HUMAN_PLAYER) {
+	    		boolean hasPlayerWon = game.player.isPlaying();
+	    		
+	    		if (hasPlayerWon) {
+	    			System.out.println("The player has won.");
+	    			msgGameFinished.text("You have won!\nClick anywhere to continue.");    		
+	    		}
+	    		else {
+	    			System.out.println("The player has lost.");
+	    			msgGameFinished.text("You have lost!\nClick anywhere to continue.");   
+	    		}
     		}
-    		else {
-    			System.out.println("The player has lost.");
-    			msgGameFinished.text("You have lost!\nClick anywhere to continue.");   
-    		}
+    		else
+    			msgGameFinished.text("Click anywhere to continue.");
     		
     		stage.addActor(msgGameFinished);
     		msgGameFinished.show(stage);
@@ -97,40 +104,48 @@ public class GameWindow implements Screen, InputProcessor {
         }
         
         shapeRenderer.end();
+
+        if (GameStage.HUMAN_PLAYER) {
+        	shapeRenderer.begin(ShapeType.Line);
+    
+	        for (Cell c : game.cells)
+	        	if (c.owner == game.player && c.selected) {        		
+	        		int posX = Gdx.input.getX(),
+	        			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
+	        		
+	        		Gdx.gl20.glLineWidth(6);
+	        		
+	        		shapeRenderer.setColor(Color.WHITE);
+	        		shapeRenderer.line(c.posX, c.posY, posX, posY);
+	        	}
+	        
+	        shapeRenderer.end();
         
-        shapeRenderer.begin(ShapeType.Line);
-        
-        for (Cell c : game.cells)
-        	if (c.owner == game.player && c.selected) {        		
-        		int posX = Gdx.input.getX(),
-        			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        		
-        		Gdx.gl20.glLineWidth(6);
-        		
-        		shapeRenderer.setColor(Color.WHITE);
-        		shapeRenderer.line(c.posX, c.posY, posX, posY);
-        	}
-        
-        shapeRenderer.end();
-        
+	        shapeRenderer.begin(ShapeType.Filled);
+	        
+	        for (Cell c : game.cells) {
+	        	if (c.owner == game.player && c.selected) {
+	        		shapeRenderer.setColor(Color.YELLOW);
+	        		shapeRenderer.circle(c.posX, c.posY, c.radius + 5);
+	        	}
+	        }
+	        
+	        shapeRenderer.end();        	
+        }
+                
         shapeRenderer.begin(ShapeType.Filled);
         
         for (Cell c : game.cells) {
-        	if (c.owner == game.player && c.selected) {
-        		shapeRenderer.setColor(Color.YELLOW);
-        		shapeRenderer.circle(c.posX, c.posY, c.radius + 5);
-        	}
-        	
-        	if (c.owner == null)
-        		shapeRenderer.setColor(Color.GRAY);
-        	else
-        		shapeRenderer.setColor(c.owner.color);
-        	
-        	shapeRenderer.circle(c.posX, c.posY, c.radius);
+	    	if (c.owner == null)
+	    		shapeRenderer.setColor(Color.GRAY);
+	    	else
+	    		shapeRenderer.setColor(c.owner.color);
+	    	
+	    	shapeRenderer.circle(c.posX, c.posY, c.radius);
         }
-        	
-        shapeRenderer.end();
         
+        shapeRenderer.end();
+	    	
         batch.begin();
         
         for (Cell c : game.cells) {
@@ -143,7 +158,7 @@ public class GameWindow implements Screen, InputProcessor {
         			c.posX - approxWidth / 2, c.posY + approxHeight / 2);
         }
         	
-        batch.end();    	
+        batch.end();
     }
 
     @Override
@@ -182,6 +197,9 @@ public class GameWindow implements Screen, InputProcessor {
     		return false;
     	}
     	
+    	if (!GameStage.HUMAN_PLAYER)
+    		return false;
+    	
         int posX = screenX,
             posY = Gdx.graphics.getHeight() - screenY;
         		/* screenY is reversed in respect to the coordinates
@@ -190,27 +208,29 @@ public class GameWindow implements Screen, InputProcessor {
     	
 		Cell clicked = null;
 		
-		for (Cell c: game.cells) {
-			if (c.isInside(posX, posY))
-				clicked = c;
+		synchronized (game) {
+			for (Cell c: game.cells) {
+				if (c.isInside(posX, posY))
+					clicked = c;
+			}
+	    	
+	    	if (button == Buttons.LEFT) {
+	    		System.out.println("Left mouse click at " + posX + " " + posY);
+	    			
+	    		if (clicked != null && clicked.owner == game.player)
+	    			clicked.select();
+	    	}
+	    	else if (button == Buttons.RIGHT) {
+	    		System.out.println("Right mouse click at " + posX + " " + posY);
+	    		
+	    		if (clicked == null)
+	    			game.deselectAll(game.player);
+	    		else
+	    			game.send(clicked, game.player);
+	    	}
+	    	
+	    	return false;
 		}
-    	
-    	if (button == Buttons.LEFT) {
-    		System.out.println("Left mouse click at " + posX + " " + posY);
-    			
-    		if (clicked != null && clicked.owner == game.player)
-    			clicked.select();
-    	}
-    	else if (button == Buttons.RIGHT) {
-    		System.out.println("Right mouse click at " + posX + " " + posY);
-    		
-    		if (clicked == null)
-    			game.deselectAll(game.player);
-    		else
-    			game.send(clicked, game.player);
-    	}
-    	
-    	return false;
     }
    
 
