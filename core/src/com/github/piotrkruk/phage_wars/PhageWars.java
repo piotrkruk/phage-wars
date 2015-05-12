@@ -40,6 +40,7 @@ public class PhageWars extends Game {
 	
 	public void refreshMode() {
 		Gdx.graphics.setDisplayMode(mode.width, mode.height, false);
+		background.setSize(mode.width, mode.height);
 	}
 	
 	public enum DisplayMode {
@@ -49,9 +50,19 @@ public class PhageWars extends Game {
 		
 		public final int width, height;
 		
+		public final int blockSize,
+						 btnWidth,
+						 btnHeight,
+						 border;
+		
 		private DisplayMode(int width, int height) {
 			this.width = width;
 			this.height = height;
+			
+			blockSize = width / 50;
+			btnWidth = 12 * blockSize;
+			btnHeight = 4 * blockSize;
+			border = 2 * blockSize;
 		}
 	}
 }

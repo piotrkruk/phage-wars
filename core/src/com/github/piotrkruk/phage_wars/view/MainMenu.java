@@ -28,9 +28,15 @@ public class MainMenu implements Screen {
     public MainMenu(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
-    	btnNewGame.setBounds(800, 360, 300, 100);
-    	btnSettings.setBounds(800, 230, 300, 100);
-    	btnExit.setBounds(800, 100, 300, 100);
+    	int btnWidth = phageWars.mode.btnWidth,
+    		btnHeight = phageWars.mode.btnHeight,
+    		border = phageWars.mode.border,
+    		block = phageWars.mode.blockSize,
+    		left = phageWars.mode.width - border - btnWidth;
+    	
+    	btnNewGame.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
+    	btnSettings.setBounds(left, border + block + btnHeight, btnWidth, btnHeight);
+    	btnExit.setBounds(left, border, btnWidth, btnHeight);
     	
         btnNewGame.addListener( new ClickListener() {
             @Override

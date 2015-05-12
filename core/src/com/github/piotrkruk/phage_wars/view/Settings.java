@@ -35,9 +35,20 @@ public class Settings implements Screen {
     public Settings(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
-    	btnBack.setBounds(800, 100, 300, 100);
-    	btnModeNormal.setBounds(100, 600, 300, 100);
-    	btnModeHD.setBounds(100, 450, 300, 100);
+    	int btnWidth = phageWars.mode.btnWidth,
+        	btnHeight = phageWars.mode.btnHeight,
+        	border = phageWars.mode.border,
+        	block = phageWars.mode.blockSize,
+        	left = phageWars.mode.width - border - btnWidth,
+        	upper = phageWars.mode.height - border - btnHeight,
+        	center = phageWars.mode.width / 2;
+    	
+    	btnBack.setBounds(left, border, btnWidth, btnHeight);
+    	
+    	btnModeNormal
+    		.setBounds(center - block - btnWidth, upper, btnWidth, btnHeight);
+    	btnModeHD
+    		.setBounds(center + block, upper, btnWidth, btnHeight);
     	
         btnBack.addListener( new ClickListener() {
             @Override
