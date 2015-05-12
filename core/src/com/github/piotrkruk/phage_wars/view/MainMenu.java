@@ -2,10 +2,8 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -19,9 +17,6 @@ import com.github.piotrkruk.phage_wars.PhageWars;
 
 public class MainMenu implements Screen {
 	private final PhageWars phageWars;
-	
-    private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
-    private Image background = new Image(texture);
     
     private Stage stage = new Stage();
     
@@ -76,7 +71,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
-    	stage.addActor(background);
+    	stage.addActor(phageWars.background);
     	
     	stage.addActor(btnNewGame);
     	stage.addActor(btnSettings);

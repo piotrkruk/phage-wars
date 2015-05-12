@@ -5,14 +5,17 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.github.piotrkruk.phage_wars.PhageWars;
 
 public class DesktopLauncher {
+	private static PhageWars phageWars = new PhageWars();
+	
 	public static void main (String[] arg) {
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
-		config.width = PhageWars.WIDTH;
-		config.height = PhageWars.HEIGHT;
-		config.title = PhageWars.TITLE;
+		config.width = phageWars.mode.width;
+		config.height = phageWars.mode.height;
+		config.title = phageWars.title;
+		config.resizable = false;
 		
-		new LwjglApplication(new PhageWars(), config);
+		new LwjglApplication(phageWars, config);
 	}
 }

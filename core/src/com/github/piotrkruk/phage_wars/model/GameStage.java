@@ -1,9 +1,7 @@
 package com.github.piotrkruk.phage_wars.model;
 
 import java.util.*;
-
 import com.badlogic.gdx.graphics.Color;
-import com.github.piotrkruk.phage_wars.PhageWars;
 
 /**
  * Models the game,
@@ -17,8 +15,7 @@ public class GameStage {
 	private final static Random rand = new Random();
 	
 	// for positioning of the cells:
-	final int WIDTH = PhageWars.WIDTH;
-	final int HEIGHT = PhageWars.HEIGHT;
+	final int WIDTH, HEIGHT;
 	
 	// for generating the stage:
 	private static final int CELLS_PER_PLAYER = 1;
@@ -49,7 +46,9 @@ public class GameStage {
 	public Player player = null;
 	public Race race = null;
 	
-	public GameStage() {
+	public GameStage(int width, int height) {
+		this.WIDTH = width;
+		this.HEIGHT = height;
 		
 		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();

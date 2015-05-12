@@ -5,14 +5,12 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.*;
@@ -31,9 +29,6 @@ import com.github.piotrkruk.phage_wars.model.*;
 public class GameWindow implements Screen, InputProcessor {
 	private final PhageWars phageWars;
 	private volatile boolean paused = false;
-	
-    private Texture texture = new Texture(Gdx.files.internal("background.jpg"));
-    private Image background = new Image(texture);
     
     private Stage stage = new Stage();
     private BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
@@ -41,7 +36,8 @@ public class GameWindow implements Screen, InputProcessor {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
     
-    private GameStage game = new GameStage();
+    private GameStage game = new GameStage(Gdx.graphics.getWidth(),
+    									   Gdx.graphics.getHeight());
     
     public GameWindow(PhageWars phageWars) {
     	this.phageWars = phageWars;
@@ -167,7 +163,7 @@ public class GameWindow implements Screen, InputProcessor {
 
     @Override
     public void show() {
-    	stage.addActor(background);
+    	stage.addActor(phageWars.background);
     }
 
     @Override

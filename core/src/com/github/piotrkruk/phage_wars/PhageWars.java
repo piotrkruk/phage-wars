@@ -2,16 +2,27 @@ package com.github.piotrkruk.phage_wars;
 
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.github.piotrkruk.phage_wars.view.*;
 
 
-public class PhageWars extends Game {
-	
-    public static final String TITLE = "Phage Wars"; 
-    public static final int WIDTH = 1200, HEIGHT = 700;
+public class PhageWars extends Game {    
+    public final String title = "Phage Wars";
+    
+    public DisplayMode mode = DisplayMode.HD;
+    
+    public Texture texture;
+    public Image background;
 	
 	@Override
 	public void create () {
+		texture = new Texture(Gdx.files.internal("background.jpg"));
+		
+		background = new Image(texture);
+		background.setSize(mode.width, mode.height);
+		
 		setScreen(new MainMenu(this));
 	}
 	
@@ -25,5 +36,22 @@ public class PhageWars extends Game {
 	
 	public void setToSettings() {
 		setScreen(new Settings(this));
+	}
+	
+	public void refreshMode() {
+		Gdx.graphics.setDisplayMode(mode.width, mode.height, false);
+	}
+	
+	public enum DisplayMode {
+		
+		NORMAL(960, 540),
+		HD(1280,720);
+		
+		public final int width, height;
+		
+		private DisplayMode(int width, int height) {
+			this.width = width;
+			this.height = height;
+		}
 	}
 }
