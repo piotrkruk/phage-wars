@@ -58,7 +58,8 @@ public class AI implements Runnable {
 	public void run() {		
 		synchronized (game) {
 			while (game.isRunning() && player.isPlaying()) {
-				move();
+				if (!game.paused)
+					move();
 				
 				try {
 					game.wait( MIN_MOVE_DELAY + rand.nextInt(MAX_MOVE_DELAY - MIN_MOVE_DELAY) );

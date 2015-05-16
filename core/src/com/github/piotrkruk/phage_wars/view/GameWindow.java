@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.*;
@@ -28,7 +30,8 @@ import com.github.piotrkruk.phage_wars.model.*;
 
 public class GameWindow implements Screen, InputProcessor {
 	private final PhageWars phageWars;
-	private volatile boolean paused = false;
+	private volatile boolean finished = false;
+	private volatile int pausedCount = 0;
     
     private Stage stage = new Stage();
     private BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
@@ -39,11 +42,33 @@ public class GameWindow implements Screen, InputProcessor {
     private GameStage game = new GameStage(Gdx.graphics.getWidth(),
     									   Gdx.graphics.getHeight());
     
+    private Image circExit = new Image( new Texture(Gdx.files.internal("game_exit.png")) );
+    private Image circPause = new Image( new Texture(Gdx.files.internal("game_pause.png")) );
+    private Image circResume = new Image( new Texture(Gdx.files.internal("game_resume.png")) );
+    
     public GameWindow(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
     	game.genRandom();
     	game.startGame();
+    	
+    	int block = phageWars.mode.blockSize,
+    		circSize = 2 * block;
+    	
+    	circExit.setSize(circSize, circSize);
+    	circPause.setSize(circSize, circSize);
+    	circResume.setSize(circSize, circSize);
+    	
+    	circExit.setPosition(phageWars.mode.width - circSize - block / 4,
+    						 phageWars.mode.height - circSize - block / 4);
+    	
+    	circPause.setPosition(circExit.getX() - circSize - block / 4,
+				 			  phageWars.mode.height - circSize - block / 4);
+    	
+    	circResume.setPosition(circExit.getX() - circSize - block / 4,
+	 			  			   phageWars.mode.height - circSize - block / 4);
+    	
+    	circResume.setVisible(false);
     	
     	Gdx.input.setInputProcessor(this);
     }
@@ -53,8 +78,11 @@ public class GameWindow implements Screen, InputProcessor {
 	    stage.act();
 	    stage.draw();
 	        
-	    if (!paused) {
+	    if (!finished) {
 	    	synchronized (game) {
+	    		if (pausedCount == 0)
+	    			game.update(delta);
+	    		
 	    		checkGameStatus();
 	    		drawCells(delta);
 	    	}
@@ -63,7 +91,7 @@ public class GameWindow implements Screen, InputProcessor {
     
     private void checkGameStatus() {
     	if (!game.isRunning()) {
-    		paused = true;
+    		finished = true;
     		
     		System.out.println("The game has finished.");
     		
@@ -89,9 +117,7 @@ public class GameWindow implements Screen, InputProcessor {
     	}
     }
 
-    private void drawCells(float delta) {
-        game.update(delta);
-        
+    private void drawCells(float delta) {        
         shapeRenderer.begin(ShapeType.Filled);
         
         for (Bacteria b : game.bacterias) {
@@ -164,6 +190,10 @@ public class GameWindow implements Screen, InputProcessor {
     @Override
     public void show() {
     	stage.addActor(phageWars.background);
+    	
+    	stage.addActor(circExit);
+    	stage.addActor(circPause);
+    	stage.addActor(circResume);
     }
 
     @Override
@@ -172,13 +202,29 @@ public class GameWindow implements Screen, InputProcessor {
     }
 
     @Override
-    public void pause() {
-    	paused = true;
+    public void pause() { 
+    	pausedCount++;
+    	
+    	if (pausedCount == 1) {
+    		game.paused = true;
+	    	System.out.println("Game paused.");
+	    	
+	    	circPause.setVisible(false);
+	    	circResume.setVisible(true);
+    	}
     }
 
     @Override
-    public void resume() {
-    	paused = false;
+    public void resume() {  
+    	pausedCount--;
+    	
+    	if (pausedCount == 0) {
+    		game.paused = false;
+	    	System.out.println("Game resumed.");
+	    	
+	    	circPause.setVisible(true);
+	    	circResume.setVisible(false);
+    	}
     }
 
     @Override
@@ -188,19 +234,38 @@ public class GameWindow implements Screen, InputProcessor {
    
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-    	if (paused) {
+    	if (finished) {
     		phageWars.setToMenu();
     		return false;
     	}
-    	
-    	if (!GameStage.HUMAN_PLAYER)
-    		return false;
     	
         int posX = screenX,
             posY = Gdx.graphics.getHeight() - screenY;
         		/* screenY is reversed in respect to the coordinates
         		 * of drawing
         		 */
+    	
+    	if (posX >= circExit.getX() && posX <= circExit.getX() + circExit.getWidth() &&
+    		posY >= circExit.getY() && posY <= circExit.getY() + circExit.getHeight()) {
+    			System.out.println("Game exited.");
+    		
+    			phageWars.setToMenu();
+    			return false;
+    	}
+    	
+    	if (posX >= circPause.getX() && posX <= circPause.getX() + circPause.getWidth() &&
+    		posY >= circPause.getY() && posY <= circPause.getY() + circPause.getHeight()) {
+    		
+    		if (pausedCount == 0)
+    			this.pause();
+    		else
+    			this.resume();
+    		
+    		return false;
+    	}
+    	
+    	if (pausedCount > 0 || !GameStage.HUMAN_PLAYER)
+    		return false;
     	
 		Cell clicked = null;
 		

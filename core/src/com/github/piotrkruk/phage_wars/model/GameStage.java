@@ -27,6 +27,8 @@ public class GameStage {
 	
 	private final Map mapHandler;
 	
+	public volatile boolean paused = false;
+	
 	// objects present on the stage:
 	public List <Player> players = new ArrayList <Player> ();
 	public List <Race> races = new ArrayList <Race> ();
