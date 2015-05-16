@@ -12,17 +12,20 @@ import com.badlogic.gdx.graphics.Color;
 
 public class GameStage {
 	
-	private final static Random rand = new Random();
-	
 	// for positioning of the cells:
-	final int WIDTH, HEIGHT;
+	private final int WIDTH, HEIGHT;
 	
 	// for generating the stage:
-	private static final int CELLS_PER_PLAYER = 1;
-	private static final int EMPTY_CELLS = 4;
+	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
+	private static final int DEFAULT_EMPTY_CELLS = 4;
+	
+	private static final double DEFAULT_PLAYER_STRENGTH = 1.0;
+	private static final double DEFAULT_OPPONENT_STRENGTH = 2.5;
 	
 	public static final boolean HUMAN_PLAYER = true;
 	public static final int NO_OF_PLAYERS = 3;
+	
+	private final Map mapHandler;
 	
 	// objects present on the stage:
 	public List <Player> players = new ArrayList <Player> ();
@@ -49,13 +52,21 @@ public class GameStage {
 	public GameStage(int width, int height) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
+		this.mapHandler = new Map(width, height, this);
 		
 		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();
 			p.color = colors[i];
 			
+			double strength;
+			
+			if (HUMAN_PLAYER && i == 0)
+				strength = DEFAULT_PLAYER_STRENGTH;
+			else
+				strength = DEFAULT_OPPONENT_STRENGTH;
+			
 			players.add(p);
-			races.add( new Race(p) );
+			races.add( new Race(p, strength) );
 		}
 		
 		grid = new Grid(WIDTH, HEIGHT, this);
@@ -110,49 +121,7 @@ public class GameStage {
 	 * Generates a random stage filled with cells
 	 */
 	public void genRandom() {
-		
-		for (int i = 0; i < NO_OF_PLAYERS; i++) {
-			for (int j = 0; j < CELLS_PER_PLAYER;) {
-				Cell c = randCell(races.get(i), players.get(i));
-				
-				boolean collision = false;
-				
-				if (c.posX < c.radius || c.posX + c.radius > WIDTH ||
-					c.posY < c.radius || c.posY + c.radius > HEIGHT)
-					collision = true;
-				
-				for (Cell cl : cells)
-					if (c.doesCollide(cl))
-						collision = true;
-				
-				if (!collision) {
-					cells.add(c);
-					j++;
-				}
-			}
-			
-			players.get(i).ownCount = CELLS_PER_PLAYER;
-		}
-		
-		for (int j = 0; j < EMPTY_CELLS;) {
-			Cell c = randCell(new Race(), null);
-			
-			boolean collision = false;
-			
-			if (c.posX < c.radius || c.posX + c.radius > WIDTH ||
-				c.posY < c.radius || c.posY + c.radius > HEIGHT)
-				collision = true;
-			
-			for (Cell cl : cells)
-				if (c.doesCollide(cl))
-					collision = true;
-			
-			if (!collision) {
-				cells.add(c);
-				j++;
-			}
-		}
-		
+		mapHandler.genRandom(DEFAULT_CELLS_PER_PLAYER, DEFAULT_EMPTY_CELLS);		
 	}
 	
 	
@@ -183,28 +152,7 @@ public class GameStage {
 				it.remove();
 			}
 		}
-	}
-	
-	public Cell randCell(Race race, Player owner) {
-		return new Cell(randX(), randY(), randRad(race), randUnits(race), race, owner);
-	}
-	
-	private int randX() {
-		return rand.nextInt(WIDTH);
-	}
-	
-	private int randY() {
-		return rand.nextInt(HEIGHT);
-	}
-	
-	private int randRad(Race race) {
-		return race.minRadius + rand.nextInt(race.maxRadius - race.minRadius + 1);
-	}
-	
-	private int randUnits(Race race) {
-		return rand.nextInt(race.maxInitUnits + 1);
-	}
-	
+	}	
 	
 	/**
 	 * Sends units from all selected cells
@@ -214,8 +162,11 @@ public class GameStage {
 		
 		for (Cell c : cells)
 			if (c.owner == p && c.selected) {
-				grid.runSearch(c, destination);
-				
+				if (!grid.runSearch(c, destination)) {
+					deselectAll(p);
+					return ; // returns if path not found
+				}
+					
 				double units = c.sendUnits();		
 				double unitsPerBacteria = units / Bacteria.BACTERIAS_PER_SHOT;
 				

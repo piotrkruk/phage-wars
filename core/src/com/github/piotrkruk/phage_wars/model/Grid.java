@@ -27,7 +27,7 @@ public class Grid {
 	public final int width, height;
 	public final int widthInPoints, heightInPoints;
 	
-	public final int pointDist = 10;
+	public final int pointDist = 5;
 	
 	private final GameStage game;
 	
@@ -95,8 +95,10 @@ public class Grid {
 	/**
 	 * Runs BFS to find the path
 	 * from 'source' to 'destination'
+	 * 
+	 * @return true if the path was found
 	 */
-	public void runSearch(Cell source, Cell destination) {
+	public boolean runSearch(Cell source, Cell destination) {
 		clear();
 		
 		this.destination = new Point(destination.posX, destination.posY).roundToGrid();
@@ -125,6 +127,9 @@ public class Grid {
 		while (!queue.isEmpty()) {
 			Point pt = queue.poll();
 			
+			if (pt.equals(this.destination))
+				break;
+			
 			int idX = pt.posX / pointDist,
 				idY = pt.posY / pointDist;
 			
@@ -145,6 +150,8 @@ public class Grid {
 				}
 			}
 		}
+		
+		return (this.destination.getSource() != null);
 	}
 	
 	/**
@@ -196,6 +203,18 @@ public class Grid {
 		@Override
 		public Point clone() {
 			return new Point(posX, posY);
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null || !obj.getClass().equals(Point.class))
+				return false;
+			else {
+				Point pt = (Point) obj;
+				
+				return (pt.posX == this.posX &&
+						pt.posY == this.posY);
+			}
 		}
 		
 		public void moveRandomly(Random rand) {
