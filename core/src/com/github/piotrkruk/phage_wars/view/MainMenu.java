@@ -21,7 +21,8 @@ public class MainMenu implements Screen {
     private Stage stage = new Stage();
     
     private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
-    private TextButton btnNewGame = new TextButton(String.valueOf("New Game"), defaultSkin);
+    private TextButton btnNewGame = new TextButton(String.valueOf("Quick game"), defaultSkin);
+    private TextButton btnLevSelect = new TextButton(String.valueOf("Level selection"), defaultSkin);
     private TextButton btnSettings = new TextButton(String.valueOf("Settings"), defaultSkin);
     private TextButton btnExit = new TextButton(String.valueOf("Exit"), defaultSkin);
     
@@ -34,7 +35,8 @@ public class MainMenu implements Screen {
     		block = phageWars.mode.blockSize,
     		left = phageWars.mode.width - border - btnWidth;
     	
-    	btnNewGame.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
+    	btnNewGame.setBounds(left, border + 3 * (block + btnHeight), btnWidth, btnHeight);
+    	btnLevSelect.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
     	btnSettings.setBounds(left, border + block + btnHeight, btnWidth, btnHeight);
     	btnExit.setBounds(left, border, btnWidth, btnHeight);
     	
@@ -43,6 +45,14 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 MainMenu.this.phageWars.setToGame();
+            }
+        } );
+        
+        btnLevSelect.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                MainMenu.this.phageWars.setToLevels();
             }
         } );
         
@@ -80,6 +90,7 @@ public class MainMenu implements Screen {
     	stage.addActor(phageWars.background);
     	
     	stage.addActor(btnNewGame);
+    	stage.addActor(btnLevSelect);
     	stage.addActor(btnSettings);
     	stage.addActor(btnExit);
     }
