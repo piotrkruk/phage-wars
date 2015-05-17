@@ -19,7 +19,7 @@ public class Race {
 	final static double DEFAULT_GROWTH = 3;
 	final static double DEFAULT_GIVES = 0.3;
 	final static int DEFAULT_MIN_RADIUS = 40;
-	final static int DEFAULT_MAX_RADIUS = 120;
+	final static int DEFAULT_MAX_RADIUS = 90;
 	final static int DEFAULT_MIN_INIT_UNITS = 20;
 	final static int DEFAULT_MAX_INIT_UNITS = 30;
 	

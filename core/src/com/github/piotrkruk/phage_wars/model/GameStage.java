@@ -56,6 +56,8 @@ public class GameStage {
 		this.HEIGHT = height;
 		this.mapHandler = new Map(width, height, this);
 		
+		Player.idCnt = 0;
+		
 		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();
 			p.color = colors[i];

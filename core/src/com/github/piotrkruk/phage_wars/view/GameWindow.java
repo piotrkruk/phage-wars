@@ -46,11 +46,40 @@ public class GameWindow implements Screen, InputProcessor {
     private Image circPause = new Image( new Texture(Gdx.files.internal("game_pause.png")) );
     private Image circResume = new Image( new Texture(Gdx.files.internal("game_resume.png")) );
     
+    private Texture[] texturePlayers =
+    	{
+    		new Texture(Gdx.files.internal("cells/cell_blue.png")),
+    		new Texture(Gdx.files.internal("cells/cell_red.png")),
+    		new Texture(Gdx.files.internal("cells/cell_purple.png")),
+    		new Texture(Gdx.files.internal("cells/cell_empty.png"))
+    	};
+    
+    private Image[] imgCells;
+    private int[] imgCellOwners;
+    
     public GameWindow(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
     	game.genRandom();
     	game.startGame();
+    	
+    	imgCells = new Image[game.cells.size()];
+    	imgCellOwners = new int[game.cells.size()];
+    	
+    	for (int i = 0; i < game.cells.size(); i++) {
+    		Player pl = game.cells.get(i).owner;
+    		
+    		if (pl != null)
+    			imgCellOwners[i] = pl.id;
+    		else
+    			imgCellOwners[i] = texturePlayers.length-1;
+    		
+    		imgCells[i] = new Image( texturePlayers[ imgCellOwners[i] ] );
+    		
+    		int diam = game.cells.get(i).radius * 2;
+    		
+    		imgCells[i].setSize(diam, diam);
+    	}
     	
     	int block = phageWars.mode.blockSize,
     		circSize = 2 * block;
@@ -154,21 +183,34 @@ public class GameWindow implements Screen, InputProcessor {
 	        
 	        shapeRenderer.end();        	
         }
-                
-        shapeRenderer.begin(ShapeType.Filled);
-        
-        for (Cell c : game.cells) {
-	    	if (c.owner == null)
-	    		shapeRenderer.setColor(Color.GRAY);
-	    	else
-	    		shapeRenderer.setColor(c.owner.color);
-	    	
-	    	shapeRenderer.circle(c.posX, c.posY, c.radius);
-        }
-        
-        shapeRenderer.end();
 	    	
         batch.begin();
+ 
+        for (int i = 0; i < game.cells.size(); i++) {
+        	Cell c = game.cells.get(i);
+        	Image img = imgCells[i];
+        	
+        	int oldOwn = imgCellOwners[i],
+        		newOwn;
+        	
+        	if (c.owner != null)
+        		newOwn = c.owner.id;
+        	else
+        		newOwn = texturePlayers.length-1;
+        	
+        	if (oldOwn != newOwn) {
+        		imgCellOwners[i] = newOwn;
+        		imgCells[i] = new Image( texturePlayers[newOwn] );
+        		
+        		int diam = c.radius * 2;
+        		imgCells[i].setSize(diam, diam);
+        		
+        		img = imgCells[i];
+        	}
+        	
+        	img.setPosition(c.posX - c.radius, c.posY - c.radius);
+        	img.draw(batch, 1);
+        }
         
         for (Cell c : game.cells) {
         	String temp = String.valueOf(c.getUnits());

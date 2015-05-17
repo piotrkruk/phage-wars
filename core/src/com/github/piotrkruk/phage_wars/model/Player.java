@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Color;
  */
 
 public class Player {
-	private static int idCnt = 0;
+	public static int idCnt = 0;
 	public final int id;
 	
 	public Color color = Color.GRAY;
