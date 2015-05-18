@@ -57,13 +57,13 @@ public class AI implements Runnable {
 	@Override
 	public void run() {		
 		synchronized (game) {
-			while (game.isRunning() && player.isPlaying()) {
-				if (!game.paused)
-					move();
-				
+			while (game.isRunning() && player.isPlaying()) {				
 				try {
 					game.wait( MIN_MOVE_DELAY + rand.nextInt(MAX_MOVE_DELAY - MIN_MOVE_DELAY) );
 				} catch (InterruptedException e) {}
+				
+				if (!game.paused)
+					move();
 			}
 		}
 	}

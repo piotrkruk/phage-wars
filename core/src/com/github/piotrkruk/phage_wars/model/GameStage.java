@@ -13,14 +13,14 @@ import com.badlogic.gdx.graphics.Color;
 public class GameStage {
 	
 	// for positioning of the cells:
-	private final int WIDTH, HEIGHT;
+	private final int WIDTH, HEIGHT, BLOCK_SIZE;
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
 	private static final int DEFAULT_EMPTY_CELLS = 4;
 	
 	private static final double DEFAULT_PLAYER_STRENGTH = 1.0;
-	private static final double DEFAULT_OPPONENT_STRENGTH = 2.5;
+	private static final double DEFAULT_OPPONENT_STRENGTH = 1.4;
 	
 	public static final boolean HUMAN_PLAYER = true;
 	public static final int NO_OF_PLAYERS = 3;
@@ -51,10 +51,12 @@ public class GameStage {
 	public Player player = null;
 	public Race race = null;
 	
-	public GameStage(int width, int height) {
+	public GameStage(int width, int height, int blockSize) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
-		this.mapHandler = new Map(width, height, this);
+		this.BLOCK_SIZE = blockSize;
+		
+		this.mapHandler = new Map(width, height, BLOCK_SIZE, this);
 		
 		Player.idCnt = 0;
 		
@@ -70,7 +72,7 @@ public class GameStage {
 				strength = DEFAULT_OPPONENT_STRENGTH;
 			
 			players.add(p);
-			races.add( new Race(p, strength) );
+			races.add( new Race(BLOCK_SIZE, p, strength) );
 		}
 		
 		grid = new Grid(WIDTH, HEIGHT, this);

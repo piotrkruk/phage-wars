@@ -37,7 +37,7 @@ public class Cell {
 	}
 	
 	public void grow(float delta) {
-		units += delta * race.growthRate;
+		units += delta * race.growthRate(radius);
 	}
 	
 	public synchronized void addUnits(double units, Player from) {

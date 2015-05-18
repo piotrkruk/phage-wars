@@ -12,13 +12,15 @@ public class Map {
 	
 	private final static Random rand = new Random();
 	private final int WIDTH, HEIGHT;
+	private final int BLOCK_SIZE;
 	
 	private final GameStage game;
 
 	
-	public Map(int width, int height, GameStage game) {
+	public Map(int width, int height, int blockSize, GameStage game) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
+		this.BLOCK_SIZE = blockSize;
 		this.game = game;
 	}
 	
@@ -38,13 +40,21 @@ public class Map {
 		}
 		
 		for (int j = 0; j < emptyCells;) {
-			Cell c = randCell(new Race(), null);
+			Cell c = randCell(new Race(BLOCK_SIZE), null);
 			
 			if (isValid(c)) {
 				game.cells.add(c);
 				j++;
 			}
 		}
+	}
+	
+	/**
+	 * @param path - path containing a file from which a map is to be read
+	 * 
+	 */
+	public void read(String path) {
+		// TODO
 	}
 		
 	/**

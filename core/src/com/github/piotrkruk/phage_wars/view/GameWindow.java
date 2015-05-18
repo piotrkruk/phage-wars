@@ -39,8 +39,7 @@ public class GameWindow implements Screen, InputProcessor {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
     
-    private GameStage game = new GameStage(Gdx.graphics.getWidth(),
-    									   Gdx.graphics.getHeight());
+    private GameStage game;
     
     private Image circExit = new Image( new Texture(Gdx.files.internal("game_exit.png")) );
     private Image circPause = new Image( new Texture(Gdx.files.internal("game_pause.png")) );
@@ -59,6 +58,10 @@ public class GameWindow implements Screen, InputProcessor {
     
     public GameWindow(PhageWars phageWars) {
     	this.phageWars = phageWars;
+    	
+    	game = new GameStage(phageWars.mode.width,
+				   			 phageWars.mode.height,
+				   			 phageWars.mode.blockSize);
     	
     	game.genRandom();
     	game.startGame();
