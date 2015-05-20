@@ -13,14 +13,14 @@ import com.badlogic.gdx.graphics.Color;
 public class GameStage {
 	
 	// for positioning of the cells:
-	private final int WIDTH, HEIGHT, BLOCK_SIZE;
+	public final int WIDTH, HEIGHT, BLOCK_SIZE;
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
 	private static final int DEFAULT_EMPTY_CELLS = 4;
 	
 	private static final double DEFAULT_PLAYER_STRENGTH = 1.0;
-	private static final double DEFAULT_OPPONENT_STRENGTH = 1.4;
+	private static final double DEFAULT_OPPONENT_STRENGTH = 1.0;
 	
 	public static final boolean HUMAN_PLAYER = true;
 	public static final int NO_OF_PLAYERS = 3;
@@ -56,7 +56,7 @@ public class GameStage {
 		this.HEIGHT = height;
 		this.BLOCK_SIZE = blockSize;
 		
-		this.mapHandler = new Map(width, height, BLOCK_SIZE, this);
+		this.mapHandler = new Map(this);
 		
 		Player.idCnt = 0;
 		
@@ -139,7 +139,7 @@ public class GameStage {
 	 * 		- positions of the bacterias
 	 * 
 	 */
-	public void update(float delta) {
+	public synchronized void update(float delta) {
 		for (Cell c : cells)
 			if (c.owner != null)
 				c.grow(delta);

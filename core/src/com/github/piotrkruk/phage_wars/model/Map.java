@@ -15,16 +15,11 @@ public class Map {
 	private final static int NUM_OF_TRIALS = 200;
 	
 	private final static Random rand = new Random();
-	private final int WIDTH, HEIGHT;
-	private final int BLOCK_SIZE;
 	
 	private final GameStage game;
 
 	
-	public Map(int width, int height, int blockSize, GameStage game) {
-		this.WIDTH = width;
-		this.HEIGHT = height;
-		this.BLOCK_SIZE = blockSize;
+	public Map(GameStage game) {
 		this.game = game;
 	}
 	
@@ -37,7 +32,8 @@ public class Map {
 		 *  Dummy cell located at the upper-right corner
 		 *  to prevent cells from overlapping with buttons
 		 */
-		Cell dummy = new Cell(WIDTH - 2 * BLOCK_SIZE, HEIGHT, 4 * BLOCK_SIZE, 0, null, null);
+		Cell dummy =
+			new Cell(game.WIDTH - 2 * game.BLOCK_SIZE, game.HEIGHT, 4 * game.BLOCK_SIZE, 0, null, null);
 		
 		/*
 		 * Generate some maps (only non-empty cells)
@@ -76,7 +72,7 @@ public class Map {
 		 * Add empty cells
 		 */
 		for (int j = 0; j < emptyCells;) {
-			Cell c = randCell(new Race(BLOCK_SIZE), null);
+			Cell c = randCell(new Race(game.BLOCK_SIZE), null);
 			
 			if (isValid(c, cellsBest)) {
 				cellsBest.add(c);
@@ -107,8 +103,8 @@ public class Map {
 	 * 
 	 */
 	private boolean isValid(Cell c, List <Cell> list) {
-		if (c.posX < c.radius || c.posX + c.radius > WIDTH ||
-			c.posY < c.radius || c.posY + c.radius > HEIGHT)
+		if (c.posX < c.radius || c.posX + c.radius > game.WIDTH ||
+			c.posY < c.radius || c.posY + c.radius > game.HEIGHT)
 			return false;
 			
 		for (Cell cl : list)
@@ -127,11 +123,11 @@ public class Map {
 	}
 	
 	private int randX() {
-		return rand.nextInt(WIDTH);
+		return rand.nextInt(game.WIDTH);
 	}
 	
 	private int randY() {
-		return rand.nextInt(HEIGHT);
+		return rand.nextInt(game.HEIGHT);
 	}
 	
 	private int randRad(Race race) {
