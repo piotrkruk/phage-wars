@@ -17,7 +17,7 @@ public class Race {
 	final int blockSize;
 	
 	/* 
-	 * Radius and growth_for_radius constants are given in respect to screen's block
+	 * Radius and growth_for_area constants are given in respect to screen's block
 	 * to provide portability for different screen sizes
 	 * 
 	 * However, all values anywhere else (including radius for a cell)
@@ -32,7 +32,7 @@ public class Race {
 	final static double DEFAULT_MAX_RADIUS = 4.0;
 	final static int DEFAULT_MIN_INIT_UNITS = 20;
 	final static int DEFAULT_MAX_INIT_UNITS = 30;
-	final static double GROWTH_FOR_RADIUS = 0.6;
+	final static double GROWTH_FOR_AREA = 0.005;
 	
 	// each race apart from an empty one has it's owner
 	final Player owner;
@@ -74,6 +74,6 @@ public class Race {
 	}
 	
 	public double growthRate(int radius) {
-		return GROWTH_FOR_RADIUS * ( ((double) radius) / blockSize );
+		return GROWTH_FOR_AREA * ( ((double) radius * radius) / blockSize );
 	}
 }

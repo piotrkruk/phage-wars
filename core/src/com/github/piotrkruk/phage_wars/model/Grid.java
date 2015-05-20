@@ -21,13 +21,13 @@ import java.util.Random;
 
 public class Grid {
 	
-	private static final int AVOID_BY = 15;
+	private final int avoidBy;
 		// avoid the border of a cell by this margin
 	
 	public final int width, height;
 	public final int widthInPoints, heightInPoints;
 	
-	public final int pointDist = 5;
+	public final int pointDist;
 	
 	private final GameStage game;
 	
@@ -37,10 +37,12 @@ public class Grid {
 	private Point src[][];
 	private boolean locked[][];
 	
-	public Grid(int width, int height, GameStage game) {
+	public Grid(int width, int height, int blockSize, GameStage game) {
 		this.game = game;
 		this.width = width;
 		this.height = height;
+		this.pointDist = blockSize / 5;
+		this.avoidBy = blockSize / 2;
 		
 		this.widthInPoints = width / pointDist;
 		this.heightInPoints = height / pointDist;
@@ -166,7 +168,7 @@ public class Grid {
 				for (int j = 0; j < heightInPoints; j++) {
 					int dist = distSquared(i * pointDist, j * pointDist, c.posX, c.posY);
 					
-					if (dist <= Math.pow(c.radius + AVOID_BY, 2))
+					if (dist <= Math.pow(c.radius + avoidBy, 2))
 						locked[i][j] = true;
 				}
 		}

@@ -75,7 +75,7 @@ public class GameStage {
 			races.add( new Race(BLOCK_SIZE, p, strength) );
 		}
 		
-		grid = new Grid(WIDTH, HEIGHT, this);
+		grid = new Grid(WIDTH, HEIGHT, BLOCK_SIZE, this);
 		
 		if (HUMAN_PLAYER) {
 			player = players.get(0);

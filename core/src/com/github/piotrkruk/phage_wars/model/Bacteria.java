@@ -17,11 +17,10 @@ public class Bacteria {
 	public static final int DEFAULT_RADIUS = 8;
 	public static final int BACTERIAS_PER_SHOT = 10;
 	private static final double MAX_WAIT_TIME = 0.6;
-	private static final double TIME_PER_PIXEL = 0.01;
+	private static final double TIME_PER_STEP = 0.07;
 	
 	public int posX, posY;
 	public final int radius = DEFAULT_RADIUS;
-	private final double timePerStep;
 	
 	private double timer = -rand.nextDouble() * MAX_WAIT_TIME;
 		// time since started moving
@@ -41,7 +40,6 @@ public class Bacteria {
 		this.units = units;
 		this.from = from;
 		this.destination = destination;
-		this.timePerStep = TIME_PER_PIXEL * g.pointDist;
 		
 		path = g.getPath();
 	}
@@ -55,8 +53,8 @@ public class Bacteria {
 	public boolean move(float delta) {
 		timer += delta;
 		
-		int pos = (int) (timer / timePerStep);
-		double between = (timer / timePerStep) - pos;
+		int pos = (int) (timer / TIME_PER_STEP);
+		double between = (timer / TIME_PER_STEP) - pos;
 		
 			// the bacteria is between path.get(pos) and path.get(pos+1)
 		

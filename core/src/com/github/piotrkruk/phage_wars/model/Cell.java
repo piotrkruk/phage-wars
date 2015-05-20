@@ -80,6 +80,10 @@ public class Cell {
 		return Grid.distSquared(x, y, this.posX, this.posY) <= Math.pow(radius, 2);
 	}
 	
+	public static int distSquared(Cell a, Cell b) {
+		return Grid.distSquared(a.posX, a.posY, b.posX, b.posY);
+	}
+	
 	public boolean doesCollide(Cell c) {
 		int dist = Grid.distSquared(posX, posY, c.posX, c.posY);
 		
