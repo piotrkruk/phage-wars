@@ -19,8 +19,8 @@ public class GameStage {
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
 	private static final int DEFAULT_EMPTY_CELLS = 4;
 	
-	private static final double DEFAULT_PLAYER_STRENGTH = 1.0;
-	private static final double DEFAULT_OPPONENT_STRENGTH = 1.0;
+	private final double PLAYER_STRENGTH = 1.0;
+	private final double AI_STRENGTH;
 	
 	public static final boolean HUMAN_PLAYER = true;
 	public static final int NO_OF_PLAYERS = 3;
@@ -51,10 +51,11 @@ public class GameStage {
 	public Player player = null;
 	public Race race = null;
 	
-	public GameStage(int width, int height, int blockSize) {
+	public GameStage(int width, int height, int blockSize, double aiStrength) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
 		this.BLOCK_SIZE = blockSize;
+		this.AI_STRENGTH = aiStrength;
 		
 		this.mapHandler = new Map(this);
 		
@@ -67,9 +68,9 @@ public class GameStage {
 			double strength;
 			
 			if (HUMAN_PLAYER && i == 0)
-				strength = DEFAULT_PLAYER_STRENGTH;
+				strength = PLAYER_STRENGTH;
 			else
-				strength = DEFAULT_OPPONENT_STRENGTH;
+				strength = AI_STRENGTH;
 			
 			players.add(p);
 			races.add( new Race(BLOCK_SIZE, p, strength) );
@@ -97,7 +98,7 @@ public class GameStage {
 			i = 0;
 		
 		for (; i < NO_OF_PLAYERS; i++)
-			new Thread( new AI(this, players.get(i)) ).start();
+			new Thread( new AI(this, players.get(i), AI_STRENGTH) ).start();
 	}
 	
 	public synchronized boolean isRunning() {

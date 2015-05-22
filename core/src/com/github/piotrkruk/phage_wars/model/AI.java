@@ -13,16 +13,21 @@ import java.util.Random;
 
 public class AI implements Runnable {
 	
-	private static final int MAX_MOVE_DELAY = 2500;
-	private static final int MIN_MOVE_DELAY = 1500;
+	private final int maxMoveDelay;
+	private final int minMoveDelay;
 	private static final Random rand = new Random();
 	
 	private final GameStage game;
 	public final Player player;
+	public double strength;
 	
-	public AI(GameStage game, Player player) {
+	public AI(GameStage game, Player player, double strength) {
 		this.game = game;
 		this.player = player;
+		this.strength = strength;
+		
+		minMoveDelay = (int) (1500 / strength);
+		maxMoveDelay = (int) (2500 / strength);
 	}
 	
 	/**
@@ -135,7 +140,7 @@ public class AI implements Runnable {
 	public void run() {		
 		synchronized (game) {
 			try {
-				game.wait(MIN_MOVE_DELAY);
+				game.wait(minMoveDelay);
 			} catch (InterruptedException e1) {}
 			
 			while (game.isRunning() && player.isPlaying()) {
@@ -143,7 +148,7 @@ public class AI implements Runnable {
 					move();
 				
 				try {
-					game.wait( MIN_MOVE_DELAY + rand.nextInt(MAX_MOVE_DELAY - MIN_MOVE_DELAY) );
+					game.wait( minMoveDelay + rand.nextInt(maxMoveDelay - minMoveDelay) );
 				} catch (InterruptedException e) {}
 			}
 		}

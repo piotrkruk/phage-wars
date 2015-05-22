@@ -61,7 +61,8 @@ public class GameWindow implements Screen, InputProcessor {
     	
     	game = new GameStage(phageWars.mode.width,
 				   			 phageWars.mode.height,
-				   			 phageWars.mode.blockSize);
+				   			 phageWars.mode.blockSize,
+				   			 phageWars.difficulty.aiStrength);
     	
     	game.genRandom();
     	game.startGame();

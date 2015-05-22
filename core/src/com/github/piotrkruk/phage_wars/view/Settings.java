@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.PhageWars.DisplayMode;
+import com.github.piotrkruk.phage_wars.PhageWars.GameMode;
 
 
 /**
@@ -22,15 +23,19 @@ public class Settings implements Screen {
     private Stage stage = new Stage();
     private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
     
-    private TextButton btnBack = new TextButton(String.valueOf("Back to menu"), defaultSkin);
+    private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
     
     private TextButton btnModeNormal = new TextButton(
-    		String.valueOf("Normal resolution (" + DisplayMode.NORMAL.width
-    						+ "x" + DisplayMode.NORMAL.height + ")"), defaultSkin);
+    		"Normal resolution (" + DisplayMode.NORMAL.width
+    		+ "x" + DisplayMode.NORMAL.height + ")", defaultSkin);
     
     private TextButton btnModeHD = new TextButton(
-    		String.valueOf("HD resolution (" + DisplayMode.HD.width
-    						+ "x" + DisplayMode.HD.height + ")"), defaultSkin);
+    		"HD resolution (" + DisplayMode.HD.width
+    		+ "x" + DisplayMode.HD.height + ")", defaultSkin);
+    
+    private TextButton btnEasy = new TextButton("Easy", defaultSkin),
+    				   btnMedium = new TextButton("Medium", defaultSkin),
+    				   btnHard = new TextButton("Hard", defaultSkin);
     
     public Settings(PhageWars phageWars) {
     	this.phageWars = phageWars;
@@ -50,6 +55,34 @@ public class Settings implements Screen {
     	btnModeHD
     		.setBounds(center + block, upper, btnWidth, btnHeight);
     	
+    	upper -= border + btnHeight;
+    	
+    	btnEasy
+			.setBounds(center - block - 1.5f * btnWidth, upper, btnWidth, btnHeight);
+    	btnMedium
+			.setBounds(center - 0.5f * btnWidth, upper, btnWidth, btnHeight);
+    	btnHard
+			.setBounds(center + block + 0.5f * btnWidth, upper, btnWidth, btnHeight);
+    	
+    	btnModeNormal.getStyle().checked = btnModeNormal.getStyle().down;
+    	btnModeHD.getStyle().checked = btnModeHD.getStyle().down;
+    	
+    	btnEasy.getStyle().checked = btnEasy.getStyle().down;
+    	btnMedium.getStyle().checked = btnMedium.getStyle().down;
+    	btnHard.getStyle().checked = btnHard.getStyle().down;
+    	
+    	if (phageWars.mode == DisplayMode.NORMAL)
+    		btnModeNormal.setChecked(true);
+    	else
+    		btnModeHD.setChecked(true);
+    	
+    	if (phageWars.difficulty == GameMode.EASY)
+    		btnEasy.setChecked(true);
+    	else if (phageWars.difficulty == GameMode.MEDIUM)
+    		btnMedium.setChecked(true);
+    	else if (phageWars.difficulty == GameMode.HARD)
+    		btnHard.setChecked(true);
+    	
         btnBack.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
@@ -61,7 +94,7 @@ public class Settings implements Screen {
         btnModeNormal.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
-            {
+            {            	
                 Settings.this.phageWars.mode = DisplayMode.NORMAL;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -74,6 +107,33 @@ public class Settings implements Screen {
             {
                 Settings.this.phageWars.mode = DisplayMode.HD;
                 Settings.this.phageWars.refreshMode();
+                Settings.this.phageWars.setToSettings();
+            }
+        } );
+        
+        btnEasy.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Settings.this.phageWars.difficulty = GameMode.EASY;
+                Settings.this.phageWars.setToSettings();
+            }
+        } );
+        
+        btnMedium.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Settings.this.phageWars.difficulty = GameMode.MEDIUM;
+                Settings.this.phageWars.setToSettings();
+            }
+        } );
+        
+        btnHard.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Settings.this.phageWars.difficulty = GameMode.HARD;
                 Settings.this.phageWars.setToSettings();
             }
         } );
@@ -98,6 +158,10 @@ public class Settings implements Screen {
     	stage.addActor(btnBack);
     	stage.addActor(btnModeNormal);
     	stage.addActor(btnModeHD);
+    	
+    	stage.addActor(btnEasy);
+    	stage.addActor(btnMedium);
+    	stage.addActor(btnHard);
     }
 
     @Override

@@ -12,6 +12,7 @@ public class PhageWars extends Game {
     public final String title = "Phage Wars";
     
     public DisplayMode mode = DisplayMode.HD;
+    public GameMode difficulty = GameMode.MEDIUM;
     
     public Texture texture;
     public Image background;
@@ -68,5 +69,19 @@ public class PhageWars extends Game {
 			btnHeight = 4 * blockSize;
 			border = 2 * blockSize;
 		}
+	}
+	
+	public enum GameMode {
+		
+		EASY(0.6),
+		MEDIUM(1.0),
+		HARD(1.7);
+		
+		public final double aiStrength;
+		
+		private GameMode(double aiStrength) {
+			this.aiStrength = aiStrength;
+		}
+		
 	}
 }
