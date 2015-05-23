@@ -174,13 +174,15 @@ public class GameStage {
 					return ; // returns if path not found
 				}
 					
-				double units = c.sendUnits();		
-				double unitsPerBacteria = units / Bacteria.BACTERIAS_PER_SHOT;
+				double units = c.sendUnits();	
 				
-				for (int i = 0; i < Bacteria.BACTERIAS_PER_SHOT; i++)
+				int numberOfBacterias = (int) (units / Bacteria.UNITS_PER_BACTERIA);
+				double unitsPerBacteria = units / numberOfBacterias;
+				
+				for (int i = 0; i < numberOfBacterias; i++)
 					bacterias.add( new Bacteria(unitsPerBacteria, p, destination, grid) );
 				
-				p.bacteriaCount += Bacteria.BACTERIAS_PER_SHOT;
+				p.bacteriaCount += numberOfBacterias;
 			}
 	}
 	

@@ -26,19 +26,54 @@ public class AI implements Runnable {
 		this.player = player;
 		this.strength = strength;
 		
-		minMoveDelay = (int) (1500 / strength);
-		maxMoveDelay = (int) (2500 / strength);
+		minMoveDelay = (int) (2000 / strength);
+		maxMoveDelay = (int) (3000 / strength);
 	}
 	
 	/**
-	 * Selects random subset of the cells
+	 * Selects subset of the cells
 	 * owned by this player
+	 * suitable for a given target
 	 * 
 	 */
-	private void selectSources() {
-		for (Cell c : game.cells) {
-			if (c.owner == player && rand.nextBoolean())
-				c.select();
+	private void selectSources(Cell target) {
+
+		int minDistance = Integer.MAX_VALUE;
+		double avgDistance = 0.0;
+		
+		for (Cell c : game.cells)
+			if (c.owner == player) {
+				int distance = Cell.distSquared(c, target);
+				
+				minDistance = Math.min(minDistance, distance);
+				avgDistance += distance;
+			}
+		
+		avgDistance /= player.ownCount;
+				
+		if (target.owner == null) {
+			/*
+			 * If target is an empty cell
+			 * then just send from the closest source
+			 */
+			
+			for (Cell c : game.cells)
+				if (c.owner == player && Cell.distSquared(c, target) == minDistance) {
+					c.select();
+					return ;
+				}
+		}
+		else {
+			for (Cell c : game.cells)
+				if (c.owner == player) {
+					double probability = 0.5;
+					
+					probability *= avgDistance / Cell.distSquared(c, target);
+					probability *= c.units / target.units;
+					
+					if (rand.nextDouble() < probability)
+						c.select();
+				}
 		}
 	}
 	
@@ -62,9 +97,6 @@ public class AI implements Runnable {
 		
 		List <Target> targets = new LinkedList <Target> ();
 		
-		// add possibility of not making a move
-		targets.add( new Target(null, 2.0) );
-		
 		double allOwnedUnits = 0,
 			   avgDistSum = 0;
 		
@@ -80,6 +112,15 @@ public class AI implements Runnable {
 		
 		if (targetCount == 0) // no targets
 			return null;
+		else if (targetCount >= player.ownCount) {
+			/*
+			 * add possibility of not making a move
+			 * but only if we haven't overrun the stage yet
+			 * 
+			 */
+			
+			targets.add( new Target(null, 2.0) );
+		}
 		
 		avgDistSum /= (double) targetCount;
 		
@@ -131,7 +172,7 @@ public class AI implements Runnable {
 		Cell target = selectTarget();
 		
 		if (target != null) {
-			selectSources();
+			selectSources(target);
 			game.send(target, player);
 		}
 	}

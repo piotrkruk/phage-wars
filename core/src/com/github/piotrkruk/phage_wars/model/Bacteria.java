@@ -15,7 +15,7 @@ public class Bacteria {
 	private static final Random rand = new Random();
 	
 	public static final int DEFAULT_RADIUS = 8;
-	public static final int BACTERIAS_PER_SHOT = 10;
+	public static final double UNITS_PER_BACTERIA = 1.5;
 	private static final double MAX_WAIT_TIME = 0.6;
 	private static final double TIME_PER_STEP = 0.07;
 	
