@@ -28,6 +28,7 @@ public class MapEditor extends GameDisplayer {
     private TextButton btnLoad = new TextButton(String.valueOf("Load"), defaultSkin);
     
     private int centerX, centerY;
+    
     private boolean creating = false;
     private volatile boolean remapping = false;
 	
@@ -36,8 +37,7 @@ public class MapEditor extends GameDisplayer {
 		
 		game = new GameStage(phageWars.mode.width,
 							 phageWars.mode.height,
-							 phageWars.mode.blockSize,
-							 1.0);
+							 phageWars.mode.blockSize, 1.0);
 		
     	int btnWidth = phageWars.mode.btnWidth,
         	btnHeight = phageWars.mode.btnHeight,
@@ -200,7 +200,7 @@ public class MapEditor extends GameDisplayer {
 					public void canceled() {}
                 	
                 };
-                Gdx.input.getTextInput(listener, "Write [owner id] [number of units]", 
+                Gdx.input.getTextInput(listener, "[owner id] [number of units]", 
                 		"", "for unoccupied cells leave this empty");
     		}
     		else
@@ -209,7 +209,13 @@ public class MapEditor extends GameDisplayer {
     	else if (button == Buttons.RIGHT) {
     		System.out.println("Right mouse click at " + posX + " " + posY);
     		
-    		creating = false;
+    		if (creating) {
+    			creating = false;
+    		} else {    			
+    			/**
+    			 *  TODO: if clicked a cell - delete it
+    			 */
+    		}
     	}
     	
     	return false;

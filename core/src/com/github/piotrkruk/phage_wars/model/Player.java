@@ -2,7 +2,6 @@ package com.github.piotrkruk.phage_wars.model;
 
 import java.io.Serializable;
 
-import com.badlogic.gdx.graphics.Color;
 
 
 
@@ -19,8 +18,6 @@ public class Player implements Serializable {
 	
 	public static int idCnt = 0;
 	public final int id;
-	
-	public transient Color color = Color.GRAY;
 	
 	public volatile int ownCount = 0; // number of owned cells at some moment
 	public volatile int bacteriaCount = 0; // number of owned bacterias

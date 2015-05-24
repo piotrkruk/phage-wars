@@ -65,27 +65,27 @@ public class GameDisplayer implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
-	    stage.act();
-	    stage.draw();
-	        
+		stage.act();
+		stage.draw();
+		    
 		drawCells();
 		drawAmountsOfUnits();
 	}
 	
 	protected void initCellImages() {
     	for (int i = 0; i < game.cells.size(); i++) {
-    		Player pl = game.cells.get(i).owner;
-    		
-    		if (pl != null)
-    			imgCellOwners.add(pl.id);
-    		else
-    			imgCellOwners.add(texturePlayers.length-1);
-    		
-    		imgCells.add( new Image( texturePlayers[ imgCellOwners.get(i) ] ) );
-    		
-    		int diam = game.cells.get(i).radius * 2;
-    		
-    		imgCells.get(i).setSize(diam, diam);
+			Player pl = game.cells.get(i).owner;
+			
+			if (pl != null)
+				imgCellOwners.add(pl.id);
+			else
+				imgCellOwners.add(texturePlayers.length-1);
+			
+			imgCells.add( new Image( texturePlayers[ imgCellOwners.get(i) ] ) );
+			
+			int diam = game.cells.get(i).radius * 2;
+			
+			imgCells.get(i).setSize(diam, diam);
     	}
 	}
 	

@@ -1,12 +1,9 @@
 package com.github.piotrkruk.phage_wars.model;
 
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 
-import com.badlogic.gdx.graphics.Color;
 
 /**
  * Models the game,
@@ -40,15 +37,6 @@ public class GameStage implements Serializable {
 	public List <Player> players = new ArrayList <Player> ();
 	public List <Race> races = new ArrayList <Race> ();
 	
-	private transient Color[] colors =
-		{
-			Color.BLUE,
-			Color.RED,
-			Color.PURPLE,
-			Color.CYAN,
-			Color.GREEN
-		};
-	
 	public List <Cell> cells = new ArrayList <Cell> ();
 	public List <Bacteria> bacterias = new ArrayList <Bacteria> ();
 	
@@ -70,7 +58,6 @@ public class GameStage implements Serializable {
 		
 		for (int i = 0; i < NO_OF_PLAYERS; i++) {
 			Player p = new Player();
-			p.color = colors[i];
 			
 			double strength;
 			
@@ -197,28 +184,5 @@ public class GameStage implements Serializable {
 		for (Cell c : cells)
 			if (c.owner == p)
 				c.deselect();
-	}
-	
-	private void readObject(ObjectInputStream aInputStream) 
-			throws ClassNotFoundException, IOException {
-
-		aInputStream.defaultReadObject();
-		
-		/*
-		 * Re-set colors, which are made transient
-		 * due to the Color class being non-serializable
-		 */
-		
-		colors = new Color[]
-			{
-				Color.BLUE,
-				Color.RED,
-				Color.PURPLE,
-				Color.CYAN,
-				Color.GREEN
-			};
-		
-		for (int i = 0; i < NO_OF_PLAYERS; i++)
-			players.get(i).color = colors[i];
 	}
 }
