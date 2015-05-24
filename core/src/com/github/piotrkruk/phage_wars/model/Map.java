@@ -1,19 +1,28 @@
 package com.github.piotrkruk.phage_wars.model;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 /**
  * Class responsible for generating random maps
- * and (in future) reading generated ones from files
+ * and reading generated ones from *.ser files
+ * which are just GameStage's state serialized
  * 
  */
 
-public class Map {
-	
+public class Map implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private final static int NUM_OF_TRIALS = 200;
-	
 	private final static Random rand = new Random();
 	
 	private final GameStage game;
@@ -93,8 +102,76 @@ public class Map {
 	 * @param path - path containing a file from which a map is to be read
 	 * 
 	 */
-	public void read(String path) {
-		// TODO
+	public static GameStage read(int width, int height, int blockSize,
+			double aiStrength, String path) {
+		
+		FileInputStream fileIn;
+		ObjectInputStream in;
+		
+		try {
+			fileIn = new FileInputStream(path);
+			in = new ObjectInputStream(fileIn);
+			
+			try {
+				GameStage temp = (GameStage) in.readObject();
+				
+				/*
+				 * Set transient variables
+				 * to values given from outside 
+				 */				
+				temp.WIDTH = width;
+				temp.HEIGHT = height;
+				temp.BLOCK_SIZE = blockSize;
+				temp.AI_STRENGTH = aiStrength;
+				
+				temp.grid = new Grid(width, height, blockSize, temp);
+				
+				System.out.println("Map read successfully.");
+				return temp;
+			}
+			finally {
+				in.close();
+				fileIn.close();
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found!");
+		} catch (IOException e) {
+			System.out.println("IO failed! " + e);
+		} catch (ClassNotFoundException e) {
+			System.out.println("Class not found! " + e);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @param path - path containing a file into which a map is to be written
+	 * 
+	 */
+	public static void write(GameStage game, String path) {
+		FileOutputStream fileOut;
+		ObjectOutputStream out;
+		
+		try {
+			fileOut = new FileOutputStream(path);
+			out = new ObjectOutputStream(fileOut);
+			
+			try {
+				out.writeObject(game);
+			}
+			finally {
+				out.close();
+				fileOut.close();
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found!");
+		} catch (IOException e) {
+			System.out.println("IO failed! " + e);
+		}
+		
+		System.out.println("Map saved successfully.");
 	}
 		
 	/**

@@ -130,7 +130,7 @@ public class GameWindow implements Screen, InputProcessor {
     		
     		Dialog msgGameFinished = new Dialog("Infection complete.", defaultSkin);
     		
-    		if (GameStage.HUMAN_PLAYER) {
+    		if (game.HUMAN_PLAYER) {
 	    		boolean hasPlayerWon = game.player.isPlaying();
 	    		
 	    		if (hasPlayerWon) {
@@ -160,7 +160,7 @@ public class GameWindow implements Screen, InputProcessor {
         
         shapeRenderer.end();
 
-        if (GameStage.HUMAN_PLAYER) {
+        if (game.HUMAN_PLAYER) {
         	shapeRenderer.begin(ShapeType.Line);
     
 	        for (Cell c : game.cells)
@@ -310,7 +310,7 @@ public class GameWindow implements Screen, InputProcessor {
     		return false;
     	}
     	
-    	if (pausedCount > 0 || !GameStage.HUMAN_PLAYER)
+    	if (pausedCount > 0 || !game.HUMAN_PLAYER)
     		return false;
     	
 		Cell clicked = null;

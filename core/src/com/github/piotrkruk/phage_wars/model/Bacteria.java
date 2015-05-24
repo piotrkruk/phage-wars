@@ -1,6 +1,7 @@
 package com.github.piotrkruk.phage_wars.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
@@ -11,7 +12,10 @@ import java.util.Random;
  */
 
 
-public class Bacteria {
+public class Bacteria implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private static final Random rand = new Random();
 	
 	public static final int DEFAULT_RADIUS = 8;

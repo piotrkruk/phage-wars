@@ -1,13 +1,17 @@
 package com.github.piotrkruk.phage_wars.model;
 
+import java.io.Serializable;
+
 /**
  * Class containing information
  * about some particular race of cells
  * 
  */
 
-public class Race {
-	
+public class Race implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	final double givesAway;
 	final int minRadius;
 	final int maxRadius;

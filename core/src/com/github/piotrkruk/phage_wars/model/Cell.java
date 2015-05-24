@@ -1,5 +1,7 @@
 package com.github.piotrkruk.phage_wars.model;
 
+import java.io.Serializable;
+
 
 /**
  * Class representing an abstract model
@@ -7,7 +9,10 @@ package com.github.piotrkruk.phage_wars.model;
  * 
  */
 
-public class Cell {
+public class Cell implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private static int idCnt = 0;
 	public final int id;
 	

@@ -1,6 +1,11 @@
 package com.github.piotrkruk.phage_wars.model;
 
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
+
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -10,20 +15,22 @@ import com.badlogic.gdx.graphics.Color;
  *
  */
 
-public class GameStage {
-	
+public class GameStage implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	// for positioning of the cells:
-	public final int WIDTH, HEIGHT, BLOCK_SIZE;
+	public transient int WIDTH, HEIGHT, BLOCK_SIZE;
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
 	private static final int DEFAULT_EMPTY_CELLS = 4;
 	
-	private final double PLAYER_STRENGTH = 1.0;
-	private final double AI_STRENGTH;
+	public transient double PLAYER_STRENGTH = 1.0;
+	public transient double AI_STRENGTH = 1.0;
 	
-	public static final boolean HUMAN_PLAYER = true;
-	public static final int NO_OF_PLAYERS = 3;
+	public final boolean HUMAN_PLAYER = true;
+	public final int NO_OF_PLAYERS = 3;
 	
 	private final Map mapHandler;
 	
@@ -33,7 +40,7 @@ public class GameStage {
 	public List <Player> players = new ArrayList <Player> ();
 	public List <Race> races = new ArrayList <Race> ();
 	
-	Color[] colors =
+	private transient Color[] colors =
 		{
 			Color.BLUE,
 			Color.RED,
@@ -45,7 +52,7 @@ public class GameStage {
 	public List <Cell> cells = new ArrayList <Cell> ();
 	public List <Bacteria> bacterias = new ArrayList <Bacteria> ();
 	
-	public Grid grid;
+	public transient Grid grid;
 	
 	// if there is a human player - his player class and race:
 	public Player player = null;
@@ -186,11 +193,32 @@ public class GameStage {
 			}
 	}
 	
-
 	public synchronized void deselectAll(Player p) {
 		for (Cell c : cells)
 			if (c.owner == p)
 				c.deselect();
 	}
-
+	
+	private void readObject(ObjectInputStream aInputStream) 
+			throws ClassNotFoundException, IOException {
+		
+		aInputStream.defaultReadObject();
+		
+		/*
+		 * Re-set colors, which are made transient
+		 * due to the Color class being non-serializable
+		 */
+		
+		colors = new Color[]
+			{
+				Color.BLUE,
+				Color.RED,
+				Color.PURPLE,
+				Color.CYAN,
+				Color.GREEN
+			};
+		
+		for (int i = 0; i < NO_OF_PLAYERS; i++)
+			players.get(i).color = colors[i];
+	}
 }
