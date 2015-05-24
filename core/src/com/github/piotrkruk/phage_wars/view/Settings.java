@@ -21,7 +21,7 @@ public class Settings implements Screen {
 	private final PhageWars phageWars;
     
     private Stage stage = new Stage();
-    private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
+    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     
     private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
     

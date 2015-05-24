@@ -201,7 +201,7 @@ public class GameStage implements Serializable {
 	
 	private void readObject(ObjectInputStream aInputStream) 
 			throws ClassNotFoundException, IOException {
-		
+
 		aInputStream.defaultReadObject();
 		
 		/*

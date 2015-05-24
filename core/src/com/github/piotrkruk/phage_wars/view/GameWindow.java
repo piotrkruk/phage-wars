@@ -34,16 +34,16 @@ public class GameWindow implements Screen, InputProcessor {
 	private volatile int pausedCount = 0;
     
     private Stage stage = new Stage();
-    private BitmapFont font = new BitmapFont(Gdx.files.internal("default.fnt"));
+    private BitmapFont font = new BitmapFont(Gdx.files.internal("skins/default.fnt"));
     private SpriteBatch batch = new SpriteBatch();
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Skin defaultSkin = new Skin(Gdx.files.internal("uiskin.json"));
+    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     
     private GameStage game;
     
-    private Image circExit = new Image( new Texture(Gdx.files.internal("game_exit.png")) );
-    private Image circPause = new Image( new Texture(Gdx.files.internal("game_pause.png")) );
-    private Image circResume = new Image( new Texture(Gdx.files.internal("game_resume.png")) );
+    private Image circExit = new Image( new Texture(Gdx.files.internal("buttons/game_exit.png")) );
+    private Image circPause = new Image( new Texture(Gdx.files.internal("buttons/game_pause.png")) );
+    private Image circResume = new Image( new Texture(Gdx.files.internal("buttons/game_resume.png")) );
     
     private Texture[] texturePlayers =
     	{
@@ -51,6 +51,13 @@ public class GameWindow implements Screen, InputProcessor {
     		new Texture(Gdx.files.internal("cells/cell_red.png")),
     		new Texture(Gdx.files.internal("cells/cell_purple.png")),
     		new Texture(Gdx.files.internal("cells/cell_empty.png"))
+    	};
+    
+    private Texture[] textureBacterias =
+    	{
+    		new Texture(Gdx.files.internal("bacterias/bacteria_blue.png")),
+    		new Texture(Gdx.files.internal("bacterias/bacteria_red.png")),
+    		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png"))
     	};
     
     private Image[] imgCells;
@@ -117,7 +124,11 @@ public class GameWindow implements Screen, InputProcessor {
 	    			game.update(delta);
 	    		
 	    		checkGameStatus();
-	    		drawCells(delta);
+	    		
+	    		drawBacterias();
+	    		drawSelections();
+	    		drawCells();
+	    		drawAmountsOfUnits();
 	    	}
 	    }
     }
@@ -149,45 +160,55 @@ public class GameWindow implements Screen, InputProcessor {
     		msgGameFinished.show(stage);
     	}
     }
+    
+    private void drawBacterias() {    	
+    	batch.begin();
+    	
+    	for (Bacteria b : game.bacterias) {
+    		Image img = new Image( textureBacterias[b.from.id] );
+    		
+    		int diam = b.radius * 2;
+    		
+    		img.setSize(diam, diam);
+    		img.setPosition(b.posX - b.radius, b.posY - b.radius);
+    		img.draw(batch, 1);
+    	}
+    	
+    	batch.end();
+    }
+    
+    private void drawSelections() {
+    	if (!game.HUMAN_PLAYER)
+    		return;
+    	
+    	shapeRenderer.begin(ShapeType.Line);
 
-    private void drawCells(float delta) {        
+        for (Cell c : game.cells)
+        	if (c.owner == game.player && c.selected) {        		
+        		int posX = Gdx.input.getX(),
+        			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        		
+        		Gdx.gl20.glLineWidth(6);
+        		
+        		shapeRenderer.setColor(Color.WHITE);
+        		shapeRenderer.line(c.posX, c.posY, posX, posY);
+        	}
+        
+        shapeRenderer.end();
+    
         shapeRenderer.begin(ShapeType.Filled);
         
-        for (Bacteria b : game.bacterias) {
-        	shapeRenderer.setColor(b.from.color);        	
-        	shapeRenderer.circle(b.posX, b.posY, b.radius);
+        for (Cell c : game.cells) {
+        	if (c.owner == game.player && c.selected) {
+        		shapeRenderer.setColor(Color.YELLOW);
+        		shapeRenderer.circle(c.posX, c.posY, c.radius + 5);
+        	}
         }
         
         shapeRenderer.end();
+    }
 
-        if (game.HUMAN_PLAYER) {
-        	shapeRenderer.begin(ShapeType.Line);
-    
-	        for (Cell c : game.cells)
-	        	if (c.owner == game.player && c.selected) {        		
-	        		int posX = Gdx.input.getX(),
-	        			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
-	        		
-	        		Gdx.gl20.glLineWidth(6);
-	        		
-	        		shapeRenderer.setColor(Color.WHITE);
-	        		shapeRenderer.line(c.posX, c.posY, posX, posY);
-	        	}
-	        
-	        shapeRenderer.end();
-        
-	        shapeRenderer.begin(ShapeType.Filled);
-	        
-	        for (Cell c : game.cells) {
-	        	if (c.owner == game.player && c.selected) {
-	        		shapeRenderer.setColor(Color.YELLOW);
-	        		shapeRenderer.circle(c.posX, c.posY, c.radius + 5);
-	        	}
-	        }
-	        
-	        shapeRenderer.end();        	
-        }
-	    	
+    private void drawCells() {	    	
         batch.begin();
  
         for (int i = 0; i < game.cells.size(); i++) {
@@ -215,6 +236,12 @@ public class GameWindow implements Screen, InputProcessor {
         	img.setPosition(c.posX - c.radius, c.posY - c.radius);
         	img.draw(batch, 1);
         }
+        
+        batch.end();
+    }
+    
+    private void drawAmountsOfUnits() {
+        batch.begin();
         
         for (Cell c : game.cells) {
         	String temp = String.valueOf(c.getUnits());
