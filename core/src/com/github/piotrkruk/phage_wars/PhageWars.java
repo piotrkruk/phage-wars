@@ -43,6 +43,10 @@ public class PhageWars extends Game {
 		setScreen(new Settings(this));
 	}
 	
+	public void setToMapEditor() {
+		setScreen(new MapEditor(this));
+	}
+	
 	public void refreshMode() {
 		Gdx.graphics.setDisplayMode(mode.width, mode.height, false);
 		background.setSize(mode.width, mode.height);

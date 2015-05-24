@@ -22,6 +22,7 @@ public class Levels implements Screen {
     private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     
     private TextButton btnBack = new TextButton(String.valueOf("Back to menu"), defaultSkin);
+    private TextButton btnEditor = new TextButton(String.valueOf("Open editor"), defaultSkin);
     
     public Levels(PhageWars phageWars) {
     	this.phageWars = phageWars;
@@ -32,12 +33,21 @@ public class Levels implements Screen {
         	left = phageWars.mode.width - border - btnWidth;
     	
     	btnBack.setBounds(left, border, btnWidth, btnHeight);
+    	btnEditor.setBounds(border, border, btnWidth, btnHeight);
     	
         btnBack.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
                 Levels.this.phageWars.setToMenu();
+            }
+        });
+        
+        btnEditor.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Levels.this.phageWars.setToMapEditor();
             }
         });
         
@@ -59,6 +69,7 @@ public class Levels implements Screen {
     	stage.addActor(phageWars.background);
     	
     	stage.addActor(btnBack);
+    	stage.addActor(btnEditor);
     }
 
     @Override

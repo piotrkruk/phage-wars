@@ -2,18 +2,11 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.*;
 
@@ -28,30 +21,13 @@ import com.github.piotrkruk.phage_wars.model.*;
  *
  */
 
-public class GameWindow implements Screen, InputProcessor {
-	private final PhageWars phageWars;
+public class GameWindow extends GameDisplayer {
 	private volatile boolean finished = false;
 	private volatile int pausedCount = 0;
-    
-    private Stage stage = new Stage();
-    private BitmapFont font = new BitmapFont(Gdx.files.internal("skins/default.fnt"));
-    private SpriteBatch batch = new SpriteBatch();
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-    
-    private GameStage game;
     
     private Image circExit = new Image( new Texture(Gdx.files.internal("buttons/game_exit.png")) );
     private Image circPause = new Image( new Texture(Gdx.files.internal("buttons/game_pause.png")) );
     private Image circResume = new Image( new Texture(Gdx.files.internal("buttons/game_resume.png")) );
-    
-    private Texture[] texturePlayers =
-    	{
-    		new Texture(Gdx.files.internal("cells/cell_blue.png")),
-    		new Texture(Gdx.files.internal("cells/cell_red.png")),
-    		new Texture(Gdx.files.internal("cells/cell_purple.png")),
-    		new Texture(Gdx.files.internal("cells/cell_empty.png"))
-    	};
     
     private Texture[] textureBacterias =
     	{
@@ -60,11 +36,8 @@ public class GameWindow implements Screen, InputProcessor {
     		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png"))
     	};
     
-    private Image[] imgCells;
-    private int[] imgCellOwners;
-    
     public GameWindow(PhageWars phageWars) {
-    	this.phageWars = phageWars;
+    	super(phageWars);
     	
     	game = new GameStage(phageWars.mode.width,
 				   			 phageWars.mode.height,
@@ -72,25 +45,8 @@ public class GameWindow implements Screen, InputProcessor {
 				   			 phageWars.difficulty.aiStrength);
     	
     	game.genRandom();
-    	game.startGame();
     	
-    	imgCells = new Image[game.cells.size()];
-    	imgCellOwners = new int[game.cells.size()];
-    	
-    	for (int i = 0; i < game.cells.size(); i++) {
-    		Player pl = game.cells.get(i).owner;
-    		
-    		if (pl != null)
-    			imgCellOwners[i] = pl.id;
-    		else
-    			imgCellOwners[i] = texturePlayers.length-1;
-    		
-    		imgCells[i] = new Image( texturePlayers[ imgCellOwners[i] ] );
-    		
-    		int diam = game.cells.get(i).radius * 2;
-    		
-    		imgCells[i].setSize(diam, diam);
-    	}
+    	initCellImages();
     	
     	int block = phageWars.mode.blockSize,
     		circSize = 2 * block;
@@ -110,6 +66,7 @@ public class GameWindow implements Screen, InputProcessor {
     	
     	circResume.setVisible(false);
     	
+    	game.startGame();
     	Gdx.input.setInputProcessor(this);
     }
 
@@ -161,7 +118,7 @@ public class GameWindow implements Screen, InputProcessor {
     	}
     }
     
-    private void drawBacterias() {    	
+    private void drawBacterias() {
     	batch.begin();
     	
     	for (Bacteria b : game.bacterias) {
@@ -208,58 +165,6 @@ public class GameWindow implements Screen, InputProcessor {
         shapeRenderer.end();
     }
 
-    private void drawCells() {	    	
-        batch.begin();
- 
-        for (int i = 0; i < game.cells.size(); i++) {
-        	Cell c = game.cells.get(i);
-        	Image img = imgCells[i];
-        	
-        	int oldOwn = imgCellOwners[i],
-        		newOwn;
-        	
-        	if (c.owner != null)
-        		newOwn = c.owner.id;
-        	else
-        		newOwn = texturePlayers.length-1;
-        	
-        	if (oldOwn != newOwn) {
-        		imgCellOwners[i] = newOwn;
-        		imgCells[i] = new Image( texturePlayers[newOwn] );
-        		
-        		int diam = c.radius * 2;
-        		imgCells[i].setSize(diam, diam);
-        		
-        		img = imgCells[i];
-        	}
-        	
-        	img.setPosition(c.posX - c.radius, c.posY - c.radius);
-        	img.draw(batch, 1);
-        }
-        
-        batch.end();
-    }
-    
-    private void drawAmountsOfUnits() {
-        batch.begin();
-        
-        for (Cell c : game.cells) {
-        	String temp = String.valueOf(c.getUnits());
-        	
-        	float approxHeight = font.getCapHeight(),
-        		  approxWidth = 2.4f * font.getSpaceWidth() * temp.length();
-        	
-        	font.draw(batch, temp,
-        			c.posX - approxWidth / 2, c.posY + approxHeight / 2);
-        }
-        	
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
     @Override
     public void show() {
     	stage.addActor(phageWars.background);
@@ -267,11 +172,6 @@ public class GameWindow implements Screen, InputProcessor {
     	stage.addActor(circExit);
     	stage.addActor(circPause);
     	stage.addActor(circResume);
-    }
-
-    @Override
-    public void hide() {
-        dispose();
     }
 
     @Override
@@ -298,11 +198,6 @@ public class GameWindow implements Screen, InputProcessor {
 	    	circPause.setVisible(true);
 	    	circResume.setVisible(false);
     	}
-    }
-
-    @Override
-    public void dispose() {
-    	stage.dispose();
     }
    
     @Override
@@ -366,40 +261,4 @@ public class GameWindow implements Screen, InputProcessor {
 	    	return false;
 		}
     }
-   
-
-    @Override
-    public boolean keyDown(int keycode) {
-    	return false;
-	}
-	
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-	
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-	
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-	
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-	
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-	
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
-	}
 }

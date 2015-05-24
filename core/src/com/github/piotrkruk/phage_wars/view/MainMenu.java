@@ -22,7 +22,7 @@ public class MainMenu implements Screen {
     
     private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     private TextButton btnNewGame = new TextButton(String.valueOf("Quick game"), defaultSkin);
-    private TextButton btnLevSelect = new TextButton(String.valueOf("Level selection"), defaultSkin);
+    private TextButton btnLevSelect = new TextButton(String.valueOf("Levels"), defaultSkin);
     private TextButton btnSettings = new TextButton(String.valueOf("Settings"), defaultSkin);
     private TextButton btnExit = new TextButton(String.valueOf("Exit"), defaultSkin);
     
