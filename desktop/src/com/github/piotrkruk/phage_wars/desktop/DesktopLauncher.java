@@ -31,7 +31,7 @@ public class DesktopLauncher {
 		config.height = phageWars.mode.height;
 		config.title = phageWars.title;
 		config.fullscreen = phageWars.mode.fullscreen;
-		config.vSyncEnabled = false;
+		config.vSyncEnabled = true;
 		config.resizable = false;
 		config.addIcon("icon_launcher.png", Files.FileType.Internal);
 		

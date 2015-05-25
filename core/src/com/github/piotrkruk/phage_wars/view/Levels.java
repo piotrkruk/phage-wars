@@ -2,6 +2,7 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,6 +21,9 @@ public class Levels implements Screen {
     
     private Stage stage = new Stage();
     private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+
+    private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
+    private float buttonclickvolume = 0.7f;
     
     private TextButton btnBack = new TextButton(String.valueOf("Back to menu"), defaultSkin);
     private TextButton btnEditor = new TextButton(String.valueOf("Open editor"), defaultSkin);
@@ -39,6 +43,7 @@ public class Levels implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Levels.this.phageWars.setToMenu();
             }
         });
@@ -47,6 +52,7 @@ public class Levels implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Levels.this.phageWars.setToMapEditor();
             }
         });

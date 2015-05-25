@@ -2,6 +2,7 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,7 +23,10 @@ public class Settings implements Screen {
     
     private Stage stage = new Stage();
     private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-    
+
+    private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
+    private float buttonclickvolume = 0.7f;
+
     private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
     
     private TextButton btnModeNormal = new TextButton(
@@ -90,19 +94,21 @@ public class Settings implements Screen {
     		btnMedium.setChecked(true);
     	else if (phageWars.difficulty == GameMode.HARD)
     		btnHard.setChecked(true);
-    	
+
         btnBack.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.setToMenu();
             }
         } );
-        
+
         btnModeNormal.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
-            {            	
+            {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.mode = DisplayMode.NORMAL;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -113,6 +119,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.mode = DisplayMode.HD;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -123,9 +130,11 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.mode = DisplayMode.FS;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
+
             }
         } );
 
@@ -134,6 +143,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.difficulty = GameMode.EASY;
                 Settings.this.phageWars.setToSettings();
             }
@@ -143,6 +153,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.difficulty = GameMode.MEDIUM;
                 Settings.this.phageWars.setToSettings();
             }
@@ -152,6 +163,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Settings.this.phageWars.difficulty = GameMode.HARD;
                 Settings.this.phageWars.setToSettings();
             }

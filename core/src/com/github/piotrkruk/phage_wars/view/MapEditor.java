@@ -3,6 +3,7 @@ package com.github.piotrkruk.phage_wars.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,6 +29,9 @@ public class MapEditor extends GameDisplayer {
     private TextButton btnLoad = new TextButton(String.valueOf("Load"), defaultSkin);
     
     private int centerX, centerY;
+
+	private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
+	private float buttonclickvolume = 0.7f;
     
     private boolean creating = false;
     private volatile boolean remapping = false;
@@ -53,7 +57,8 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                MapEditor.this.phageWars.setToLevels();
+				buttonclick.play(buttonclickvolume);
+				MapEditor.this.phageWars.setToLevels();
             }
         } );
         
@@ -61,6 +66,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+				buttonclick.play(buttonclickvolume);
                 Input.TextInputListener listener = new Input.TextInputListener() {
 
 					@Override
@@ -80,6 +86,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+				buttonclick.play(buttonclickvolume);
                 Input.TextInputListener listener = new Input.TextInputListener() {
 
 					@Override

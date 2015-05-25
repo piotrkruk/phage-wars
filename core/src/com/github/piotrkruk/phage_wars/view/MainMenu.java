@@ -2,6 +2,7 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -25,6 +26,9 @@ public class MainMenu implements Screen {
     private TextButton btnLevSelect = new TextButton(String.valueOf("Levels"), defaultSkin);
     private TextButton btnSettings = new TextButton(String.valueOf("Settings"), defaultSkin);
     private TextButton btnExit = new TextButton(String.valueOf("Exit"), defaultSkin);
+
+    private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
+    private float buttonclickvolume = 0.7f;
     
     public MainMenu(PhageWars phageWars) {
     	this.phageWars = phageWars;
@@ -39,11 +43,11 @@ public class MainMenu implements Screen {
     	btnLevSelect.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
     	btnSettings.setBounds(left, border + block + btnHeight, btnWidth, btnHeight);
     	btnExit.setBounds(left, border, btnWidth, btnHeight);
-    	
         btnNewGame.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 MainMenu.this.phageWars.setToGame();
             }
         } );
@@ -52,6 +56,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 MainMenu.this.phageWars.setToLevels();
             }
         } );
@@ -60,6 +65,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 MainMenu.this.phageWars.setToSettings();
             }
         } );
@@ -68,6 +74,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                buttonclick.play(buttonclickvolume);
                 Gdx.app.exit();
             }
         } );
