@@ -33,7 +33,11 @@ public class GameWindow extends GameDisplayer {
     	{
     		new Texture(Gdx.files.internal("bacterias/bacteria_blue.png")),
     		new Texture(Gdx.files.internal("bacterias/bacteria_red.png")),
-    		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png"))
+    		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_yellow.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_turquoise.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_green.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_orange.png"))
     	};
     
     public GameWindow(PhageWars phageWars) {

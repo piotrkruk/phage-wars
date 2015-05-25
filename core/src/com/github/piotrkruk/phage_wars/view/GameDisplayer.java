@@ -43,6 +43,10 @@ public class GameDisplayer implements Screen, InputProcessor {
     		new Texture(Gdx.files.internal("cells/cell_blue.png")),
     		new Texture(Gdx.files.internal("cells/cell_red.png")),
     		new Texture(Gdx.files.internal("cells/cell_purple.png")),
+			new Texture(Gdx.files.internal("cells/cell_yellow.png")),
+			new Texture(Gdx.files.internal("cells/cell_turquoise.png")),
+			new Texture(Gdx.files.internal("cells/cell_green.png")),
+			new Texture(Gdx.files.internal("cells/cell_orange.png")),
     		new Texture(Gdx.files.internal("cells/cell_empty.png"))
     	};
     

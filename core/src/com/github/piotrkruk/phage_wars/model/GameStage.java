@@ -21,13 +21,13 @@ public class GameStage implements Serializable {
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
-	private static final int DEFAULT_EMPTY_CELLS = 4;
+	private static final int DEFAULT_EMPTY_CELLS = 2;
 	
 	public transient double PLAYER_STRENGTH = 1.0;
 	public transient double AI_STRENGTH = 1.0;
 	
 	public final boolean HUMAN_PLAYER = true;
-	public final int NO_OF_PLAYERS = 3;
+	public final int NO_OF_PLAYERS = 7;
 	
 	private final Map mapHandler;
 	
