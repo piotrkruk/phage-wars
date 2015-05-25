@@ -21,13 +21,17 @@ public class GameStage implements Serializable {
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
-	private static final int DEFAULT_EMPTY_CELLS = 2;
+	private static final int DEFAULT_EMPTY_CELLS = 4;
+	private static final int DEFAULT_NO_OF_PLAYERS = 3;
+	public static final int MAX_NO_OF_PLAYERS = 7;
 	
 	public transient double PLAYER_STRENGTH = 1.0;
 	public transient double AI_STRENGTH = 1.0;
 	
 	public final boolean HUMAN_PLAYER = true;
-	public final int NO_OF_PLAYERS = 7;
+	
+	public final int NO_OF_PLAYERS;
+	public final int NO_OF_IMAGES_TO_CHOOSE_FROM = 6;
 	
 	private final Map mapHandler;
 	
@@ -47,10 +51,15 @@ public class GameStage implements Serializable {
 	public Race race = null;
 	
 	public GameStage(int width, int height, int blockSize, double aiStrength) {
+		this(width, height, blockSize, aiStrength, DEFAULT_NO_OF_PLAYERS);
+	}
+	
+	public GameStage(int width, int height, int blockSize, double aiStrength, int noOfPlayers) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
 		this.BLOCK_SIZE = blockSize;
 		this.AI_STRENGTH = aiStrength;
+		this.NO_OF_PLAYERS = noOfPlayers;
 		
 		this.mapHandler = new Map(this);
 		
@@ -91,8 +100,15 @@ public class GameStage implements Serializable {
 		else
 			i = 0;
 		
+		/*
+		 * Run threads for all the AI's, omitting
+		 * the dead ones - during map edition all players
+		 * are created, but some may have not been given any cells
+		 */
+		
 		for (; i < NO_OF_PLAYERS; i++)
-			new Thread( new AI(this, players.get(i), AI_STRENGTH) ).start();
+			if (players.get(i).isPlaying())
+				new Thread( new AI(this, players.get(i), AI_STRENGTH) ).start();
 	}
 	
 	public synchronized boolean isRunning() {

@@ -37,7 +37,7 @@ public class MapEditor extends GameDisplayer {
 		
 		game = new GameStage(phageWars.mode.width,
 							 phageWars.mode.height,
-							 phageWars.mode.blockSize, 1.0);
+							 phageWars.mode.blockSize, 1.0, GameStage.MAX_NO_OF_PLAYERS);
 		
     	int btnWidth = phageWars.mode.btnWidth,
         	btnHeight = phageWars.mode.btnHeight,
@@ -166,14 +166,19 @@ public class MapEditor extends GameDisplayer {
 						Race race = null;
 						Player pl = null;
 						
-						if (!text.equals("")) {
-							String[] temp = text.split(" ");
-							
-							id = Integer.parseInt(temp[0]);
-							initUnits = Integer.parseInt(temp[1]);
-							
-							race = game.races.get(id);
-							pl = game.players.get(id);
+						if (!text.equals("")) {							
+							try {
+								String[] temp = text.split(" ");
+								
+								id = Integer.parseInt(temp[0]);
+								initUnits = Integer.parseInt(temp[1]);
+								
+								race = game.races.get(id);
+								pl = game.players.get(id);
+							} catch (RuntimeException e) {
+								System.out.println("Illegal arguments!");
+								return ;
+							}
 						}
 						else {
 							id = texturePlayers.length - 1;

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -92,8 +93,26 @@ public class Map implements Serializable {
 		
 		cellsBest.remove(0); // remove dummy cell
 		
-		for (int i = 0; i < game.players.size(); i++)
-			game.players.get(i).ownCount = cellsPerPlayer;
+		/*
+		 * Assign images randomly to opponent players
+		 * but the human playing the game is always blue
+		 */
+		
+		List <Integer> idList = new LinkedList <Integer> ();
+		
+		for (int i = 1; i < game.NO_OF_IMAGES_TO_CHOOSE_FROM; i++)
+			idList.add(i);
+		
+		Collections.shuffle(idList);
+			
+		idList.add(0, 0);
+		
+		for (int i = 0; i < game.NO_OF_PLAYERS; i++) {
+			Player pl = game.players.get(i);
+			
+			pl.ownCount = cellsPerPlayer;
+			pl.imageId = idList.get(i);
+		}
 		
 		game.cells = cellsBest;
 	}

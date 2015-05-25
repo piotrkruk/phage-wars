@@ -44,10 +44,21 @@ public class GameDisplayer implements Screen, InputProcessor {
     		new Texture(Gdx.files.internal("cells/cell_red.png")),
     		new Texture(Gdx.files.internal("cells/cell_purple.png")),
 			new Texture(Gdx.files.internal("cells/cell_yellow.png")),
-			new Texture(Gdx.files.internal("cells/cell_turquoise.png")),
 			new Texture(Gdx.files.internal("cells/cell_green.png")),
 			new Texture(Gdx.files.internal("cells/cell_orange.png")),
+			new Texture(Gdx.files.internal("cells/cell_turquoise.png")),
     		new Texture(Gdx.files.internal("cells/cell_empty.png"))
+    	};
+    
+    protected Texture[] textureBacterias =
+    	{
+    		new Texture(Gdx.files.internal("bacterias/bacteria_blue.png")),
+    		new Texture(Gdx.files.internal("bacterias/bacteria_red.png")),
+    		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_yellow.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_green.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_orange.png")),
+			new Texture(Gdx.files.internal("bacterias/bacteria_turquoise.png"))
     	};
     
     protected List <Image> imgCells = new LinkedList <Image> ();
@@ -81,7 +92,7 @@ public class GameDisplayer implements Screen, InputProcessor {
 			Player pl = game.cells.get(i).owner;
 			
 			if (pl != null)
-				imgCellOwners.add(pl.id);
+				imgCellOwners.add(pl.imageId);
 			else
 				imgCellOwners.add(texturePlayers.length-1);
 			
@@ -93,7 +104,7 @@ public class GameDisplayer implements Screen, InputProcessor {
     	}
 	}
 	
-    protected void drawCells() {	    	
+    protected void drawCells() {    	
         batch.begin();
  
         for (int i = 0; i < game.cells.size(); i++) {
@@ -104,7 +115,7 @@ public class GameDisplayer implements Screen, InputProcessor {
         		newOwn;
         	
         	if (c.owner != null)
-        		newOwn = c.owner.id;
+        		newOwn = c.owner.imageId;
         	else
         		newOwn = texturePlayers.length-1;
         	

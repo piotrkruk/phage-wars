@@ -29,17 +29,6 @@ public class GameWindow extends GameDisplayer {
     private Image circPause = new Image( new Texture(Gdx.files.internal("buttons/game_pause.png")) );
     private Image circResume = new Image( new Texture(Gdx.files.internal("buttons/game_resume.png")) );
     
-    private Texture[] textureBacterias =
-    	{
-    		new Texture(Gdx.files.internal("bacterias/bacteria_blue.png")),
-    		new Texture(Gdx.files.internal("bacterias/bacteria_red.png")),
-    		new Texture(Gdx.files.internal("bacterias/bacteria_purple.png")),
-			new Texture(Gdx.files.internal("bacterias/bacteria_yellow.png")),
-			new Texture(Gdx.files.internal("bacterias/bacteria_turquoise.png")),
-			new Texture(Gdx.files.internal("bacterias/bacteria_green.png")),
-			new Texture(Gdx.files.internal("bacterias/bacteria_orange.png"))
-    	};
-    
     public GameWindow(PhageWars phageWars) {
     	super(phageWars);
     	
@@ -126,7 +115,7 @@ public class GameWindow extends GameDisplayer {
     	batch.begin();
     	
     	for (Bacteria b : game.bacterias) {
-    		Image img = new Image( textureBacterias[b.from.id] );
+    		Image img = new Image( textureBacterias[b.from.imageId] );
     		
     		int diam = b.radius * 2;
     		

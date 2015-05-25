@@ -17,7 +17,9 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static int idCnt = 0;
+	
 	public final int id;
+	public int imageId;
 	
 	public volatile int ownCount = 0; // number of owned cells at some moment
 	public volatile int bacteriaCount = 0; // number of owned bacterias
@@ -26,7 +28,12 @@ public class Player implements Serializable {
 							 		 // (only human players by default)
 	
 	public Player() {
+		this(idCnt);
+	}
+	
+	public Player(int imageId) {
 		id = idCnt++;
+		this.imageId = imageId;
 	}
 	
 	public void setActive() {
