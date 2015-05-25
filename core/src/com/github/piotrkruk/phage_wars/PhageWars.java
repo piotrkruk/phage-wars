@@ -11,7 +11,7 @@ import com.github.piotrkruk.phage_wars.view.*;
 public class PhageWars extends Game {    
     public final String title = "Phage Wars";
     
-    public DisplayMode mode = DisplayMode.HD;
+    public DisplayMode mode = DisplayMode.NORMAL;
     public GameMode difficulty = GameMode.MEDIUM;
     
     public Texture texture;
@@ -78,7 +78,7 @@ public class PhageWars extends Game {
 	public enum GameMode {
 		
 		EASY(0.6),
-		MEDIUM(1.0),
+		MEDIUM(0.9),
 		HARD(1.7);
 		
 		public final double aiStrength;
