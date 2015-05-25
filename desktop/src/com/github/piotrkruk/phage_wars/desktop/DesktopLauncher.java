@@ -25,12 +25,13 @@ public class DesktopLauncher {
 			System.out.println("Choosing normal mode.");
 			phageWars.mode = DisplayMode.NORMAL;
 		}
-		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
 		config.width = phageWars.mode.width;
 		config.height = phageWars.mode.height;
 		config.title = phageWars.title;
+		config.fullscreen = phageWars.mode.fullscreen;
+		config.vSyncEnabled = false;
 		config.resizable = false;
 		config.addIcon("icon_launcher.png", Files.FileType.Internal);
 		

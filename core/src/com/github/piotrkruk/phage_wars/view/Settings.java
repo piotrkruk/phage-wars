@@ -32,6 +32,9 @@ public class Settings implements Screen {
     private TextButton btnModeHD = new TextButton(
     		"HD resolution (" + DisplayMode.HD.width
     		+ "x" + DisplayMode.HD.height + ")", defaultSkin);
+
+    private TextButton btnModeFS = new TextButton(
+            "Full screen", defaultSkin);
     
     private TextButton btnEasy = new TextButton("Easy", defaultSkin),
     				   btnMedium = new TextButton("Medium", defaultSkin),
@@ -51,9 +54,11 @@ public class Settings implements Screen {
     	btnBack.setBounds(left, border, btnWidth, btnHeight);
     	
     	btnModeNormal
-    		.setBounds(center - block - btnWidth, upper, btnWidth, btnHeight);
+    		.setBounds(center - block - 1.5f * btnWidth, upper, btnWidth, btnHeight);
     	btnModeHD
-    		.setBounds(center + block, upper, btnWidth, btnHeight);
+    		.setBounds(center - 0.5f * btnWidth, upper, btnWidth, btnHeight);
+        btnModeFS
+                .setBounds(center + block + 0.5f * btnWidth, upper, btnWidth, btnHeight);
     	
     	upper -= border + btnHeight;
     	
@@ -66,6 +71,7 @@ public class Settings implements Screen {
     	
     	btnModeNormal.getStyle().checked = btnModeNormal.getStyle().down;
     	btnModeHD.getStyle().checked = btnModeHD.getStyle().down;
+        btnModeFS.getStyle().checked = btnModeFS.getStyle().down;
     	
     	btnEasy.getStyle().checked = btnEasy.getStyle().down;
     	btnMedium.getStyle().checked = btnMedium.getStyle().down;
@@ -73,8 +79,10 @@ public class Settings implements Screen {
     	
     	if (phageWars.mode == DisplayMode.NORMAL)
     		btnModeNormal.setChecked(true);
-    	else
+    	else if (phageWars.mode == DisplayMode.HD)
     		btnModeHD.setChecked(true);
+        else
+            btnModeFS.setChecked(true);
     	
     	if (phageWars.difficulty == GameMode.EASY)
     		btnEasy.setChecked(true);
@@ -110,6 +118,17 @@ public class Settings implements Screen {
                 Settings.this.phageWars.setToSettings();
             }
         } );
+
+        btnModeFS.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Settings.this.phageWars.mode = DisplayMode.FS;
+                Settings.this.phageWars.refreshMode();
+                Settings.this.phageWars.setToSettings();
+            }
+        } );
+
         
         btnEasy.addListener( new ClickListener() {
             @Override
@@ -158,6 +177,7 @@ public class Settings implements Screen {
     	stage.addActor(btnBack);
     	stage.addActor(btnModeNormal);
     	stage.addActor(btnModeHD);
+        stage.addActor(btnModeFS);
     	
     	stage.addActor(btnEasy);
     	stage.addActor(btnMedium);

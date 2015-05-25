@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.github.piotrkruk.phage_wars.view.*;
 
+import java.awt.*;
+
 
 public class PhageWars extends Game {    
     public final String title = "Phage Wars";
@@ -48,26 +50,32 @@ public class PhageWars extends Game {
 	}
 	
 	public void refreshMode() {
-		Gdx.graphics.setDisplayMode(mode.width, mode.height, false);
+		Gdx.graphics.setDisplayMode(mode.width, mode.height, mode.fullscreen);
 		background.setSize(mode.width, mode.height);
 	}
-	
+
+	private static Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+
 	public enum DisplayMode {
 		
-		NORMAL(960, 540),
-		HD(1280,720);
-		
+		NORMAL(960, 540,false),
+		HD(1280,720,false),
+		FS(dimension.width,dimension.height,true);
+
 		public final int width, height;
 		
 		public final int blockSize,
 						 btnWidth,
 						 btnHeight,
 						 border;
-		
-		private DisplayMode(int width, int height) {
+
+		public final boolean fullscreen;
+
+		private DisplayMode(int width, int height, boolean fullscreen) {
 			this.width = width;
 			this.height = height;
-			
+			this.fullscreen = fullscreen;
+
 			blockSize = width / 50;
 			btnWidth = 12 * blockSize;
 			btnHeight = 4 * blockSize;
