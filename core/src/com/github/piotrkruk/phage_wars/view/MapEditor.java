@@ -19,6 +19,12 @@ import com.github.piotrkruk.phage_wars.model.Race;
 /**
  * Class for editing the maps
  * 
+ * Controls:
+ * 		- first left click sets a position for a center of a cell
+ * 		- second left click sets the size of the cell
+ * 		- right click deletes a cell - the one that was being created
+ * 			(if done while creating) or the one that was clicked on (otherwise)
+ * 
  */
 
 
@@ -145,6 +151,28 @@ public class MapEditor extends GameDisplayer {
         super.render(delta);
 	}
 	
+	/**
+	 * Deletes everything related to some cell
+	 * @param ind - index in game.cells
+	 * 
+	 */
+	private void deleteCell(int ind) {
+		game.cells.remove(ind);
+		imgCells.remove(ind);
+		imgCellOwners.remove(ind);
+	}
+	
+	/**
+	 * Discards the cell being created
+	 * 
+	 */
+	private void discard() {
+		if (creating) {		
+			creating = false;
+			deleteCell( game.cells.size() - 1 );
+		}
+	}
+	
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {   
     	
@@ -221,12 +249,15 @@ public class MapEditor extends GameDisplayer {
     	else if (button == Buttons.RIGHT) {
     		System.out.println("Right mouse click at " + posX + " " + posY);
     		
-    		if (creating) {
-    			creating = false;
-    		} else {    			
-    			/**
-    			 *  TODO: if clicked a cell - delete it
-    			 */
+    		if (creating)
+    			discard();
+    		else {    			
+    			for (int i = 0; i < game.cells.size(); i++) {
+    				if (game.cells.get(i).isInside(posX, posY)) {
+    					deleteCell(i);
+    					break;
+    				}
+    			}    			
     		}
     	}
     	

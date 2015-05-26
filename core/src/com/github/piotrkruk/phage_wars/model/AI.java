@@ -26,8 +26,8 @@ public class AI implements Runnable {
 		this.player = player;
 		this.strength = strength;
 		
-		minMoveDelay = (int) (2000 / strength);
-		maxMoveDelay = (int) (3000 / strength);
+		minMoveDelay = (int) (3000 / strength);
+		maxMoveDelay = (int) (4000 / strength);
 	}
 	
 	/**

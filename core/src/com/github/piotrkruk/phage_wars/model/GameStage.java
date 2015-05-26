@@ -21,7 +21,7 @@ public class GameStage implements Serializable {
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
-	private static final int DEFAULT_EMPTY_CELLS = 4;
+	private static final int DEFAULT_EMPTY_CELLS = 5;
 	private static final int DEFAULT_NO_OF_PLAYERS = 3;
 	public static final int MAX_NO_OF_PLAYERS = 7;
 	

@@ -7,14 +7,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.github.piotrkruk.phage_wars.PhageWars;
+import com.github.piotrkruk.phage_wars.model.Bacteria;
 import com.github.piotrkruk.phage_wars.model.Cell;
 import com.github.piotrkruk.phage_wars.model.GameStage;
 import com.github.piotrkruk.phage_wars.model.Player;
@@ -134,6 +137,53 @@ public class GameDisplayer implements Screen, InputProcessor {
         }
         
         batch.end();
+    }
+    
+    protected void drawBacterias() {
+    	batch.begin();
+    	
+    	for (Bacteria b : game.bacterias) {
+    		Image img = new Image( textureBacterias[b.from.imageId] );
+    		
+    		int diam = b.radius * 2;
+    		
+    		img.setSize(diam, diam);
+    		img.setPosition(b.posX - b.radius, b.posY - b.radius);
+    		img.draw(batch, 1);
+    	}
+    	
+    	batch.end();
+    }
+    
+    protected void drawSelections() {
+    	if (!game.HUMAN_PLAYER)
+    		return;
+    	
+    	shapeRenderer.begin(ShapeType.Line);
+
+        for (Cell c : game.cells)
+        	if (c.owner == game.player && c.selected) {        		
+        		int posX = Gdx.input.getX(),
+        			posY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        		
+        		Gdx.gl20.glLineWidth(6);
+        		
+        		shapeRenderer.setColor(Color.WHITE);
+        		shapeRenderer.line(c.posX, c.posY, posX, posY);
+        	}
+        
+        shapeRenderer.end();
+    
+        shapeRenderer.begin(ShapeType.Filled);
+        
+        for (Cell c : game.cells) {
+        	if (c.owner == game.player && c.selected) {
+        		shapeRenderer.setColor(Color.YELLOW);
+        		shapeRenderer.circle(c.posX, c.posY, c.radius + 5);
+        	}
+        }
+        
+        shapeRenderer.end();
     }
     
     protected void drawAmountsOfUnits() {
