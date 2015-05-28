@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.github.piotrkruk.phage_wars.model.GameStage;
 import com.github.piotrkruk.phage_wars.view.*;
 
 import java.awt.*;
@@ -30,7 +31,17 @@ public class PhageWars extends Game {
 	}
 	
 	public void setToGame() {
-		setScreen(new GameWindow(this));
+		GameWindow gameWindow = new GameWindow(this);
+		
+		gameWindow.startGame();
+		setScreen(gameWindow);
+	}
+	
+	public void setToGame(GameStage game) {
+		GameWindow gameWindow = new GameWindow(this);
+		
+		gameWindow.startGame(game);
+		setScreen(gameWindow);
 	}
 	
 	public void setToLevels() {

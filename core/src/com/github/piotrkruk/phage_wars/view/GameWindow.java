@@ -35,18 +35,9 @@ public class GameWindow extends GameDisplayer {
 	private float buttonclickvolume = 0.7f;
 
 	public final float DEFAULT_CLICK_VOLUME = 0.7f; // Maybe this const value should be in other file
-
+	
     public GameWindow(PhageWars phageWars) {
     	super(phageWars);
-    	
-    	game = new GameStage(phageWars.mode.width,
-				   			 phageWars.mode.height,
-				   			 phageWars.mode.blockSize,
-				   			 phageWars.difficulty.aiStrength);
-    	
-    	game.genRandom();
-    	
-    	initCellImages();
     	
     	int block = phageWars.mode.blockSize,
     		circSize = 2 * block;
@@ -77,8 +68,31 @@ public class GameWindow extends GameDisplayer {
 
 		circSoundOff.setVisible(false);
 
-		game.startGame();
     	Gdx.input.setInputProcessor(this);
+    }
+    
+    /*
+     * Creates and starts a game
+     */
+    public void startGame() {
+    	GameStage temp = new GameStage(phageWars.mode.width,
+	   			 phageWars.mode.height,
+	   			 phageWars.mode.blockSize,
+	   			 phageWars.difficulty.aiStrength);
+
+    	temp.genRandom();
+    	
+    	startGame(temp);
+    }
+    
+    /*
+     * @param game - GameStage that is to be played
+     */
+    public void startGame(GameStage game) {
+    	this.game = game;
+    	
+    	initCellImages();
+    	game.startGame();
     }
 
     @Override

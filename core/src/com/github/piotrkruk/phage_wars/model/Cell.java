@@ -16,7 +16,7 @@ public class Cell implements Serializable {
 	private static int idCnt = 0;
 	public final int id;
 	
-	public int posX, posY, radius;
+	public int posX, posY, radius;	
 	public double units;
 	
 	public final Race race;

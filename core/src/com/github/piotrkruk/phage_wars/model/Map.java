@@ -48,7 +48,6 @@ public class Map implements Serializable {
 		/*
 		 * Generate some maps (only non-empty cells)
 		 * and choose the best one
-		 * 
 		 */
 		for (int trial = 0; trial < NUM_OF_TRIALS; trial++) {
 			
@@ -82,7 +81,7 @@ public class Map implements Serializable {
 		 * Add empty cells
 		 */
 		for (int j = 0; j < emptyCells;) {
-			Cell c = randCell(new Race(game.BLOCK_SIZE), null);
+			Cell c = randCell(new Race(game), null);
 			
 			if (isValid(c, cellsBest)) {
 				cellsBest.add(c);
@@ -134,15 +133,12 @@ public class Map implements Serializable {
 			try {
 				GameStage temp = (GameStage) in.readObject();
 				
-				/*
-				 * Set transient variables
-				 * to values given from outside 
-				 */				
-				temp.WIDTH = width;
-				temp.HEIGHT = height;
-				temp.BLOCK_SIZE = blockSize;
-				temp.AI_STRENGTH = aiStrength;
+				temp.resize(width, height, blockSize);
 				
+				/*
+				 * Set transient fields
+				 */
+				temp.AI_STRENGTH = aiStrength;
 				temp.grid = new Grid(width, height, blockSize, temp);
 				
 				System.out.println("Map read successfully.");

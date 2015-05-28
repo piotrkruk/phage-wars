@@ -24,6 +24,7 @@ public class Bacteria implements Serializable {
 	private static final double TIME_PER_STEP = 0.07;
 	
 	public int posX, posY;
+	
 	public final int radius = DEFAULT_RADIUS;
 	
 	private double timer = -rand.nextDouble() * MAX_WAIT_TIME;
@@ -38,14 +39,17 @@ public class Bacteria implements Serializable {
 	public Player from;
 	public Cell destination;
 	
+	public final GameStage gameStage;
+	
 	private List <Grid.Point> path;
 	
-	public Bacteria(double units, Player from, Cell destination, Grid g) {
+	public Bacteria(double units, Player from, Cell destination, GameStage gameStage) {
 		this.units = units;
 		this.from = from;
 		this.destination = destination;
+		this.gameStage = gameStage;
 		
-		path = g.getPath();
+		path = gameStage.grid.getPath();
 	}
 	
 	/**

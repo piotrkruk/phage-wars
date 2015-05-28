@@ -17,7 +17,7 @@ public class GameStage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// for positioning of the cells:
-	public transient int WIDTH, HEIGHT, BLOCK_SIZE;
+	public int WIDTH, HEIGHT, BLOCK_SIZE;
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
@@ -33,7 +33,7 @@ public class GameStage implements Serializable {
 	public final int NO_OF_PLAYERS;
 	public final int NO_OF_IMAGES_TO_CHOOSE_FROM = 6;
 	
-	private final Map mapHandler;
+	public final Map mapHandler;
 	
 	public volatile boolean paused = false;
 	
@@ -76,7 +76,7 @@ public class GameStage implements Serializable {
 				strength = AI_STRENGTH;
 			
 			players.add(p);
-			races.add( new Race(BLOCK_SIZE, p, strength) );
+			races.add( new Race(this, p, strength) );
 		}
 		
 		grid = new Grid(WIDTH, HEIGHT, BLOCK_SIZE, this);
@@ -190,7 +190,7 @@ public class GameStage implements Serializable {
 				double unitsPerBacteria = units / numberOfBacterias;
 				
 				for (int i = 0; i < numberOfBacterias; i++)
-					bacterias.add( new Bacteria(unitsPerBacteria, p, destination, grid) );
+					bacterias.add( new Bacteria(unitsPerBacteria, p, destination, this) );
 				
 				p.bacteriaCount += numberOfBacterias;
 			}
@@ -200,5 +200,27 @@ public class GameStage implements Serializable {
 		for (Cell c : cells)
 			if (c.owner == p)
 				c.deselect();
+	}
+	
+	/**
+	 * Resize all coordinates-dependent objects
+	 */	
+	public void resize(int width, int height, int blockSize) {
+		double ratio = ((double) blockSize) / BLOCK_SIZE;
+		
+		for (Cell c : cells) {
+			c.posX *= ratio;
+			c.posY *= ratio;
+			c.radius *= ratio;
+		}
+		
+		for (Bacteria b : bacterias) {
+			b.posX *= ratio;
+			b.posY *= ratio;
+		}
+		
+		WIDTH = width;
+		HEIGHT = height;
+		BLOCK_SIZE = blockSize;
 	}
 }

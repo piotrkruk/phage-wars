@@ -31,8 +31,9 @@ import com.github.piotrkruk.phage_wars.model.Race;
 public class MapEditor extends GameDisplayer {
     
     private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
-    private TextButton btnSave = new TextButton(String.valueOf("Save"), defaultSkin);
-    private TextButton btnLoad = new TextButton(String.valueOf("Load"), defaultSkin);
+    private TextButton btnSave = new TextButton("Save", defaultSkin);
+    private TextButton btnLoad = new TextButton("Load", defaultSkin);
+    private TextButton btnPlay = new TextButton("Play", defaultSkin);
     
     private int centerX, centerY;
 
@@ -58,6 +59,7 @@ public class MapEditor extends GameDisplayer {
         btnBack.setBounds(left, border, btnWidth, btnHeight);
         btnSave.setBounds(left, border + block + btnHeight, btnWidth, btnHeight);
         btnLoad.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
+        btnPlay.setBounds(left, border + 3 * (block + btnHeight), btnWidth, btnHeight);
 
         btnBack.addListener( new ClickListener() {
             @Override
@@ -120,6 +122,15 @@ public class MapEditor extends GameDisplayer {
                 Gdx.input.getTextInput(listener, "Write the name of the map", "", "eg. mymap.ser");
             }
         });
+        
+        btnPlay.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+				buttonclick.play(buttonclickvolume);
+				MapEditor.this.phageWars.setToGame(game);
+            }
+        } );
 	}
 
 	@Override
@@ -129,6 +140,7 @@ public class MapEditor extends GameDisplayer {
     	stage.addActor(btnBack);
     	stage.addActor(btnSave);
     	stage.addActor(btnLoad);
+    	stage.addActor(btnPlay);
 	}
 
 	@Override
@@ -157,6 +169,8 @@ public class MapEditor extends GameDisplayer {
 	 * 
 	 */
 	private void deleteCell(int ind) {
+		game.cells.get(ind).owner.ownCount--;
+		
 		game.cells.remove(ind);
 		imgCells.remove(ind);
 		imgCellOwners.remove(ind);
@@ -219,7 +233,7 @@ public class MapEditor extends GameDisplayer {
 							id = texturePlayers.length - 1;
 							initUnits = 0;
 							
-							race = new Race(game.BLOCK_SIZE);
+							race = new Race(game);
 							pl = null;
 						}
 						
