@@ -85,9 +85,13 @@ public class GameDisplayer implements Screen, InputProcessor {
 	public void render(float delta) {
 		stage.act();
 		stage.draw();
-		    
-		drawCells();
-		drawAmountsOfUnits();
+		   
+		synchronized (game) {
+			drawBacterias();
+			drawSelections();
+			drawCells();
+			drawAmountsOfUnits();
+		}
 	}
 	
 	protected void initCellImages() {

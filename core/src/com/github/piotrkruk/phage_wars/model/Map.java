@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+
 /**
  * Class responsible for generating random maps
  * and reading generated ones from *.ser files
@@ -27,7 +28,6 @@ public class Map implements Serializable {
 	private final static Random rand = new Random();
 	
 	private final GameStage game;
-
 	
 	public Map(GameStage game) {
 		this.game = game;
@@ -37,13 +37,8 @@ public class Map implements Serializable {
 		
 		int sumBest = 0;
 		List <Cell> cellsBest = null;
-	
-		/*
-		 *  Dummy cell located at the upper-right corner
-		 *  to prevent cells from overlapping with buttons
-		 */
-		Cell dummy =
-			new Cell(game.WIDTH - 2 * game.BLOCK_SIZE, game.HEIGHT, 4 * game.BLOCK_SIZE, 0, null, null);
+
+		Cell dummyCell = getDummyCell(game);
 		
 		/*
 		 * Generate some maps (only non-empty cells)
@@ -54,21 +49,21 @@ public class Map implements Serializable {
 			int sumTemp = Integer.MAX_VALUE;
 			List <Cell> cellsTemp = new LinkedList <Cell> ();
 
-			cellsTemp.add(dummy);
+			cellsTemp.add(dummyCell);
 		
 			for (int i = 0; i < game.players.size(); i++) {
 				for (int j = 0; j < cellsPerPlayer;) {
 					Cell c = randCell(game.races.get(i), game.players.get(i));
 					
-					if (isValid(c, cellsTemp)) {
+					if (isValid(c, cellsTemp, game.WIDTH, game.HEIGHT)) {
 						cellsTemp.add(c);
 						j++;
 					}
 				}
 			}
 			
-			for (Cell a : cellsTemp) if (a != dummy)
-				for (Cell b : cellsTemp) if (b != dummy && a != b)
+			for (Cell a : cellsTemp) if (a != dummyCell)
+				for (Cell b : cellsTemp) if (b != dummyCell && a != b)
 					sumTemp = Math.min(sumTemp, Cell.distSquared(a, b));
 			
 			if (sumTemp > sumBest) {
@@ -83,7 +78,7 @@ public class Map implements Serializable {
 		for (int j = 0; j < emptyCells;) {
 			Cell c = randCell(new Race(game), null);
 			
-			if (isValid(c, cellsBest)) {
+			if (isValid(c, cellsBest, game.WIDTH, game.HEIGHT)) {
 				cellsBest.add(c);
 				j++;
 			}
@@ -114,6 +109,15 @@ public class Map implements Serializable {
 		}
 		
 		game.cells = cellsBest;
+	}
+	
+	public static Cell getDummyCell(GameStage game) {
+		/*
+		 *  Dummy cell located at the upper-right corner
+		 *  to prevent cells from overlapping with buttons
+		 */
+		
+		return new Cell(game.WIDTH - 2 * game.BLOCK_SIZE, game.HEIGHT, 4 * game.BLOCK_SIZE, 0, null, null);
 	}
 	
 	/**
@@ -193,17 +197,29 @@ public class Map implements Serializable {
 	 * Checks if c is a valid cell to be added
 	 * to existing list of cells
 	 * 
+	 * If cell c is itself present on the list
+	 * the function doesn't take that as an invalid state
+	 * 
 	 */
-	private boolean isValid(Cell c, List <Cell> list) {
-		if (c.posX < c.radius || c.posX + c.radius > game.WIDTH ||
-			c.posY < c.radius || c.posY + c.radius > game.HEIGHT)
+	public static boolean isValid(Cell c, List <Cell> list, int width, int height) {
+		if (c.posX < c.radius || c.posX + c.radius > width ||
+			c.posY < c.radius || c.posY + c.radius > height)
 			return false;
-			
-		for (Cell cl : list)
+		
+		for (Cell cl : list) if (c != cl)
 			if (c.doesCollide(cl))
 				return false;
 		
 		return true;
+	}
+	
+	/**
+	 * Checks if c is a valid cell to be added
+	 * to some game stage
+	 * 
+	 */
+	public static boolean isValid(Cell c, GameStage game) {
+		return isValid(c, game.cells, game.WIDTH, game.HEIGHT);
 	}
 	
 	private Cell randCell(Race race, Player owner) {

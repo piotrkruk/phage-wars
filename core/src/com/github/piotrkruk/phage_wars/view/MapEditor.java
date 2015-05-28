@@ -40,8 +40,18 @@ public class MapEditor extends GameDisplayer {
 	private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
 	private float buttonclickvolume = 0.7f;
     
-    private boolean creating = false;
+	/*
+	 * When creating is true every render changes the size
+	 * of the last cell in game.cells
+	 */
+    private volatile boolean creating = false;
+    
+    /*
+     * When remapping is true the application is loading
+     * a new map
+     */
     private volatile boolean remapping = false;
+    
 	
 	public MapEditor(PhageWars phageWars) {
 		super(phageWars);
@@ -148,19 +158,21 @@ public class MapEditor extends GameDisplayer {
 		if (remapping)
 			return ;
 		
-	    if (creating) {
-    		int posX = Gdx.input.getX(),
-        		posY = Gdx.graphics.getHeight() - Gdx.input.getY();
-	    	
-    		int radius = (int) Math.sqrt( Grid.distSquared(centerX, centerY, posX, posY) ),
-    			diam = radius * 2,
-    			ind = game.cells.size() - 1;
-    		
-    		game.cells.get(ind).radius = radius;
-    		imgCells.get(ind).setSize(diam, diam);
-	    }
-		
-        super.render(delta);
+		synchronized (game) {
+		    if (creating) {
+	    		int posX = Gdx.input.getX(),
+	        		posY = Gdx.graphics.getHeight() - Gdx.input.getY();
+		    	
+	    		int radius = (int) Math.sqrt( Grid.distSquared(centerX, centerY, posX, posY) ),
+	    			diam = radius * 2,
+	    			ind = game.cells.size() - 1;
+	    		
+	    		game.cells.get(ind).radius = radius;
+	    		imgCells.get(ind).setSize(diam, diam);
+		    }
+			
+	        super.render(delta);
+		}
 	}
 	
 	/**
@@ -169,11 +181,37 @@ public class MapEditor extends GameDisplayer {
 	 * 
 	 */
 	private void deleteCell(int ind) {
-		game.cells.get(ind).owner.ownCount--;
-		
-		game.cells.remove(ind);
-		imgCells.remove(ind);
-		imgCellOwners.remove(ind);
+		synchronized (game) {
+			Cell c = game.cells.get(ind);
+			
+			if (c.owner != null)
+				c.owner.ownCount--;
+			
+			game.cells.remove(ind);
+			imgCells.remove(ind);
+			imgCellOwners.remove(ind);
+		}
+	}
+	
+	/**
+	 * Adds a cell and all related objects
+	 * to the game
+	 * 
+	 */
+	private void addCell(int imageId, int posX, int posY, int radius, int initUnits, Race race, Player pl) {
+		synchronized (game) {
+			int ind = game.cells.size();
+			
+			imgCellOwners.add(imageId);
+			imgCells.add( new Image( texturePlayers[ imgCellOwners.get(ind) ] ) );
+			
+			game.cells.add(
+					new Cell(centerX, centerY, radius, initUnits, race, pl)
+				);
+			
+			if (pl != null)
+				pl.ownCount++;
+		}
 	}
 	
 	/**
@@ -181,7 +219,7 @@ public class MapEditor extends GameDisplayer {
 	 * 
 	 */
 	private void discard() {
-		if (creating) {		
+		synchronized (game) {
 			creating = false;
 			deleteCell( game.cells.size() - 1 );
 		}
@@ -190,91 +228,86 @@ public class MapEditor extends GameDisplayer {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {   
     	
-        int posX = screenX,
-            posY = Gdx.graphics.getHeight() - screenY;
-        		/* screenY is reversed in respect to the coordinates
-        		 * of drawing
-        		 */
-	    	
-    	if (button == Buttons.LEFT) {
-    		System.out.println("Left mouse click at " + posX + " " + posY);
-    			
-    		if (!creating) {
-    			
-    			centerX = posX;
-    			centerY = posY;
-    			
-                Input.TextInputListener listener = new Input.TextInputListener() {
-
-					@Override
-					public void input(String text) {
-						
-						int ind = imgCells.size();
-						
-						int id, initUnits;
-						Race race = null;
-						Player pl = null;
-						
-						if (!text.equals("")) {							
-							try {
-								String[] temp = text.split(" ");
-								
-								id = Integer.parseInt(temp[0]);
-								initUnits = Integer.parseInt(temp[1]);
-								
-								race = game.races.get(id);
-								pl = game.players.get(id);
-							} catch (RuntimeException e) {
-								System.out.println("Illegal arguments!");
-								return ;
-							}
-						}
-						else {
-							id = texturePlayers.length - 1;
-							initUnits = 0;
+    	synchronized (game) {
+	        int posX = screenX,
+	            posY = Gdx.graphics.getHeight() - screenY;
+	        		/* screenY is reversed in respect to the coordinates
+	        		 * of drawing
+	        		 */
+		    	
+	    	if (button == Buttons.LEFT) {
+	    		System.out.println("Left mouse click at " + posX + " " + posY);
+	    			
+	    		if (!creating) {
+	    			
+	    			centerX = posX;
+	    			centerY = posY;
+	    			
+	                Input.TextInputListener listener = new Input.TextInputListener() {
+	
+						@Override
+						public void input(String text) {							
+							int id, initUnits;
+							Race race = null;
+							Player pl = null;
 							
-							race = new Race(game);
-							pl = null;
+							if (!text.equals("")) {							
+								try {
+									String[] temp = text.split(" ");
+									
+									id = Integer.parseInt(temp[0]);
+									initUnits = Integer.parseInt(temp[1]);
+									
+									race = game.races.get(id);
+									pl = game.players.get(id);
+								} catch (RuntimeException e) {
+									System.out.println("Illegal arguments!");
+									return ;
+								}
+							}
+							else {
+								id = texturePlayers.length - 1;
+								initUnits = 0;
+								
+								race = new Race(game);
+								pl = null;
+							}
+							
+							MapEditor.this.addCell(id, centerX, centerY, 0, initUnits, race, pl);
+			        		creating = true;
 						}
-						
-						imgCellOwners.add(id);
-		        		imgCells.add( new Image( texturePlayers[ imgCellOwners.get(ind) ] ) );
-		        		
-		        		game.cells.add(
-		        				new Cell(centerX, centerY, 0, initUnits, race, pl)
-		        			);
-		        		
-		        		if (pl != null)
-		        			pl.ownCount++;
-		        		
-		        		creating = true;
-					}
+	
+						@Override
+						public void canceled() {}
+	                	
+	                };
+	                Gdx.input.getTextInput(listener, "[owner id] [number of units]", 
+	                		"", "for unoccupied cells leave this empty");
+	    		}
+	    		else {
+	    			creating = false;
+	    			Cell created = game.cells.get( game.cells.size() - 1 );
+	    			
+	    			if (!Map.isValid(created, game) || Map.getDummyCell(game).doesCollide(created))
+	    				discard();
+	    		}
+	    	}
+	    	else if (button == Buttons.RIGHT) {
+	    		System.out.println("Right mouse click at " + posX + " " + posY);
+	    		
+	    		if (creating)
+	    			discard();
+	    		else {
+	    			for (int i = 0; i < game.cells.size(); i++) {
+	    				if (game.cells.get(i).isInside(posX, posY)) {
+	    					deleteCell(i);
+	    					break;
+	    				}
+	    			}
+	    		}
+	    	}
+    	}
 
-					@Override
-					public void canceled() {}
-                	
-                };
-                Gdx.input.getTextInput(listener, "[owner id] [number of units]", 
-                		"", "for unoccupied cells leave this empty");
-    		}
-    		else
-    			creating = false;
-    	}
-    	else if (button == Buttons.RIGHT) {
-    		System.out.println("Right mouse click at " + posX + " " + posY);
-    		
-    		if (creating)
-    			discard();
-    		else {    			
-    			for (int i = 0; i < game.cells.size(); i++) {
-    				if (game.cells.get(i).isInside(posX, posY)) {
-    					deleteCell(i);
-    					break;
-    				}
-    			}    			
-    		}
-    	}
-    	
     	return false;
     }
 }

@@ -96,23 +96,20 @@ public class GameWindow extends GameDisplayer {
     }
 
     @Override
-    public void render(float delta) {    	
-	    stage.act();
-	    stage.draw();
-	        
-	    if (!finished) {
-	    	synchronized (game) {
-	    		if (pausedCount == 0)
-	    			game.update(delta);
-	    		
-	    		checkGameStatus();
-	    		
-	    		drawBacterias();
-	    		drawSelections();
-	    		drawCells();
-	    		drawAmountsOfUnits();
-	    	}
-	    }
+    public void render(float delta) {
+    	if (finished) {
+		    stage.act();
+		    stage.draw();
+    	}
+    	else {
+    		synchronized(game) {
+    			if (pausedCount == 0)
+    				game.update(delta);
+    		
+    			checkGameStatus();
+    			super.render(delta);
+    		}
+    	}
     }
     
     private void checkGameStatus() {
