@@ -12,13 +12,13 @@ public class Race implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	final double givesAway;
-	final int minRadius;
-	final int maxRadius;
-	final int minInitUnits;
-	final int maxInitUnits;
+	public final double givesAway;
+	public final int minRadius;
+	public final int maxRadius;
+	public final int minInitUnits;
+	public final int maxInitUnits;
 	
-	final GameStage gameStage;
+	private final GameStage gameStage;
 	
 	/* 
 	 * Radius and growth_for_area constants are given in respect to screen's block
@@ -60,8 +60,8 @@ public class Race implements Serializable {
 	 */
 	public Race(GameStage gameStage, Player owner, double strength) {
 		this(gameStage, DEFAULT_GIVES,
-				(int) (gameStage.BLOCK_SIZE * DEFAULT_MIN_RADIUS), 
-				(int) (gameStage.BLOCK_SIZE * DEFAULT_MAX_RADIUS),
+				(int) (gameStage.blockSize * DEFAULT_MIN_RADIUS), 
+				(int) (gameStage.blockSize * DEFAULT_MAX_RADIUS),
 				(int) (strength * DEFAULT_MIN_INIT_UNITS),
 				(int) (strength * DEFAULT_MAX_INIT_UNITS), owner);
 	}
@@ -69,8 +69,8 @@ public class Race implements Serializable {
 	// constructs an empty race
 	public Race(GameStage gameStage) {
 		this(gameStage, DEFAULT_GIVES,
-				(int) (gameStage.BLOCK_SIZE * DEFAULT_MIN_RADIUS), 
-				(int) (gameStage.BLOCK_SIZE * DEFAULT_MAX_RADIUS), 0, 0, null);
+				(int) (gameStage.blockSize * DEFAULT_MIN_RADIUS), 
+				(int) (gameStage.blockSize * DEFAULT_MAX_RADIUS), 0, 0, null);
 	}
 	
 	public double givesAway(double units) {
@@ -78,6 +78,6 @@ public class Race implements Serializable {
 	}
 	
 	public double growthRate(int radius) {
-		return GROWTH_FOR_AREA * ( ((double) radius * radius) / gameStage.BLOCK_SIZE );
+		return GROWTH_FOR_AREA * ( ((double) radius * radius) / gameStage.blockSize );
 	}
 }

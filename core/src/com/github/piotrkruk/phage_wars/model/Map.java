@@ -55,7 +55,7 @@ public class Map implements Serializable {
 				for (int j = 0; j < cellsPerPlayer;) {
 					Cell c = randCell(game.races.get(i), game.players.get(i));
 					
-					if (isValid(c, cellsTemp, game.WIDTH, game.HEIGHT)) {
+					if (isValid(c, cellsTemp, game.width, game.height)) {
 						cellsTemp.add(c);
 						j++;
 					}
@@ -78,7 +78,7 @@ public class Map implements Serializable {
 		for (int j = 0; j < emptyCells;) {
 			Cell c = randCell(new Race(game), null);
 			
-			if (isValid(c, cellsBest, game.WIDTH, game.HEIGHT)) {
+			if (isValid(c, cellsBest, game.width, game.height)) {
 				cellsBest.add(c);
 				j++;
 			}
@@ -117,7 +117,7 @@ public class Map implements Serializable {
 		 *  to prevent cells from overlapping with buttons
 		 */
 		
-		return new Cell(game.WIDTH - 2 * game.BLOCK_SIZE, game.HEIGHT, 4 * game.BLOCK_SIZE, 0, null, null);
+		return new Cell(game.width - 2 * game.blockSize, game.height, 4 * game.blockSize, 0, null, null);
 	}
 	
 	/**
@@ -219,7 +219,7 @@ public class Map implements Serializable {
 	 * 
 	 */
 	public static boolean isValid(Cell c, GameStage game) {
-		return isValid(c, game.cells, game.WIDTH, game.HEIGHT);
+		return isValid(c, game.cells, game.width, game.height);
 	}
 	
 	private Cell randCell(Race race, Player owner) {
@@ -231,11 +231,11 @@ public class Map implements Serializable {
 	}
 	
 	private int randX() {
-		return rand.nextInt(game.WIDTH);
+		return rand.nextInt(game.width);
 	}
 	
 	private int randY() {
-		return rand.nextInt(game.HEIGHT);
+		return rand.nextInt(game.height);
 	}
 	
 	private int randRad(Race race) {

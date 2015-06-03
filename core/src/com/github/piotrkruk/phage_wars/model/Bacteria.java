@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  * Class modelling one of the bacterias
- * sent from one cell to another
+ * which are sent from one cell to another
  *
  */
 
@@ -20,6 +20,7 @@ public class Bacteria implements Serializable {
 	
 	public static final int DEFAULT_RADIUS = 8;
 	public static final double UNITS_PER_BACTERIA = 1.5;
+	
 	private static final double MAX_WAIT_TIME = 0.6;
 	private static final double TIME_PER_STEP = 0.07;
 	
@@ -29,6 +30,7 @@ public class Bacteria implements Serializable {
 	
 	private double timer = -rand.nextDouble() * MAX_WAIT_TIME;
 		// time since started moving
+	
 	
 	/*
 	 * this bacteria has 'units' units
@@ -62,9 +64,12 @@ public class Bacteria implements Serializable {
 		timer += delta;
 		
 		int pos = (int) (timer / TIME_PER_STEP);
-		double between = (timer / TIME_PER_STEP) - pos;
+		double betweenRatio = (timer / TIME_PER_STEP) - pos;
 		
-			// the bacteria is between path.get(pos) and path.get(pos+1)
+		/*
+		 * This bacteria is always somewhere
+		 * between path.get(pos) and path.get(pos+1)
+		 */
 		
 		pos = Math.max(pos, 0);
 		pos = Math.min(pos, path.size() - 1);
@@ -77,8 +82,8 @@ public class Bacteria implements Serializable {
 		if (pos < path.size() - 1) {
 			Grid.Point end = path.get(pos + 1);
 			
-			posX += between * (end.posX - start.posX);
-			posY += between * (end.posY - start.posY);
+			posX += betweenRatio * (end.posX - start.posX);
+			posY += betweenRatio * (end.posY - start.posY);
 		}
 		
 		return destination.isInside(posX, posY);		

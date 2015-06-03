@@ -3,7 +3,7 @@ package com.github.piotrkruk.phage_wars.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -35,10 +35,9 @@ public class MapEditor extends GameDisplayer {
     private TextButton btnLoad = new TextButton("Load", defaultSkin);
     private TextButton btnPlay = new TextButton("Play", defaultSkin);
     
+    private Image circHideButtons = new Image( new Texture(Gdx.files.internal("buttons/hide_buttons.png")) );
+    
     private int centerX, centerY;
-
-	private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
-	private float buttonclickvolume = 0.7f;
     
 	/*
 	 * When creating is true every render changes the size
@@ -64,18 +63,24 @@ public class MapEditor extends GameDisplayer {
         	btnHeight = phageWars.mode.btnHeight,
         	border = phageWars.mode.border,
         	block = phageWars.mode.blockSize,
+        	circSize = 2 * block,
         	left = phageWars.mode.width - border - btnWidth;
+    	
+		circHideButtons.setSize(circSize, circSize);
+
+		circHideButtons.setPosition(phageWars.mode.width - circSize - block / 4,
+				phageWars.mode.height - circSize - block / 4);
         	
         btnBack.setBounds(left, border, btnWidth, btnHeight);
-        btnSave.setBounds(left, border + block + btnHeight, btnWidth, btnHeight);
-        btnLoad.setBounds(left, border + 2 * (block + btnHeight), btnWidth, btnHeight);
-        btnPlay.setBounds(left, border + 3 * (block + btnHeight), btnWidth, btnHeight);
+        btnSave.setBounds(left, btnBack.getY() + block + btnHeight, btnWidth, btnHeight);
+        btnLoad.setBounds(left, btnSave.getY() + block + btnHeight, btnWidth, btnHeight);
+        btnPlay.setBounds(left, btnLoad.getY() + block + btnHeight, btnWidth, btnHeight);
 
         btnBack.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-				buttonclick.play(buttonclickvolume);
+				MapEditor.this.phageWars.playSound();
 				MapEditor.this.phageWars.setToLevels();
             }
         } );
@@ -84,7 +89,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-				buttonclick.play(buttonclickvolume);
+            	MapEditor.this.phageWars.playSound();
                 Input.TextInputListener listener = new Input.TextInputListener() {
 
 					@Override
@@ -104,13 +109,13 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-				buttonclick.play(buttonclickvolume);
+            	MapEditor.this.phageWars.playSound();
                 Input.TextInputListener listener = new Input.TextInputListener() {
 
 					@Override
-					public void input(String text) {						
-						GameStage temp = Map.read(game.WIDTH, game.HEIGHT,
-								game.BLOCK_SIZE, game.AI_STRENGTH, text);
+					public void input(String text) {
+						GameStage temp = Map.read(game.width, game.height,
+								game.blockSize, game.AI_STRENGTH, text);
 						
 						if (temp != null) {
 							remapping = true;
@@ -137,8 +142,21 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-				buttonclick.play(buttonclickvolume);
+            	MapEditor.this.phageWars.playSound();
 				MapEditor.this.phageWars.setToGame(game);
+            }
+        } );
+	
+        circHideButtons.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+            	boolean temp = !MapEditor.this.btnBack.isVisible();
+            	
+            	MapEditor.this.btnBack.setVisible(temp);
+            	MapEditor.this.btnSave.setVisible(temp);
+            	MapEditor.this.btnLoad.setVisible(temp);
+            	MapEditor.this.btnPlay.setVisible(temp);
             }
         } );
 	}
@@ -151,6 +169,8 @@ public class MapEditor extends GameDisplayer {
     	stage.addActor(btnSave);
     	stage.addActor(btnLoad);
     	stage.addActor(btnPlay);
+    	
+    	stage.addActor(circHideButtons);
 	}
 
 	@Override

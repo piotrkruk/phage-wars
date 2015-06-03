@@ -19,7 +19,7 @@ public class Cell implements Serializable {
 	public int posX, posY, radius;	
 	public double units;
 	
-	public final Race race;
+	public Race race;
 	public volatile Player owner;
 	
 	public volatile boolean selected = false;
@@ -41,10 +41,19 @@ public class Cell implements Serializable {
 		return (int) units;
 	}
 	
+	/**
+	 * Grows the cell
+	 * @param delta - time since last grow
+	 * 
+	 */
 	public void grow(float delta) {
 		units += delta * race.growthRate(radius);
 	}
 	
+	/**
+	 * Absorbs units
+	 * 
+	 */
 	public synchronized void addUnits(double units, Player from) {
 		if (from == owner)
 			this.units += units;
@@ -66,6 +75,10 @@ public class Cell implements Serializable {
 		}
 	}
 	
+	/**
+	 * @return - amount of units sent
+	 * 
+	 */
 	public synchronized double sendUnits() {
 		double toGive = race.givesAway(units);
 		

@@ -7,11 +7,15 @@ import java.util.Random;
 
 /**
  * Class handling the AI
- * controlling some player
+ * which controls one of the players
+ * by making appropriate moves and sleeping in between
  *
  */
 
 public class AI implements Runnable {
+	
+	private static final int DEFAULT_MIN_MOVE_DELAY = 3000;
+	private static final int DEFAULT_MAX_MOVE_DELAY = 4000;
 	
 	private final int maxMoveDelay;
 	private final int minMoveDelay;
@@ -26,8 +30,8 @@ public class AI implements Runnable {
 		this.player = player;
 		this.strength = strength;
 		
-		minMoveDelay = (int) (3000 / strength);
-		maxMoveDelay = (int) (4000 / strength);
+		minMoveDelay = (int) (DEFAULT_MIN_MOVE_DELAY / strength);
+		maxMoveDelay = (int) (DEFAULT_MAX_MOVE_DELAY / strength);
 	}
 	
 	/**
@@ -64,6 +68,11 @@ public class AI implements Runnable {
 				}
 		}
 		else {
+			/*
+			 * If target is non-empty
+			 * choose sources based on distance and amout of units
+			 */
+			
 			for (Cell c : game.cells)
 				if (c.owner == player) {
 					double probability = 0.5;
@@ -115,8 +124,7 @@ public class AI implements Runnable {
 		else if (targetCount >= player.ownCount) {
 			/*
 			 * add possibility of not making a move
-			 * but only if we haven't overrun the stage yet
-			 * 
+			 * (but only if we haven't overrun the stage yet)
 			 */
 			
 			targets.add( new Target(null, 2.0) );
@@ -128,7 +136,7 @@ public class AI implements Runnable {
 			if (c.owner != player) {
 				
 				double weight,
-					   radius = c.radius / game.BLOCK_SIZE,
+					   radius = c.radius / game.blockSize,
 					   unitsRatio = c.units / allOwnedUnits,
 					   distSum = 0;
 				
@@ -167,6 +175,7 @@ public class AI implements Runnable {
 	
 	/**
 	 * Makes a random move of this player
+	 * 
 	 */
 	public void move() {
 		Cell target = selectTarget();

@@ -21,15 +21,15 @@ import java.util.Random;
 
 public class Grid {
 	
-	private final int avoidBy;
+	private int avoidBy;
 		// avoid the border of a cell by this margin
 	
-	public final int width, height;
-	public final int widthInPoints, heightInPoints;
+	public int width, height;
+	public int widthInPoints, heightInPoints;
 	
-	public final int pointDist;
+	public int pointDist;
 	
-	private final GameStage game;
+	private GameStage game;
 	
 	// parameters from the last run BFS
 	private Point destination;
@@ -61,6 +61,7 @@ public class Grid {
 	/**
 	 * Gets a randomly disturbed version
 	 * of the shortest path from last run search
+	 * 
 	 */
 	public List <Point> getPath() {
 		List <Point> list = new LinkedList <Point> ();
@@ -99,6 +100,7 @@ public class Grid {
 	 * from 'source' to 'destination'
 	 * 
 	 * @return true if the path was found
+	 * 
 	 */
 	public boolean runSearch(Cell source, Cell destination) {
 		clear();
@@ -160,6 +162,7 @@ public class Grid {
 	 * Locks points
 	 * that are currently inside some cell
 	 * not counting the Cells in 'except'
+	 * 
 	 */
 	public void lock(List <Cell> except) {
 		for (Cell c : game.cells) if (!except.contains(c)) {
@@ -177,6 +180,7 @@ public class Grid {
 	/**
 	 * Represents one point on the board
 	 * not necessarily lying on the grid
+	 * 
 	 */
 	public class Point implements Cloneable {
 		public static final int DISTURB_BY = 7;

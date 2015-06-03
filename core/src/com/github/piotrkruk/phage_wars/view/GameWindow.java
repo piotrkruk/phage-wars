@@ -2,7 +2,6 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -31,10 +30,6 @@ public class GameWindow extends GameDisplayer {
 	private Image circSoundOn = new Image( new Texture(Gdx.files.internal("buttons/sounds_on.png")) );
 	private Image circSoundOff = new Image( new Texture(Gdx.files.internal("buttons/sounds_off.png")) );
 
-	private Sound buttonclick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
-	private float buttonclickvolume = 0.7f;
-
-	public final float DEFAULT_CLICK_VOLUME = 0.7f; // Maybe this const value should be in other file
 	
     public GameWindow(PhageWars phageWars) {
     	super(phageWars);
@@ -66,13 +61,17 @@ public class GameWindow extends GameDisplayer {
 		circSoundOff.setPosition(circResume.getX() - circSize - block / 4,
 				phageWars.mode.height - circSize - block / 4);
 
-		circSoundOff.setVisible(false);
+		if (phageWars.buttonClickVolume > 0)
+			circSoundOff.setVisible(false);
+		else
+			circSoundOn.setVisible(false);
 
     	Gdx.input.setInputProcessor(this);
     }
     
-    /*
+    /**
      * Creates and starts a game
+     * 
      */
     public void startGame() {
     	GameStage temp = new GameStage(phageWars.mode.width,
@@ -85,8 +84,9 @@ public class GameWindow extends GameDisplayer {
     	startGame(temp);
     }
     
-    /*
+    /**
      * @param game - GameStage that is to be played
+     * 
      */
     public void startGame(GameStage game) {
     	this.game = game;
@@ -187,22 +187,26 @@ public class GameWindow extends GameDisplayer {
     	
         int posX = screenX,
             posY = Gdx.graphics.getHeight() - screenY;
-        		/* screenY is reversed in respect to the coordinates
+        		/* 
+        		 * screenY is reversed in respect to the coordinates
         		 * of drawing
         		 */
 
 		if (posX >= circSoundOn.getX() && posX <= circSoundOn.getX() + circSoundOn.getWidth() &&
 				posY >= circSoundOn.getY() && posY <= circSoundOn.getY() + circSoundOn.getHeight()) {
-			if(buttonclickvolume > 0.0f) {
+			if(phageWars.buttonClickVolume > 0.0f) {
 				System.out.println("Sounds turned off.");
-				buttonclickvolume = 0.0f;
+				
+				phageWars.buttonClickVolume = 0.0f;
 				circSoundOff.setVisible(true);
 				circSoundOn.setVisible(false);
 			}
 			else {
 				System.out.println("Sounds turned on.");
-				buttonclickvolume = DEFAULT_CLICK_VOLUME;
-				buttonclick.play(buttonclickvolume);
+				
+				phageWars.buttonClickVolume = PhageWars.DEFAULT_CLICK_VOLUME;
+				
+				phageWars.playSound();
 				circSoundOn.setVisible(true);
 				circSoundOff.setVisible(false);
 			}
@@ -212,7 +216,8 @@ public class GameWindow extends GameDisplayer {
     	if (posX >= circExit.getX() && posX <= circExit.getX() + circExit.getWidth() &&
     		posY >= circExit.getY() && posY <= circExit.getY() + circExit.getHeight()) {
     			System.out.println("Game exited.");
-				buttonclick.play(buttonclickvolume);
+    			
+				phageWars.playSound();
     			phageWars.setToMenu();
     			return false;
     	}
@@ -221,11 +226,11 @@ public class GameWindow extends GameDisplayer {
     		posY >= circPause.getY() && posY <= circPause.getY() + circPause.getHeight()) {
     		
     		if (pausedCount == 0) {
-				buttonclick.play(buttonclickvolume);
+    			phageWars.playSound();
 				this.pause();
 			}
     		else {
-				buttonclick.play(buttonclickvolume);
+    			phageWars.playSound();
 				this.resume();
 			}
     		

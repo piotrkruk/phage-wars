@@ -17,7 +17,7 @@ public class GameStage implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// for positioning of the cells:
-	public int WIDTH, HEIGHT, BLOCK_SIZE;
+	public int width, height, blockSize;
 	
 	// for generating the stage:
 	private static final int DEFAULT_CELLS_PER_PLAYER = 1;
@@ -55,9 +55,9 @@ public class GameStage implements Serializable {
 	}
 	
 	public GameStage(int width, int height, int blockSize, double aiStrength, int noOfPlayers) {
-		this.WIDTH = width;
-		this.HEIGHT = height;
-		this.BLOCK_SIZE = blockSize;
+		this.width = width;
+		this.height = height;
+		this.blockSize = blockSize;
 		this.AI_STRENGTH = aiStrength;
 		this.NO_OF_PLAYERS = noOfPlayers;
 		
@@ -79,7 +79,7 @@ public class GameStage implements Serializable {
 			races.add( new Race(this, p, strength) );
 		}
 		
-		grid = new Grid(WIDTH, HEIGHT, BLOCK_SIZE, this);
+		grid = new Grid(this.width, this.height, this.blockSize, this);
 		
 		if (HUMAN_PLAYER) {
 			player = players.get(0);
@@ -206,7 +206,7 @@ public class GameStage implements Serializable {
 	 * Resize all coordinates-dependent objects
 	 */	
 	public void resize(int width, int height, int blockSize) {
-		double ratio = ((double) blockSize) / BLOCK_SIZE;
+		double ratio = ((double) blockSize) / this.blockSize;
 		
 		for (Cell c : cells) {
 			c.posX *= ratio;
@@ -219,8 +219,8 @@ public class GameStage implements Serializable {
 			b.posY *= ratio;
 		}
 		
-		WIDTH = width;
-		HEIGHT = height;
-		BLOCK_SIZE = blockSize;
+		this.width = width;
+		this.height = height;
+		this.blockSize = blockSize;
 	}
 }
