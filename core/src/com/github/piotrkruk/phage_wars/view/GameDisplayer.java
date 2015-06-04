@@ -83,15 +83,19 @@ public class GameDisplayer implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
-		stage.act();
-		stage.draw();
-		   
+		batch.begin();
+		phageWars.background.draw(batch, 1);
+		batch.end();
+		
 		synchronized (game) {
 			drawBacterias();
 			drawSelections();
 			drawCells();
 			drawAmountsOfUnits();
 		}
+		
+		stage.act();
+		stage.draw();
 	}
 	
 	protected void initCellImages() {

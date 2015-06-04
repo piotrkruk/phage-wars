@@ -1,12 +1,16 @@
 package com.github.piotrkruk.phage_wars.view;
 
+import java.util.function.Consumer;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.Cell;
@@ -90,18 +94,7 @@ public class MapEditor extends GameDisplayer {
             public void clicked(InputEvent event, float x, float y)
             {
             	MapEditor.this.phageWars.playSound();
-                Input.TextInputListener listener = new Input.TextInputListener() {
-
-					@Override
-					public void input(String text) {
-						Map.write(game, text);
-					}
-
-					@Override
-					public void canceled() {}
-                	
-                };
-                Gdx.input.getTextInput(listener, "Write the name of the map", "", "eg. mymap.ser");
+            	MapEditor.this.getMapNameAndExecute(MapEditor.this::saveMap);
             }
         } );
         
@@ -110,31 +103,7 @@ public class MapEditor extends GameDisplayer {
             public void clicked(InputEvent event, float x, float y)
             {
             	MapEditor.this.phageWars.playSound();
-                Input.TextInputListener listener = new Input.TextInputListener() {
-
-					@Override
-					public void input(String text) {
-						GameStage temp = Map.read(game.width, game.height,
-								game.blockSize, game.AI_STRENGTH, text);
-						
-						if (temp != null) {
-							remapping = true;
-							
-							game = temp;
-						
-							imgCells.clear();
-							imgCellOwners.clear();
-							
-							initCellImages();
-							remapping = false;
-						}
-					}
-
-					@Override
-					public void canceled() {}
-                	
-                };
-                Gdx.input.getTextInput(listener, "Write the name of the map", "", "eg. mymap.ser");
+            	MapEditor.this.getMapNameAndExecute(MapEditor.this::loadMap);
             }
         });
         
@@ -162,9 +131,7 @@ public class MapEditor extends GameDisplayer {
 	}
 
 	@Override
-	public void show() {
-		stage.addActor(phageWars.background);
-    	
+	public void show() {    	
     	stage.addActor(btnBack);
     	stage.addActor(btnSave);
     	stage.addActor(btnLoad);
@@ -263,46 +230,7 @@ public class MapEditor extends GameDisplayer {
 	    			centerX = posX;
 	    			centerY = posY;
 	    			
-	                Input.TextInputListener listener = new Input.TextInputListener() {
-	
-						@Override
-						public void input(String text) {							
-							int id, initUnits;
-							Race race = null;
-							Player pl = null;
-							
-							if (!text.equals("")) {							
-								try {
-									String[] temp = text.split(" ");
-									
-									id = Integer.parseInt(temp[0]);
-									initUnits = Integer.parseInt(temp[1]);
-									
-									race = game.races.get(id);
-									pl = game.players.get(id);
-								} catch (RuntimeException e) {
-									System.out.println("Illegal arguments!");
-									return ;
-								}
-							}
-							else {
-								id = texturePlayers.length - 1;
-								initUnits = 0;
-								
-								race = new Race(game);
-								pl = null;
-							}
-							
-							MapEditor.this.addCell(id, centerX, centerY, 0, initUnits, race, pl);
-			        		creating = true;
-						}
-	
-						@Override
-						public void canceled() {}
-	                	
-	                };
-	                Gdx.input.getTextInput(listener, "[owner id] [number of units]", 
-	                		"", "for unoccupied cells leave this empty");
+	    			getCellParamsAndCreate();
 	    		}
 	    		else {
 	    			creating = false;
@@ -329,5 +257,138 @@ public class MapEditor extends GameDisplayer {
     	}
 
     	return false;
+    }
+    
+    /**
+     * Asks for new cell's parameters
+     * 
+     */
+    private void getCellParamsAndCreate() {
+		class CellDialog extends Dialog {
+			
+			CellDialog() {
+				super("Enter cell's parameters", defaultSkin);
+
+				getContentTable()
+					.add("Write [owner id] [amount of units]\nFor unoccupied cells leave empty");
+				getContentTable().row();
+				
+				TextField field = new TextField("", defaultSkin);
+				
+    			getContentTable().add(field);
+    			
+    			button("Ok", field);
+    			button("Cancel");
+    			
+    			key(Input.Keys.ENTER, field);
+			}
+					
+			@Override
+			public void result(Object obj) {
+				if (obj != null)
+					MapEditor.this.createCell( TextField.class.cast(obj).getText() );
+			}
+			
+		};
+		
+		new CellDialog().show(stage);
+    }
+    
+    /**
+     * Loads a name for a map and passes it to a function
+     * @param func - function to be executed
+     * 
+     */
+    private void getMapNameAndExecute(final Consumer<String> func) {
+
+    	new Dialog("Enter map's name", defaultSkin) {
+    		{
+    			getContentTable()
+					.add("You don't have to provide any extension");
+				getContentTable().row();
+				
+				TextField field = new TextField("", defaultSkin);
+				
+				getContentTable().add(field);
+				
+				button("Ok", field);
+				button("Cancel");
+    		
+				key(Input.Keys.ENTER, field);
+    		}
+    		
+			@Override
+			public void result(Object obj) {
+				if (obj != null)
+					func.accept( TextField.class.cast(obj).getText() );
+			}
+		}.show(stage);
+    }
+    
+    /**
+     * Tries to load a map
+     * @param text - map's name
+     * 
+     */
+    private void loadMap(String text) {
+		GameStage temp = Map.read(game.width, game.height,
+								  game.blockSize, game.AI_STRENGTH, text + ".ser");
+
+		if (temp != null) {
+			remapping = true;
+			
+			game = temp;
+			
+			imgCells.clear();
+			imgCellOwners.clear();
+			
+			initCellImages();
+			remapping = false;
+		}
+    }
+    
+    /**
+     * Tries to save a map
+     * @param text - map's name
+     * 
+     */
+    private void saveMap(String text) {
+    	Map.write(game, text + ".ser");
+    }
+
+    /**
+     * Tries to create a new cell
+     * @param text - user's text input
+     * 
+     */
+    private void createCell(String text) {
+		int id, initUnits;
+		Race race = null;
+		Player pl = null;
+		
+		if (!text.equals("")) {							
+			try {
+				String[] temp = text.split(" ");
+				
+				id = Integer.parseInt(temp[0]);
+				initUnits = Integer.parseInt(temp[1]);
+				
+				race = game.races.get(id);
+				pl = game.players.get(id);
+			} catch (RuntimeException e) {
+				System.out.println("Illegal arguments!");
+				return ;
+			}
+		}
+		else {
+			id = texturePlayers.length - 1;
+			initUnits = 0;
+			
+			race = new Race(game);
+			pl = null;
+		}
+		
+		addCell(id, centerX, centerY, 0, initUnits, race, pl);
+		creating = true;
     }
 }

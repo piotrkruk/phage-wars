@@ -97,53 +97,43 @@ public class GameWindow extends GameDisplayer {
 
     @Override
     public void render(float delta) {
-    	if (finished) {
-		    stage.act();
-		    stage.draw();
-    	}
-    	else {
-    		synchronized(game) {
-    			if (pausedCount == 0)
-    				game.update(delta);
-    		
-    			checkGameStatus();
-    			super.render(delta);
-    		}
-    	}
+		synchronized(game) {
+			game.update(delta);
+			checkGameStatus();
+			
+			super.render(delta);
+		}
     }
     
     private void checkGameStatus() {
-    	if (!game.isRunning()) {
+    	if (!finished && !game.isRunning()) {
     		finished = true;
     		
     		System.out.println("The game has finished.");
     		
-    		Dialog msgGameFinished = new Dialog("Infection complete.", defaultSkin);
-    		
-    		if (game.HUMAN_PLAYER) {
-	    		boolean hasPlayerWon = game.player.isPlaying();
-	    		
-	    		if (hasPlayerWon) {
-	    			System.out.println("The player has won.");
-	    			msgGameFinished.text("You have won!\nClick anywhere to continue.");    		
-	    		}
-	    		else {
-	    			System.out.println("The player has lost.");
-	    			msgGameFinished.text("You have lost!\nClick anywhere to continue.");   
-	    		}
-    		}
-    		else
-    			msgGameFinished.text("Click anywhere to continue.");
-    		
-    		stage.addActor(msgGameFinished);
-    		msgGameFinished.show(stage);
+    		new Dialog("Infection complete.", defaultSkin) {
+    			{
+    	    		if (game.HUMAN_PLAYER) {
+    		    		boolean hasPlayerWon = game.player.isPlaying();
+    		    		
+    		    		if (hasPlayerWon) {
+    		    			System.out.println("The player has won.");
+    		    			text("You have won!\nClick anywhere to continue.");    		
+    		    		}
+    		    		else {
+    		    			System.out.println("The player has lost.");
+    		    			text("You have lost!\nClick anywhere to continue.");   
+    		    		}
+    	    		}
+    	    		else
+    	    			text("Click anywhere to continue.");
+    			}
+    		}.show(stage);   		
     	}
     }
 
     @Override
     public void show() {
-		stage.addActor(phageWars.background);
-
 		stage.addActor(circExit);
 		stage.addActor(circPause);
 		stage.addActor(circResume);
