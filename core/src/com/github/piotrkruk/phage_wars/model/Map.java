@@ -117,7 +117,7 @@ public class Map implements Serializable {
 		 *  to prevent cells from overlapping with buttons
 		 */
 		
-		return new Cell(game.width - 2 * game.blockSize, game.height, 4 * game.blockSize, 0, null, null);
+		return new Cell(game.width - 3 * game.blockSize, game.height, 5 * game.blockSize, 0, null, null);
 	}
 	
 	/**
