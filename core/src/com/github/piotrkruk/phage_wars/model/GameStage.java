@@ -186,7 +186,9 @@ public class GameStage implements Serializable {
 					
 				double units = c.sendUnits();	
 				
-				int numberOfBacterias = (int) (units / Bacteria.UNITS_PER_BACTERIA);
+				int numberOfBacterias = (int) (units / Bacteria.UNITS_PER_BACTERIA);				
+				numberOfBacterias = Math.min(numberOfBacterias, Bacteria.MAX_BACTERIAS);
+				
 				double unitsPerBacteria = units / numberOfBacterias;
 				
 				for (int i = 0; i < numberOfBacterias; i++)

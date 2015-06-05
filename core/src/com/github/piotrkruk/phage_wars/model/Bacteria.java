@@ -21,6 +21,8 @@ public class Bacteria implements Serializable {
 	public static final int DEFAULT_RADIUS = 8;
 	public static final double UNITS_PER_BACTERIA = 1.5;
 	
+	public static final int MAX_BACTERIAS = 100;
+	
 	private static final double MAX_WAIT_TIME = 0.6;
 	private static final double TIME_PER_STEP = 0.07;
 	

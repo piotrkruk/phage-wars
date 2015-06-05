@@ -266,14 +266,14 @@ public class MapEditor extends GameDisplayer {
     private void getCellParamsAndCreate() {
 		class CellDialog extends Dialog {
 			
+			TextField field = new TextField("", defaultSkin);
+			
 			CellDialog() {
 				super("Enter cell's parameters", defaultSkin);
 
 				getContentTable()
 					.add("Write [owner id] [amount of units]\nFor unoccupied cells leave empty");
 				getContentTable().row();
-				
-				TextField field = new TextField("", defaultSkin);
 				
     			getContentTable().add(field);
     			
@@ -291,7 +291,10 @@ public class MapEditor extends GameDisplayer {
 			
 		};
 		
-		new CellDialog().show(stage);
+		CellDialog dialog = new CellDialog();
+		
+		dialog.show(stage);
+		stage.setKeyboardFocus(dialog.field);
     }
     
     /**
@@ -301,13 +304,16 @@ public class MapEditor extends GameDisplayer {
      */
     private void getMapNameAndExecute(final Consumer<String> func) {
 
-    	new Dialog("Enter map's name", defaultSkin) {
-    		{
+    	class MapDialog extends Dialog {
+    		
+    		TextField field = new TextField("", defaultSkin);
+    		
+    		MapDialog() {
+    			super("Enter map's name", defaultSkin);
+    			
     			getContentTable()
 					.add("You don't have to provide any extension");
 				getContentTable().row();
-				
-				TextField field = new TextField("", defaultSkin);
 				
 				getContentTable().add(field);
 				
@@ -322,7 +328,12 @@ public class MapEditor extends GameDisplayer {
 				if (obj != null)
 					func.accept( TextField.class.cast(obj).getText() );
 			}
-		}.show(stage);
+		};
+		
+		MapDialog dialog = new MapDialog();
+		
+		dialog.show(stage);
+		stage.setKeyboardFocus(dialog.field);
     }
     
     /**

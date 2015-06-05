@@ -13,6 +13,8 @@ public class Cell implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final int MAX_UNITS = 100000000;
+	
 	private static int idCnt = 0;
 	public final int id;
 	
@@ -34,7 +36,7 @@ public class Cell implements Serializable {
 		
 		this.race = race;
 		this.owner = owner;
-		this.units = initUnits;
+		this.units = Math.min(initUnits, MAX_UNITS);
 	}
 	
 	public synchronized int getUnits() {
@@ -48,6 +50,8 @@ public class Cell implements Serializable {
 	 */
 	public void grow(float delta) {
 		units += delta * race.growthRate(radius);
+		
+		fixUnits();
 	}
 	
 	/**
@@ -73,6 +77,12 @@ public class Cell implements Serializable {
 				this.owner.ownCount++;
 			}
 		}
+		
+		fixUnits();
+	}
+	
+	public synchronized void fixUnits() {
+		units = Math.min(units, MAX_UNITS);
 	}
 	
 	/**
