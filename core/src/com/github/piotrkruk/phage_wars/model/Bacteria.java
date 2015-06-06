@@ -54,6 +54,9 @@ public class Bacteria implements Serializable {
 		this.gameStage = gameStage;
 		
 		path = gameStage.grid.getPath();
+		
+		this.posX = gameStage.grid.ptSrc.posX;
+		this.posY = gameStage.grid.ptSrc.posY;
 	}
 	
 	/**
@@ -64,6 +67,9 @@ public class Bacteria implements Serializable {
 	 */
 	public boolean move(float delta) {
 		timer += delta;
+		
+		if (timer < 0)
+			return false;
 		
 		int pos = (int) (timer / TIME_PER_STEP);
 		double betweenRatio = (timer / TIME_PER_STEP) - pos;

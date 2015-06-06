@@ -99,7 +99,9 @@ public class GameWindow extends GameDisplayer {
     @Override
     public void render(float delta) {
 		synchronized(game) {
-			game.update(delta);
+			if (pausedCount == 0)
+				game.update(delta);
+			
 			checkGameStatus();
 			
 			super.render(delta);

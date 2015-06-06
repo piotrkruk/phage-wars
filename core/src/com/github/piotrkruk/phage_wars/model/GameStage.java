@@ -180,14 +180,21 @@ public class GameStage implements Serializable {
 		for (Cell c : cells)
 			if (c.owner == p && c.selected) {
 				if (!grid.runSearch(c, destination)) {
-					deselectAll(p);
-					return ; // returns if path not found
+					continue;
+					/*
+					 * Cells that couldn't find their way
+					 * to the destination stay selected
+					 * so the player can try sending units
+					 * to some other place
+					 */
 				}
 					
 				double units = c.sendUnits();	
 				
-				int numberOfBacterias = (int) (units / Bacteria.UNITS_PER_BACTERIA);				
+				int numberOfBacterias = (int) (units / Bacteria.UNITS_PER_BACTERIA);
+				
 				numberOfBacterias = Math.min(numberOfBacterias, Bacteria.MAX_BACTERIAS);
+				numberOfBacterias = Math.max(numberOfBacterias, 1);
 				
 				double unitsPerBacteria = units / numberOfBacterias;
 				

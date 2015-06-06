@@ -28,6 +28,7 @@ public class Grid {
 	public int widthInPoints, heightInPoints;
 	
 	public int pointDist;
+	public Point ptSrc;
 	
 	private GameStage game;
 	
@@ -42,7 +43,7 @@ public class Grid {
 		this.width = width;
 		this.height = height;
 		this.pointDist = blockSize / 5;
-		this.avoidBy = blockSize / 2;
+		this.avoidBy = blockSize / 3;
 		
 		this.widthInPoints = width / pointDist;
 		this.heightInPoints = height / pointDist;
@@ -109,7 +110,9 @@ public class Grid {
 		lock(Arrays.asList(source, destination));
 		
 		Queue <Point> queue = new LinkedList <Point> ();
-		queue.offer( new Point(source.posX, source.posY).roundToGrid() );
+		
+		ptSrc = new Point(source.posX, source.posY);
+		queue.offer( ptSrc.clone().roundToGrid() );
 		
 		/*
 		 * The allowed moves are as follows:

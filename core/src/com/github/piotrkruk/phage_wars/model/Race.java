@@ -36,7 +36,7 @@ public class Race implements Serializable {
 	private final static double DEFAULT_MAX_RADIUS = 4.0;
 	private final static int DEFAULT_MIN_INIT_UNITS = 20;
 	private final static int DEFAULT_MAX_INIT_UNITS = 30;
-	private final static double GROWTH_FOR_AREA = 0.005;
+	private final static double GROWTH_FOR_AREA = 0.09;
 	
 	// each race apart from an empty one has it's owner
 	public final Player owner;
@@ -78,6 +78,6 @@ public class Race implements Serializable {
 	}
 	
 	public double growthRate(int radius) {
-		return GROWTH_FOR_AREA * ( ((double) radius * radius) / gameStage.blockSize );
+		return GROWTH_FOR_AREA * Math.pow( ((double) radius) / gameStage.blockSize , 2 );
 	}
 }
