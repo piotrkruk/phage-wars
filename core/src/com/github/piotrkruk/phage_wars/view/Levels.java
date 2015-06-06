@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.github.piotrkruk.phage_wars.Assets;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.GameStage;
 import com.github.piotrkruk.phage_wars.model.Map;
@@ -34,10 +34,9 @@ public class Levels implements Screen {
 	private final PhageWars phageWars;
     
     private Stage stage = new Stage();
-    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
     
-    private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
-    private TextButton btnEditor = new TextButton("Open editor", defaultSkin);
+    private TextButton btnBack = new TextButton("Back to menu", Assets.defaultSkin);
+    private TextButton btnEditor = new TextButton("Open editor", Assets.defaultSkin);
     
     private String[] strLevels =
     	{
@@ -89,7 +88,7 @@ public class Levels implements Screen {
     	btnLevels = new Button[ strLevels.length ];
     	
     	for(int i = 0; i < btnLevels.length; i++) {
-    		btnLevels[i] = new Button(defaultSkin);
+    		btnLevels[i] = new Button(Assets.defaultSkin);
     		
     		String strImgPath = "map_images/" + strLevels[i] + ".png",
     			   strMapPath = "maps/" + strLevels[i] + ".ser";

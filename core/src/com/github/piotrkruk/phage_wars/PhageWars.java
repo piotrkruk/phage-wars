@@ -3,7 +3,6 @@ package com.github.piotrkruk.phage_wars;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.github.piotrkruk.phage_wars.model.GameStage;
@@ -19,9 +18,6 @@ public class PhageWars extends Game {
     public GameMode difficulty = GameMode.MEDIUM;
     
     public float buttonClickVolume = 0.7f;
-    public static final float DEFAULT_CLICK_VOLUME = 0.7f;
-    
-    public Sound buttonClick;
     
     public Texture texture;
     public Image background;
@@ -29,7 +25,6 @@ public class PhageWars extends Game {
 	@Override
 	public void create () {
 		texture = new Texture(Gdx.files.internal("background.jpg"));
-		buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
 		
 		background = new Image(texture);
 		background.setSize(mode.width, mode.height);
@@ -73,7 +68,7 @@ public class PhageWars extends Game {
 	}
 	
 	public void playSound() {
-		buttonClick.play(buttonClickVolume);
+		Assets.buttonClick.play(buttonClickVolume);
 	}
 
 	private static Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

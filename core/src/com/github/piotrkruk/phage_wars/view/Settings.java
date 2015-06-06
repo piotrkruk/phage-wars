@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.github.piotrkruk.phage_wars.Assets;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.PhageWars.DisplayMode;
 import com.github.piotrkruk.phage_wars.PhageWars.GameMode;
@@ -23,25 +23,24 @@ public class Settings implements Screen {
 	private final PhageWars phageWars;
     
     private Stage stage = new Stage();
-    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
 
-    private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
+    private TextButton btnBack = new TextButton("Back to menu", Assets.defaultSkin);
     
     private TextButton btnModeNormal = new TextButton(
     		"Normal resolution (" + DisplayMode.NORMAL.width
-    		+ "x" + DisplayMode.NORMAL.height + ")", defaultSkin);
+    		+ "x" + DisplayMode.NORMAL.height + ")", Assets.defaultSkin);
     
     private TextButton btnModeHD = new TextButton(
     		"HD resolution (" + DisplayMode.HD.width
-    		+ "x" + DisplayMode.HD.height + ")", defaultSkin);
+    		+ "x" + DisplayMode.HD.height + ")", Assets.defaultSkin);
 
     private TextButton btnModeFS = new TextButton(
-            "Full screen", defaultSkin);
+            "Full screen", Assets.defaultSkin);
     
-    private TextButton btnEasy = new TextButton("Easy", defaultSkin),
-    				   btnMedium = new TextButton("Medium", defaultSkin),
-    				   btnHard = new TextButton("Hard", defaultSkin);
+    private TextButton btnEasy = new TextButton("Easy", Assets.defaultSkin),
+    				   btnMedium = new TextButton("Medium", Assets.defaultSkin),
+    				   btnHard = new TextButton("Hard", Assets.defaultSkin);
     
 	private Image circSoundOn = new Image( new Texture(Gdx.files.internal("buttons/sounds_on.png")) );
 	private Image circSoundOff = new Image( new Texture(Gdx.files.internal("buttons/sounds_off.png")) );
@@ -205,7 +204,7 @@ public class Settings implements Screen {
             {
 				System.out.println("Sounds turned on.");
 				
-				Settings.this.phageWars.buttonClickVolume = PhageWars.DEFAULT_CLICK_VOLUME;
+				Settings.this.phageWars.buttonClickVolume = Assets.DEFAULT_CLICK_VOLUME;
 				
 				Settings.this.phageWars.playSound();
 				circSoundOn.setVisible(true);

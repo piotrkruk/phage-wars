@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.github.piotrkruk.phage_wars.Assets;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.*;
 
@@ -111,7 +112,7 @@ public class GameWindow extends GameDisplayer {
     		
     		System.out.println("The game has finished.");
     		
-    		new Dialog("Infection complete.", defaultSkin) {
+    		new Dialog("Infection complete.", Assets.defaultSkin) {
     			{
     	    		if (game.HUMAN_PLAYER) {
     		    		boolean hasPlayerWon = game.player.isPlaying();
@@ -194,7 +195,7 @@ public class GameWindow extends GameDisplayer {
 			else {
 				System.out.println("Sounds turned on.");
 				
-				phageWars.buttonClickVolume = PhageWars.DEFAULT_CLICK_VOLUME;
+				phageWars.buttonClickVolume = Assets.DEFAULT_CLICK_VOLUME;
 				
 				phageWars.playSound();
 				circSoundOn.setVisible(true);

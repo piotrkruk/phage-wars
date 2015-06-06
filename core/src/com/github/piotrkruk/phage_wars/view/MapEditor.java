@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.github.piotrkruk.phage_wars.Assets;
 import com.github.piotrkruk.phage_wars.PhageWars;
 import com.github.piotrkruk.phage_wars.model.Cell;
 import com.github.piotrkruk.phage_wars.model.GameStage;
@@ -34,10 +35,10 @@ import com.github.piotrkruk.phage_wars.model.Race;
 
 public class MapEditor extends GameDisplayer {
     
-    private TextButton btnBack = new TextButton("Back to menu", defaultSkin);
-    private TextButton btnSave = new TextButton("Save", defaultSkin);
-    private TextButton btnLoad = new TextButton("Load", defaultSkin);
-    private TextButton btnPlay = new TextButton("Play", defaultSkin);
+    private TextButton btnBack = new TextButton("Back to menu", Assets.defaultSkin);
+    private TextButton btnSave = new TextButton("Save", Assets.defaultSkin);
+    private TextButton btnLoad = new TextButton("Load", Assets.defaultSkin);
+    private TextButton btnPlay = new TextButton("Play", Assets.defaultSkin);
     
     private Image circHideButtons = new Image( new Texture(Gdx.files.internal("buttons/hide_buttons.png")) );
     
@@ -190,7 +191,7 @@ public class MapEditor extends GameDisplayer {
 			int ind = game.cells.size();
 			
 			imgCellOwners.add(imageId);
-			imgCells.add( new Image( texturePlayers[ imgCellOwners.get(ind) ] ) );
+			imgCells.add( new Image( Assets.texturePlayers[ imgCellOwners.get(ind) ] ) );
 			
 			game.cells.add(
 					new Cell(centerX, centerY, radius, initUnits, race, pl)
@@ -266,10 +267,10 @@ public class MapEditor extends GameDisplayer {
     private void getCellParamsAndCreate() {
 		class CellDialog extends Dialog {
 			
-			TextField field = new TextField("", defaultSkin);
+			TextField field = new TextField("", Assets.defaultSkin);
 			
 			CellDialog() {
-				super("Enter cell's parameters", defaultSkin);
+				super("Enter cell's parameters", Assets.defaultSkin);
 
 				getContentTable()
 					.add("Write [owner id] [amount of units]\nFor unoccupied cells leave empty");
@@ -306,10 +307,10 @@ public class MapEditor extends GameDisplayer {
 
     	class MapDialog extends Dialog {
     		
-    		TextField field = new TextField("", defaultSkin);
+    		TextField field = new TextField("", Assets.defaultSkin);
     		
     		MapDialog() {
-    			super("Enter map's name", defaultSkin);
+    			super("Enter map's name", Assets.defaultSkin);
     			
     			getContentTable()
 					.add("You don't have to provide any extension");
@@ -392,7 +393,7 @@ public class MapEditor extends GameDisplayer {
 			}
 		}
 		else {
-			id = texturePlayers.length - 1;
+			id = Assets.texturePlayers.length - 1;
 			initUnits = 0;
 			
 			race = new Race(game);

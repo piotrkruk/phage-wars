@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.github.piotrkruk.phage_wars.Assets;
 import com.github.piotrkruk.phage_wars.PhageWars;
 
 
@@ -20,12 +20,10 @@ public class MainMenu implements Screen {
     
     private Stage stage = new Stage();
     
-    private Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-    
-    private TextButton btnNewGame = new TextButton("Quick game", defaultSkin);
-    private TextButton btnLevSelect = new TextButton("Levels", defaultSkin);
-    private TextButton btnSettings = new TextButton("Settings", defaultSkin);
-    private TextButton btnExit = new TextButton("Exit", defaultSkin);
+    private TextButton btnNewGame = new TextButton("Quick game", Assets.defaultSkin);
+    private TextButton btnLevSelect = new TextButton("Levels", Assets.defaultSkin);
+    private TextButton btnSettings = new TextButton("Settings", Assets.defaultSkin);
+    private TextButton btnExit = new TextButton("Exit", Assets.defaultSkin);
 
     
     public MainMenu(PhageWars phageWars) {
