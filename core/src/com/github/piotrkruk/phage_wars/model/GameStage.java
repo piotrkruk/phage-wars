@@ -36,6 +36,7 @@ public class GameStage implements Serializable {
 	public final Map mapHandler;
 	
 	public volatile boolean paused = false;
+	private volatile boolean shutdown = false;
 	
 	// objects present on the stage:
 	public List <Player> players = new ArrayList <Player> ();
@@ -111,7 +112,18 @@ public class GameStage implements Serializable {
 				new Thread( new AI(this, players.get(i), AI_STRENGTH) ).start();
 	}
 	
+	/**
+	 * Forces game's shutdown
+	 * 
+	 */
+	public synchronized void shutdown() {
+		shutdown = true;
+	}
+	
 	public synchronized boolean isRunning() {
+		if (shutdown)
+			return false;
+		
 		/*
 		 * The game is still running
 		 * if there is at least active player still alive

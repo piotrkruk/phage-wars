@@ -18,7 +18,7 @@ public class Bacteria implements Serializable {
 
 	private static final Random rand = new Random();
 	
-	public static final int DEFAULT_RADIUS = 8;
+	public static final double DEFAULT_RADIUS = 0.35;
 	public static final double UNITS_PER_BACTERIA = 1.5;
 	
 	public static final int MAX_BACTERIAS = 100;
@@ -28,7 +28,7 @@ public class Bacteria implements Serializable {
 	
 	public int posX, posY;
 	
-	public final int radius = DEFAULT_RADIUS;
+	public final int radius;
 	
 	private double timer = -rand.nextDouble() * MAX_WAIT_TIME;
 		// time since started moving
@@ -52,6 +52,8 @@ public class Bacteria implements Serializable {
 		this.from = from;
 		this.destination = destination;
 		this.gameStage = gameStage;
+		
+		this.radius = (int) (DEFAULT_RADIUS * gameStage.blockSize);
 		
 		path = gameStage.grid.getPath();
 		

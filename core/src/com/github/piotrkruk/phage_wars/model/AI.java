@@ -16,8 +16,7 @@ public class AI implements Runnable {
 	
 	private static final int DEFAULT_MIN_MOVE_DELAY = 3000;
 	private static final int DEFAULT_MAX_MOVE_DELAY = 4000;
-	
-	private static final int NO_OF_TRIALS = 1000;
+	private static final int DEFAULT_RETRIAL_TIME = 500;
 	
 	private final int maxMoveDelay;
 	private final int minMoveDelay;
@@ -109,15 +108,20 @@ public class AI implements Runnable {
 		List <Target> targets = new LinkedList <Target> ();
 		
 		double allOwnedUnits = 0,
-			   avgDistSum = 0;
+			   avgDist = 0;
+		
+		Cell largestOwned = null;
 		
 		for (Cell c : game.cells)
-			if (c.owner == player)
+			if (c.owner == player) {
 				allOwnedUnits += c.units;
+				
+				if (largestOwned == null || c.units > largestOwned.units)
+					largestOwned = c;
+			}
 		
 		for (Cell c : game.cells) if (c.owner != player)
-			for (Cell d : game.cells) if (d.owner == player)
-				avgDistSum += Cell.distSquared(c, d);
+			avgDist += Cell.distSquared(c, largestOwned);
 		
 		int targetCount = game.cells.size() - player.ownCount;
 		
@@ -132,7 +136,7 @@ public class AI implements Runnable {
 			targets.add( new Target(null, 2.0) );
 		}
 		
-		avgDistSum /= (double) targetCount;
+		avgDist /= (double) targetCount;
 		
 		for (Cell c : game.cells)
 			if (c.owner != player) {
@@ -140,18 +144,14 @@ public class AI implements Runnable {
 				double weight,
 					   radius = c.radius / game.blockSize,
 					   unitsRatio = c.units / allOwnedUnits,
-					   distSum = 0;
-				
-				for (Cell d : game.cells)
-					if (d.owner == player)
-						distSum += Cell.distSquared(c, d);
+					   distSum = Cell.distSquared(c, largestOwned);
 						
 				weight = radius;
 				weight /= 1 + unitsRatio;
-				weight *= avgDistSum / distSum;
+				weight *= avgDist / distSum;
 				
 				if (c.owner == null)
-					weight += 1.0;
+					weight += 0.6;
 				
 				weight = Math.max(weight, 0.2);
 				
@@ -177,23 +177,19 @@ public class AI implements Runnable {
 	
 	/**
 	 * Makes a random move of this player,
-	 * tries multiple times if chosen moves
-	 * lead to sending nothing at all
+	 * @return true if the move was made successfully
+	 * 			(decision to make no moves counts as a successful attempt)
 	 * 
 	 */
-	public void move() {
-		for (int trial = 0; trial < NO_OF_TRIALS; trial++) {
-			Cell target = selectTarget();
-			
-			if (target == null)
-				return ;
-			else {
-				selectSources(target);
-				
-				if (game.send(target, player))
-					return ;
-			}
+	public boolean move() {
+		Cell target = selectTarget();
+		
+		if (target != null) {
+			selectSources(target);
+			return game.send(target, player);
 		}
+		else
+			return true;
 	}
 
 	@Override
@@ -201,14 +197,23 @@ public class AI implements Runnable {
 		synchronized (game) {
 			try {
 				game.wait(minMoveDelay);
-			} catch (InterruptedException e1) {}
+			} catch (InterruptedException e) {}
 			
 			while (game.isRunning() && player.isPlaying()) {
+				boolean result = true;
+				
 				if (!game.paused)
-					move();
+					result = move();
 				
 				try {
-					game.wait( minMoveDelay + rand.nextInt(maxMoveDelay - minMoveDelay) );
+					int waitTime;
+					
+					if (result)
+						waitTime = minMoveDelay + rand.nextInt(maxMoveDelay - minMoveDelay);
+					else
+						waitTime = DEFAULT_RETRIAL_TIME;
+					
+					game.wait(waitTime);
 				} catch (InterruptedException e) {}
 			}
 		}

@@ -77,9 +77,9 @@ public class GameWindow extends GameDisplayer {
      */
     public void startGame() {
     	GameStage temp = new GameStage(phageWars.mode.width,
-	   			 phageWars.mode.height,
-	   			 phageWars.mode.blockSize,
-	   			 phageWars.difficulty.aiStrength);
+						   		   	 phageWars.mode.height,
+						   			 phageWars.mode.blockSize,
+						   			 phageWars.difficulty.aiStrength);
 
     	temp.genRandom();
     	
@@ -212,6 +212,8 @@ public class GameWindow extends GameDisplayer {
     			System.out.println("Game exited.");
     			
 				phageWars.playSound();
+				game.shutdown();
+				
     			phageWars.setToMenu();
     			return false;
     	}
@@ -231,8 +233,10 @@ public class GameWindow extends GameDisplayer {
     		return false;
     	}
     	
-    	if (pausedCount > 0 || !game.HUMAN_PLAYER)
+    	if (pausedCount > 0 || !game.HUMAN_PLAYER) {
+    		game.shutdown();
     		return false;
+    	}
 
 		Cell clicked = null;
 		
