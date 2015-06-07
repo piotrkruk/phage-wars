@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+
 
 /**
  * Class responsible for generating random maps
@@ -122,17 +124,22 @@ public class Map implements Serializable {
 	
 	/**
 	 * @param path - path containing a file from which a map is to be read
+	 * @param internal - is the path internal (i.e. in assets) or not (given by user)
 	 * 
 	 */
 	public static GameStage read(int width, int height, int blockSize,
-			double aiStrength, String path) {
+			double aiStrength, String path, boolean internal) {
 		
-		FileInputStream fileIn;
-		ObjectInputStream in;
+		FileInputStream fileIn = null;
+		ObjectInputStream in = null;
 		
 		try {
-			fileIn = new FileInputStream(path);
-			in = new ObjectInputStream(fileIn);
+			if (!internal) {
+				fileIn = new FileInputStream(path);
+				in = new ObjectInputStream(fileIn);
+			}
+			else
+				in = new ObjectInputStream( Gdx.files.internal(path).read() );
 			
 			try {
 				GameStage temp = (GameStage) in.readObject();
@@ -150,7 +157,9 @@ public class Map implements Serializable {
 			}
 			finally {
 				in.close();
-				fileIn.close();
+				
+				if (!internal)
+					fileIn.close();
 			}
 			
 		} catch (FileNotFoundException e) {

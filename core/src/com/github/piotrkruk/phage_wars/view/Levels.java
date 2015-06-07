@@ -18,16 +18,6 @@ import com.github.piotrkruk.phage_wars.model.Map;
  * Class allowing the player
  * to select some level for playing
  * 
- * Map's names are in strLevels as i.e. "mymap", it is required
- * that both files mymap.ser and mymap.png exist and are placed in
- * appropriate directories.
- * 
- * Important note:
- * 		Map (*.ser) are internally stored
- * 		in desktop/maps - as opposed to core/assets/maps
- * 		(which doesn't exist)
- * 
- *
  */
 
 public class Levels implements Screen {
@@ -37,11 +27,6 @@ public class Levels implements Screen {
     
     private TextButton btnBack = new TextButton("Back to menu", Assets.defaultSkin);
     private TextButton btnEditor = new TextButton("Open editor", Assets.defaultSkin);
-    
-    private String[] strLevels =
-    	{
-    		"map_crowdy"
-    	};
     
     private Button[] btnLevels;
     
@@ -85,13 +70,13 @@ public class Levels implements Screen {
     	
     	int buttonsPerRow = 5;
     	
-    	btnLevels = new Button[ strLevels.length ];
+    	btnLevels = new Button[ Assets.strLevels.length ];
     	
     	for(int i = 0; i < btnLevels.length; i++) {
     		btnLevels[i] = new Button(Assets.defaultSkin);
     		
-    		String strImgPath = "map_images/" + strLevels[i] + ".png",
-    			   strMapPath = "maps/" + strLevels[i] + ".ser";
+    		String strImgPath = "map_images/" + Assets.strLevels[i] + ".png",
+    			   strMapPath = "maps/" + Assets.strLevels[i] + ".ser";
     		
     	    Button.ButtonStyle style = new Button.ButtonStyle();
     		
@@ -130,7 +115,7 @@ public class Levels implements Screen {
                     
                     GameStage game =
                     	Map.read(phageWars.mode.width, phageWars.mode.height,
-                    			 phageWars.mode.blockSize, phageWars.difficulty.aiStrength, strMapPath);
+                    			 phageWars.mode.blockSize, phageWars.difficulty.aiStrength, strMapPath, true);
                     
                     if (game != null)
                     	Levels.this.phageWars.setToGame(game);

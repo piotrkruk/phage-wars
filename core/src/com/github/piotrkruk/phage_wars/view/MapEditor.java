@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -40,7 +39,7 @@ public class MapEditor extends GameDisplayer {
     private TextButton btnLoad = new TextButton("Load", Assets.defaultSkin);
     private TextButton btnPlay = new TextButton("Play", Assets.defaultSkin);
     
-    private Image circHideButtons = new Image( new Texture(Gdx.files.internal("buttons/hide_buttons.png")) );
+    private Image circHideButtons = new Image(Assets.textureCircHideButtons);
     
     private int centerX, centerY;
     
@@ -344,7 +343,7 @@ public class MapEditor extends GameDisplayer {
      */
     private void loadMap(String text) {
 		GameStage temp = Map.read(game.width, game.height,
-								  game.blockSize, game.AI_STRENGTH, text + ".ser");
+								  game.blockSize, game.AI_STRENGTH, text + ".ser", false);
 
 		if (temp != null) {
 			remapping = true;

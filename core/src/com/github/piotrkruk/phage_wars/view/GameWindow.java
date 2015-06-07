@@ -2,7 +2,6 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.github.piotrkruk.phage_wars.Assets;
@@ -25,11 +24,11 @@ public class GameWindow extends GameDisplayer {
 	private volatile boolean finished = false;
 	private volatile int pausedCount = 0;
     
-    private Image circExit = new Image( new Texture(Gdx.files.internal("buttons/game_exit.png")) );
-    private Image circPause = new Image( new Texture(Gdx.files.internal("buttons/game_pause.png")) );
-    private Image circResume = new Image( new Texture(Gdx.files.internal("buttons/game_resume.png")) );
-	private Image circSoundOn = new Image( new Texture(Gdx.files.internal("buttons/sounds_on.png")) );
-	private Image circSoundOff = new Image( new Texture(Gdx.files.internal("buttons/sounds_off.png")) );
+    private Image circExit = new Image(Assets.textureCircExit);
+    private Image circPause = new Image(Assets.textureCircPause);
+    private Image circResume = new Image(Assets.textureCircResume);
+	private Image circSoundOn = new Image(Assets.textureCircSoundOn);
+	private Image circSoundOff = new Image(Assets.textureCircSoundOff);
 
 	
     public GameWindow(PhageWars phageWars) {

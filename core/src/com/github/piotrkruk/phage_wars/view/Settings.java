@@ -2,7 +2,6 @@ package com.github.piotrkruk.phage_wars.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -42,8 +41,8 @@ public class Settings implements Screen {
     				   btnMedium = new TextButton("Medium", Assets.defaultSkin),
     				   btnHard = new TextButton("Hard", Assets.defaultSkin);
     
-	private Image circSoundOn = new Image( new Texture(Gdx.files.internal("buttons/sounds_on.png")) );
-	private Image circSoundOff = new Image( new Texture(Gdx.files.internal("buttons/sounds_off.png")) );
+	private Image circSoundOn = new Image(Assets.textureCircSoundOn);
+	private Image circSoundOff = new Image(Assets.textureCircSoundOff);
     
     public Settings(PhageWars phageWars) {
     	this.phageWars = phageWars;

@@ -6,6 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+/**
+ * Class that gatheres all the assets to avoid loading them
+ * multiple times, and organize code.
+ * 
+ */
+
 public class Assets {
 	
 	public static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
@@ -13,6 +19,23 @@ public class Assets {
     
     public static BitmapFont font = new BitmapFont(Gdx.files.internal("skins/default.fnt"));
     public static Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+    
+    
+   /*
+    * Map's names are in Assets.strLevels as i.e. "mymap", it is required
+    * that both files maps/mymap.ser and map_images/mymap.png exist
+    */
+    public static String[] strLevels =
+    	{
+    		"map_crowdy"
+    	};
+    
+    public static Texture textureCircExit = new Texture(Gdx.files.internal("buttons/game_exit.png"));
+    public static Texture textureCircPause = new Texture(Gdx.files.internal("buttons/game_pause.png"));
+    public static Texture textureCircResume = new Texture(Gdx.files.internal("buttons/game_resume.png"));
+    public static Texture textureCircSoundOn = new Texture(Gdx.files.internal("buttons/sounds_on.png"));
+    public static Texture textureCircSoundOff = new Texture(Gdx.files.internal("buttons/sounds_off.png"));
+    public static Texture textureCircHideButtons = new Texture(Gdx.files.internal("buttons/hide_buttons.png"));
     
     public static Texture[] texturePlayers =
     	{
