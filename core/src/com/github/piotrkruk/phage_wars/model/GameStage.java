@@ -174,8 +174,13 @@ public class GameStage implements Serializable {
 	/**
 	 * Sends units from all selected cells
 	 * to destination cell
+	 * 
+	 * @return true if anything was sent
+	 * 
 	 */
-	public synchronized void send(Cell destination, Player p) {
+	public synchronized boolean send(Cell destination, Player p) {
+		
+		boolean result = false;
 		
 		for (Cell c : cells)
 			if (c.owner == p && c.selected) {
@@ -188,6 +193,8 @@ public class GameStage implements Serializable {
 					 * to some other place
 					 */
 				}
+				else
+					result = true;
 					
 				double units = c.sendUnits();	
 				
@@ -203,6 +210,8 @@ public class GameStage implements Serializable {
 				
 				p.bacteriaCount += numberOfBacterias;
 			}
+		
+		return result;
 	}
 	
 	public synchronized void deselectAll(Player p) {

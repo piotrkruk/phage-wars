@@ -61,8 +61,13 @@ public class MapEditor extends GameDisplayer {
 		
 		game = new GameStage(phageWars.mode.width,
 							 phageWars.mode.height,
-							 phageWars.mode.blockSize, 1.0, GameStage.MAX_NO_OF_PLAYERS);
+							 phageWars.mode.blockSize,
+							 1.0, GameStage.MAX_NO_OF_PLAYERS);
 		
+		initButtons();
+	}
+	
+	private void initButtons() {
     	int btnWidth = phageWars.mode.btnWidth,
         	btnHeight = phageWars.mode.btnHeight,
         	border = phageWars.mode.border,
@@ -356,6 +361,8 @@ public class MapEditor extends GameDisplayer {
 			initCellImages();
 			remapping = false;
 		}
+		else
+			displayMessage("Unable to load map - the file doesn't exist or is corrupted.");
     }
     
     /**
@@ -364,7 +371,12 @@ public class MapEditor extends GameDisplayer {
      * 
      */
     private void saveMap(String text) {
-    	Map.write(game, text + ".ser");
+    	boolean result = Map.write(game, text + ".ser");
+    	
+    	if (result)
+    		displayMessage("Map saved successfully!");
+    	else
+    		displayMessage("Unable to write map - error occurred.");
     }
 
     /**
@@ -401,5 +413,23 @@ public class MapEditor extends GameDisplayer {
 		
 		addCell(id, centerX, centerY, 0, initUnits, race, pl);
 		creating = true;
+    }
+    
+    /**
+     * Displays a simple message to the user
+     * 
+     */
+    private void displayMessage(String message) {
+
+    	new Dialog("", Assets.defaultSkin) {
+    		
+    		{    			
+    			getContentTable().add(message);
+				getContentTable().row();
+				
+				button("Ok");
+				key(Input.Keys.ENTER, null);
+    		}
+		}.show(stage);
     }
 }

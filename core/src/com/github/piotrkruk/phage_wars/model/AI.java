@@ -17,6 +17,8 @@ public class AI implements Runnable {
 	private static final int DEFAULT_MIN_MOVE_DELAY = 3000;
 	private static final int DEFAULT_MAX_MOVE_DELAY = 4000;
 	
+	private static final int NO_OF_TRIALS = 1000;
+	
 	private final int maxMoveDelay;
 	private final int minMoveDelay;
 	private static final Random rand = new Random();
@@ -70,7 +72,7 @@ public class AI implements Runnable {
 		else {
 			/*
 			 * If target is non-empty
-			 * choose sources based on distance and amout of units
+			 * choose sources based on distance and amount of units
 			 */
 			
 			for (Cell c : game.cells)
@@ -174,15 +176,23 @@ public class AI implements Runnable {
 	}
 	
 	/**
-	 * Makes a random move of this player
+	 * Makes a random move of this player,
+	 * tries multiple times if chosen moves
+	 * lead to sending nothing at all
 	 * 
 	 */
 	public void move() {
-		Cell target = selectTarget();
-		
-		if (target != null) {
-			selectSources(target);
-			game.send(target, player);
+		for (int trial = 0; trial < NO_OF_TRIALS; trial++) {
+			Cell target = selectTarget();
+			
+			if (target == null)
+				return ;
+			else {
+				selectSources(target);
+				
+				if (game.send(target, player))
+					return ;
+			}
 		}
 	}
 

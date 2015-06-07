@@ -75,9 +75,9 @@ public class PhageWars extends Game {
 
 	public enum DisplayMode {
 		
-		NORMAL(960, 540,false),
-		HD(1280,720,false),
-		FS(dimension.width,dimension.height,true);
+		NORMAL(960, 540, "Normal", false),
+		HD(1280, 720, "HD", false),
+		FS(dimension.width, dimension.height, "Fullscreen", true);
 
 		public final int width, height;
 		
@@ -87,16 +87,25 @@ public class PhageWars extends Game {
 						 border;
 
 		public final boolean fullscreen;
+		
+		public final String name;
+		public final String description;
 
-		private DisplayMode(int width, int height, boolean fullscreen) {
+		private DisplayMode(int width, int height, String name, boolean fullscreen) {
 			this.width = width;
 			this.height = height;
+			this.name = name;
 			this.fullscreen = fullscreen;
 
 			blockSize = width / 50;
 			btnWidth = 12 * blockSize;
 			btnHeight = 4 * blockSize;
 			border = 2 * blockSize;
+    		
+    		if (fullscreen)
+    			description = name;
+    		else
+    			description = name + " resolution (" + width + "x" + height + ")";
 		}
 	}
 	

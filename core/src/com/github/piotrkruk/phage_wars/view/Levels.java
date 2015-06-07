@@ -32,12 +32,18 @@ public class Levels implements Screen {
     
     public Levels(PhageWars phageWars) {
     	this.phageWars = phageWars;
-    	
+        
+        initButtons();
+        initLevelButtons();
+        Gdx.input.setInputProcessor(stage);
+    }
+    
+    private void initButtons() {
     	int btnWidth = phageWars.mode.btnWidth,
         	btnHeight = phageWars.mode.btnHeight,
         	border = phageWars.mode.border,
         	left = phageWars.mode.width - border - btnWidth;
-    	
+        	
     	btnBack.setBounds(left, border, btnWidth, btnHeight);
     	btnEditor.setBounds(border, border, btnWidth, btnHeight);
     	
@@ -58,9 +64,6 @@ public class Levels implements Screen {
                 Levels.this.phageWars.setToMapEditor();
             }
         });
-        
-        initLevelButtons();
-        Gdx.input.setInputProcessor(stage);
     }
     
     private void initLevelButtons() {

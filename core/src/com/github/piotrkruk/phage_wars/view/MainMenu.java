@@ -29,6 +29,11 @@ public class MainMenu implements Screen {
     public MainMenu(PhageWars phageWars) {
     	this.phageWars = phageWars;
     	
+    	initButtons();
+    	Gdx.input.setInputProcessor(stage);
+    }
+    
+    private void initButtons() {
     	int btnWidth = phageWars.mode.btnWidth,
     		btnHeight = phageWars.mode.btnHeight,
     		border = phageWars.mode.border,
@@ -75,8 +80,6 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         } );
-    	
-    	Gdx.input.setInputProcessor(stage);
     }
     
     @Override

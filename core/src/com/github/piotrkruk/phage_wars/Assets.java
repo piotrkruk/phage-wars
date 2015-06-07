@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
- * Class that gatheres all the assets to avoid loading them
+ * Class that gathers all the assets to avoid loading them
  * multiple times, and organize code.
  * 
  */
@@ -27,7 +27,12 @@ public class Assets {
     */
     public static String[] strLevels =
     	{
-    		"map_crowdy"
+    		"map_everyone",
+    		"map_three",
+    		"map_crowdy",
+    		"map_tree",
+    		"map_wall",
+    		"map_box"
     	};
     
     public static Texture textureCircExit = new Texture(Gdx.files.internal("buttons/game_exit.png"));

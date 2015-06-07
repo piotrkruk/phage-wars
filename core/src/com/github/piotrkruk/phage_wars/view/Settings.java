@@ -26,16 +26,9 @@ public class Settings implements Screen {
 
     private TextButton btnBack = new TextButton("Back to menu", Assets.defaultSkin);
     
-    private TextButton btnModeNormal = new TextButton(
-    		"Normal resolution (" + DisplayMode.NORMAL.width
-    		+ "x" + DisplayMode.NORMAL.height + ")", Assets.defaultSkin);
-    
-    private TextButton btnModeHD = new TextButton(
-    		"HD resolution (" + DisplayMode.HD.width
-    		+ "x" + DisplayMode.HD.height + ")", Assets.defaultSkin);
-
-    private TextButton btnModeFS = new TextButton(
-            "Full screen", Assets.defaultSkin);
+    private TextButton btnModeNormal = new TextButton(DisplayMode.NORMAL.description, Assets.defaultSkin);
+    private TextButton btnModeHD = new TextButton(DisplayMode.HD.description, Assets.defaultSkin);
+    private TextButton btnModeFS = new TextButton(DisplayMode.FS.description, Assets.defaultSkin);
     
     private TextButton btnEasy = new TextButton("Easy", Assets.defaultSkin),
     				   btnMedium = new TextButton("Medium", Assets.defaultSkin),

@@ -175,31 +175,26 @@ public class Map implements Serializable {
 	
 	/**
 	 * @param path - path containing a file into which a map is to be written
+	 * @return true if the process was completed successfully
 	 * 
 	 */
-	public static void write(GameStage game, String path) {
-		FileOutputStream fileOut;
-		ObjectOutputStream out;
-		
-		try {
-			fileOut = new FileOutputStream(path);
-			out = new ObjectOutputStream(fileOut);
+	public static boolean write(GameStage game, String path) {
+				
+		try (
+			FileOutputStream fileOut = new FileOutputStream(path);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut)
+		) {	
+			out.writeObject(game);
 			
-			try {
-				out.writeObject(game);
-			}
-			finally {
-				out.close();
-				fileOut.close();
-			}
-			
+			System.out.println("Map saved successfully.");
+			return true;			
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found!");
 		} catch (IOException e) {
 			System.out.println("IO failed! " + e);
 		}
 		
-		System.out.println("Map saved successfully.");
+		return false;
 	}
 		
 	/**

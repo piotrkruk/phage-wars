@@ -34,6 +34,11 @@ public class GameWindow extends GameDisplayer {
     public GameWindow(PhageWars phageWars) {
     	super(phageWars);
     	
+    	initButtons();
+    	Gdx.input.setInputProcessor(this);
+    }
+    
+    private void initButtons() {
     	int block = phageWars.mode.blockSize,
     		circSize = 2 * block;
     	
@@ -42,7 +47,6 @@ public class GameWindow extends GameDisplayer {
     	circResume.setSize(circSize, circSize);
 		circSoundOff.setSize(circSize, circSize);
 		circSoundOn.setSize(circSize, circSize);
-
 
     	circExit.setPosition(phageWars.mode.width - circSize - block / 4,
 				phageWars.mode.height - circSize - block / 4);
@@ -65,8 +69,6 @@ public class GameWindow extends GameDisplayer {
 			circSoundOff.setVisible(false);
 		else
 			circSoundOn.setVisible(false);
-
-    	Gdx.input.setInputProcessor(this);
     }
     
     /**
