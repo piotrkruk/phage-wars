@@ -25,7 +25,7 @@ public class PhageWars extends Game {
 	
 	@Override
 	public void create () {
-		texture = new Texture(Gdx.files.internal("background.jpg"));
+		texture = new Texture(Gdx.files.internal("background1.png"));
 		
 		background = new Image(texture);
 		background.setSize(mode.width, mode.height);
@@ -75,6 +75,7 @@ public class PhageWars extends Game {
 	public void playWinSound() { Assets.winSound.play(soundVolume); }
 
 	public void playLooseSound() { Assets.looseSound.play(soundVolume); }
+
 
 	private static Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 
