@@ -185,7 +185,7 @@ public class Settings implements Screen {
 				System.out.println("Sounds turned off.");
 
 				Settings.this.phageWars.buttonClickVolume = 0.0f;
-                |Settings.this.phageWars.soundVolume = 0.0f;
+                Settings.this.phageWars.soundVolume = 0.0f;
 				circSoundOff.setVisible(true);
 				circSoundOn.setVisible(false);
             }
