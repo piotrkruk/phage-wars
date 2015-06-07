@@ -153,7 +153,7 @@ public class AI implements Runnable {
 				if (c.owner == null)
 					weight += 0.6;
 				
-				weight = Math.max(weight, 0.2);
+				weight = Math.max(weight, 0.1);
 				
 				targets.add( new Target(c, weight) );
 			}

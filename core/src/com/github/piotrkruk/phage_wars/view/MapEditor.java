@@ -156,8 +156,11 @@ public class MapEditor extends GameDisplayer {
 	        		posY = Gdx.graphics.getHeight() - Gdx.input.getY();
 		    	
 	    		int radius = (int) Math.sqrt( Grid.distSquared(centerX, centerY, posX, posY) ),
-	    			diam = radius * 2,
 	    			ind = game.cells.size() - 1;
+	    		
+	    		radius = Math.max(radius, game.getMinValidRadius());
+	    		
+	    		int diam = 2 * radius;
 	    		
 	    		game.cells.get(ind).radius = radius;
 	    		imgCells.get(ind).setSize(diam, diam);

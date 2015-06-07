@@ -16,6 +16,8 @@ public class Cell implements Serializable {
 	public static final int MAX_UNITS = 100000000;
 	public static final int MIN_UNITS_FOR_SENDING = 1;
 	
+	public static final double MIN_RADIUS_PER_BLOCK = 0.8;
+	
 	private static int idCnt = 0;
 	public final int id;
 	

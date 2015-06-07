@@ -181,7 +181,7 @@ public class GameStage implements Serializable {
 				it.remove();
 			}
 		}
-	}	
+	}
 	
 	/**
 	 * Sends units from all selected cells
@@ -233,7 +233,16 @@ public class GameStage implements Serializable {
 	}
 	
 	/**
+	 * @return minimum valid radius for a cell
+	 * 
+	 */
+	public int getMinValidRadius() {
+		return (int) (Cell.MIN_RADIUS_PER_BLOCK * blockSize);
+	}
+	
+	/**
 	 * Resize all coordinates-dependent objects
+	 * 
 	 */	
 	public void resize(int width, int height, int blockSize) {
 		double ratio = ((double) blockSize) / this.blockSize;
