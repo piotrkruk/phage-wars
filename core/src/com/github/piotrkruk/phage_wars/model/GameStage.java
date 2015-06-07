@@ -195,7 +195,7 @@ public class GameStage implements Serializable {
 		boolean result = false;
 		
 		for (Cell c : cells)
-			if (c.owner == p && c.selected) {
+			if (c.owner == p && c.selected && c.units > Cell.MIN_UNITS_FOR_SENDING) {
 				if (!grid.runSearch(c, destination)) {
 					continue;
 					/*

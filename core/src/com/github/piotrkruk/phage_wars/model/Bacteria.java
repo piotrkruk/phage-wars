@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Class modelling one of the bacterias
+ * Class modeling one of the bacterias
  * which are sent from one cell to another
  *
  */
@@ -24,7 +24,7 @@ public class Bacteria implements Serializable {
 	public static final int MAX_BACTERIAS = 100;
 	
 	private static final double MAX_WAIT_TIME = 0.6;
-	private static final double TIME_PER_STEP = 0.07;
+	private static final double TIME_PER_BLOCK = 0.35;
 	
 	public int posX, posY;
 	
@@ -63,7 +63,7 @@ public class Bacteria implements Serializable {
 	
 	/**
 	 * Moves the bacteria according to it's internal path
-	 * returns true if the bacteria has reached it's destination
+	 * @return true if the bacteria has reached it's destination
 	 * and therefore should be deleted
 	 * 
 	 */
@@ -73,8 +73,10 @@ public class Bacteria implements Serializable {
 		if (timer < 0)
 			return false;
 		
-		int pos = (int) (timer / TIME_PER_STEP);
-		double betweenRatio = (timer / TIME_PER_STEP) - pos;
+		double timePerStep = (TIME_PER_BLOCK / gameStage.blockSize) * gameStage.grid.pointDist;
+		
+		int pos = (int) (timer / timePerStep);
+		double betweenRatio = (timer / timePerStep) - pos;
 		
 		/*
 		 * This bacteria is always somewhere
@@ -96,6 +98,6 @@ public class Bacteria implements Serializable {
 			posY += betweenRatio * (end.posY - start.posY);
 		}
 		
-		return destination.isInside(posX, posY);		
+		return ( destination.isInside(posX, posY) || pos == path.size() - 1 );		
 	}
 }

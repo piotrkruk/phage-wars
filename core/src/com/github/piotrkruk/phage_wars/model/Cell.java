@@ -14,6 +14,7 @@ public class Cell implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final int MAX_UNITS = 100000000;
+	public static final int MIN_UNITS_FOR_SENDING = 1;
 	
 	private static int idCnt = 0;
 	public final int id;
