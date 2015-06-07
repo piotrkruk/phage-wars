@@ -31,6 +31,7 @@ public class Assets {
     		"map_three",
     		"map_crowdy",
     		"map_tree",
+    		"map_maze",
     		"map_wall",
     		"map_box"
     	};
