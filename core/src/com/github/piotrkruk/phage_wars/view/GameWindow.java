@@ -121,10 +121,12 @@ public class GameWindow extends GameDisplayer {
     		    		boolean hasPlayerWon = game.player.isPlaying();
     		    		
     		    		if (hasPlayerWon) {
+							phageWars.playWinSound();
     		    			System.out.println("The player has won.");
     		    			text("You have won!\nClick anywhere to continue.");    		
     		    		}
     		    		else {
+							phageWars.playLooseSound();
     		    			System.out.println("The player has lost.");
     		    			text("You have lost!\nClick anywhere to continue.");   
     		    		}
@@ -192,6 +194,7 @@ public class GameWindow extends GameDisplayer {
 				System.out.println("Sounds turned off.");
 				
 				phageWars.buttonClickVolume = 0.0f;
+				phageWars.soundVolume = 0.0f;
 				circSoundOff.setVisible(true);
 				circSoundOn.setVisible(false);
 			}
@@ -199,8 +202,8 @@ public class GameWindow extends GameDisplayer {
 				System.out.println("Sounds turned on.");
 				
 				phageWars.buttonClickVolume = Assets.DEFAULT_CLICK_VOLUME;
-				
-				phageWars.playSound();
+				phageWars.soundVolume = Assets.DEFAULT_SOUND_VOLUME;
+				phageWars.playClickSound();
 				circSoundOn.setVisible(true);
 				circSoundOff.setVisible(false);
 			}
@@ -211,7 +214,7 @@ public class GameWindow extends GameDisplayer {
     		posY >= circExit.getY() && posY <= circExit.getY() + circExit.getHeight()) {
     			System.out.println("Game exited.");
     			
-				phageWars.playSound();
+				phageWars.playClickSound();
 				game.shutdown();
 				
     			phageWars.setToMenu();
@@ -222,11 +225,11 @@ public class GameWindow extends GameDisplayer {
     		posY >= circPause.getY() && posY <= circPause.getY() + circPause.getHeight()) {
     		
     		if (pausedCount == 0) {
-    			phageWars.playSound();
+    			phageWars.playClickSound();
 				this.pause();
 			}
     		else {
-    			phageWars.playSound();
+    			phageWars.playClickSound();
 				this.resume();
 			}
     		

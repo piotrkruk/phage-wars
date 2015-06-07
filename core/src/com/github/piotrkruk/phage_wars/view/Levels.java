@@ -51,7 +51,7 @@ public class Levels implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Levels.this.phageWars.playSound();
+            	Levels.this.phageWars.playClickSound();
                 Levels.this.phageWars.setToMenu();
             }
         });
@@ -60,7 +60,7 @@ public class Levels implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Levels.this.phageWars.playSound();
+                Levels.this.phageWars.playClickSound();
                 Levels.this.phageWars.setToMapEditor();
             }
         });
@@ -114,7 +114,7 @@ public class Levels implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    Levels.this.phageWars.playSound();
+                    Levels.this.phageWars.playClickSound();
                     
                     GameStage game =
                     	Map.read(phageWars.mode.width, phageWars.mode.height,

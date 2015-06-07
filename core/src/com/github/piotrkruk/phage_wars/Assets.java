@@ -16,6 +16,10 @@ public class Assets {
 	
 	public static Sound buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/click1.wav"));
     public static final float DEFAULT_CLICK_VOLUME = 0.7f;
+
+	public static Sound winSound = Gdx.audio.newSound(Gdx.files.internal("sounds/win.wav"));
+	public static Sound looseSound = Gdx.audio.newSound(Gdx.files.internal("sounds/loose.wav"));
+	public static final float DEFAULT_SOUND_VOLUME = 1.0f;
     
     public static BitmapFont font = new BitmapFont(Gdx.files.internal("skins/default.fnt"));
     public static Skin defaultSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));

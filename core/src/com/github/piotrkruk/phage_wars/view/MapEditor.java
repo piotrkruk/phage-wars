@@ -89,7 +89,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-				MapEditor.this.phageWars.playSound();
+				MapEditor.this.phageWars.playClickSound();
 				MapEditor.this.phageWars.setToLevels();
             }
         } );
@@ -98,7 +98,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MapEditor.this.phageWars.playSound();
+            	MapEditor.this.phageWars.playClickSound();
             	MapEditor.this.getMapNameAndExecute(MapEditor.this::saveMap);
             }
         } );
@@ -107,7 +107,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MapEditor.this.phageWars.playSound();
+            	MapEditor.this.phageWars.playClickSound();
             	MapEditor.this.getMapNameAndExecute(MapEditor.this::loadMap);
             }
         });
@@ -116,7 +116,7 @@ public class MapEditor extends GameDisplayer {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MapEditor.this.phageWars.playSound();
+            	MapEditor.this.phageWars.playClickSound();
 				MapEditor.this.phageWars.setToGame(game);
             }
         } );

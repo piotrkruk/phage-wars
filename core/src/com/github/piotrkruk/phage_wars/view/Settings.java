@@ -107,7 +107,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                Settings.this.phageWars.playSound();
+                Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.setToMenu();
             }
         } );
@@ -116,7 +116,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.mode = DisplayMode.NORMAL;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -127,7 +127,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.mode = DisplayMode.HD;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -138,7 +138,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.mode = DisplayMode.FS;
                 Settings.this.phageWars.refreshMode();
                 Settings.this.phageWars.setToSettings();
@@ -151,7 +151,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.difficulty = GameMode.EASY;
                 Settings.this.phageWars.setToSettings();
             }
@@ -161,7 +161,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.difficulty = GameMode.MEDIUM;
                 Settings.this.phageWars.setToSettings();
             }
@@ -171,7 +171,7 @@ public class Settings implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	Settings.this.phageWars.playSound();
+            	Settings.this.phageWars.playClickSound();
                 Settings.this.phageWars.difficulty = GameMode.HARD;
                 Settings.this.phageWars.setToSettings();
             }
@@ -183,8 +183,9 @@ public class Settings implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
 				System.out.println("Sounds turned off.");
-				
+
 				Settings.this.phageWars.buttonClickVolume = 0.0f;
+                |Settings.this.phageWars.soundVolume = 0.0f;
 				circSoundOff.setVisible(true);
 				circSoundOn.setVisible(false);
             }
@@ -197,8 +198,9 @@ public class Settings implements Screen {
 				System.out.println("Sounds turned on.");
 				
 				Settings.this.phageWars.buttonClickVolume = Assets.DEFAULT_CLICK_VOLUME;
-				
-				Settings.this.phageWars.playSound();
+				Settings.this.phageWars.soundVolume = Assets.DEFAULT_SOUND_VOLUME;
+
+				Settings.this.phageWars.playClickSound();
 				circSoundOn.setVisible(true);
 				circSoundOff.setVisible(false);
             }

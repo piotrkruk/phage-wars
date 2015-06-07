@@ -17,7 +17,8 @@ public class PhageWars extends Game {
     public DisplayMode mode = DisplayMode.NORMAL;
     public GameMode difficulty = GameMode.MEDIUM;
     
-    public float buttonClickVolume = 0.7f;
+    public float buttonClickVolume = Assets.DEFAULT_CLICK_VOLUME;
+	public float soundVolume = Assets.DEFAULT_CLICK_VOLUME;
     
     public Texture texture;
     public Image background;
@@ -67,9 +68,13 @@ public class PhageWars extends Game {
 		background.setSize(mode.width, mode.height);
 	}
 	
-	public void playSound() {
+	public void playClickSound() {
 		Assets.buttonClick.play(buttonClickVolume);
 	}
+
+	public void playWinSound() { Assets.winSound.play(soundVolume); }
+
+	public void playLooseSound() { Assets.looseSound.play(soundVolume); }
 
 	private static Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 

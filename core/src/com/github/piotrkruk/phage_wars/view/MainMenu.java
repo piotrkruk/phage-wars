@@ -49,7 +49,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                MainMenu.this.phageWars.playSound();
+                MainMenu.this.phageWars.playClickSound();
                 MainMenu.this.phageWars.setToGame();
             }
         } );
@@ -58,7 +58,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MainMenu.this.phageWars.playSound();
+            	MainMenu.this.phageWars.playClickSound();
                 MainMenu.this.phageWars.setToLevels();
             }
         } );
@@ -67,7 +67,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MainMenu.this.phageWars.playSound();
+            	MainMenu.this.phageWars.playClickSound();
                 MainMenu.this.phageWars.setToSettings();
             }
         } );
@@ -76,7 +76,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-            	MainMenu.this.phageWars.playSound();
+            	MainMenu.this.phageWars.playClickSound();
                 Gdx.app.exit();
             }
         } );
