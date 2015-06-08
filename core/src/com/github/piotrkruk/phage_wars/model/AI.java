@@ -120,6 +120,9 @@ public class AI implements Runnable {
 					largestOwned = c;
 			}
 		
+		if (largestOwned == null)
+			return null;
+		
 		for (Cell c : game.cells) if (c.owner != player)
 			avgDist += Cell.distSquared(c, largestOwned);
 		
@@ -202,7 +205,7 @@ public class AI implements Runnable {
 			while (game.isRunning() && player.isPlaying()) {
 				boolean result = true;
 				
-				if (!game.paused)
+				if (!game.paused && player.ownCount > 0)
 					result = move();
 				
 				try {

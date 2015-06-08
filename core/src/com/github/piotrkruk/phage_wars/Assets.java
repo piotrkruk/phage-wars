@@ -47,8 +47,6 @@ public class Assets {
     public static Texture textureCircSoundOff = new Texture(Gdx.files.internal("buttons/sounds_off.png"));
     public static Texture textureCircHideButtons = new Texture(Gdx.files.internal("buttons/hide_buttons.png"));
 
-	public static Texture textureMainMenuTitle = new Texture(Gdx.files.internal("phage_wars_title.png"));
-
     public static Texture[] texturePlayers =
     	{
     		new Texture(Gdx.files.internal("cells/cell_blue.png")),

@@ -25,7 +25,7 @@ public class PhageWars extends Game {
 	
 	@Override
 	public void create () {
-		texture = new Texture(Gdx.files.internal("background1.png"));
+		texture = new Texture(Gdx.files.internal("background_green.png"));
 		
 		background = new Image(texture);
 		background.setSize(mode.width, mode.height);

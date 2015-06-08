@@ -71,7 +71,7 @@ public class Levels implements Screen {
         	btnHeight = phageWars.mode.btnHeight,
         	border = phageWars.mode.border;
     	
-    	int buttonsPerRow = 5;
+    	int buttonsPerRow = 4;
     	
     	btnLevels = new Button[ Assets.strLevels.length ];
     	
@@ -89,7 +89,7 @@ public class Levels implements Screen {
     		btnLevels[i].setStyle(style);
     		
     		if (i == 0)
-    			btnLevels[i].setPosition(2.5f * border, phageWars.mode.height - border - btnHeight);
+    			btnLevels[i].setPosition(1.58f * border, phageWars.mode.height - 2 * border - btnHeight);
     		else {
     			Button predecessor;
     			
@@ -99,11 +99,11 @@ public class Levels implements Screen {
     				predecessor = btnLevels[i-buttonsPerRow];
     			
     			if (i%buttonsPerRow != 0) {
-        			btnLevels[i].setX(predecessor.getRight() + border);
+        			btnLevels[i].setX(predecessor.getRight() + 3 * border);
         			btnLevels[i].setY(predecessor.getY());
         		}
         		else {
-        			btnLevels[i].setX(predecessor.getX());
+        			btnLevels[i].setX(predecessor.getX() + 3.18f * border);
         			btnLevels[i].setY(predecessor.getY() - predecessor.getHeight() - border);
         		}
     		}
