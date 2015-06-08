@@ -3,7 +3,6 @@ package com.github.piotrkruk.phage_wars.net.client;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -15,28 +14,31 @@ import java.util.UUID;
 public class Client {
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
+	@SuppressWarnings("unused")
 	private ObjectOutputStream objectOutputStream;
 
-	// private BufferedInputStream inputStream;
-	// private BufferedOutputStream outputStream;
+	 @SuppressWarnings("unused")
+	private BufferedInputStream inputStream;
+	 @SuppressWarnings("unused")
+	private BufferedOutputStream outputStream;
 
 	public void connect() throws UnknownHostException, IOException {
 		socket = new Socket("localhost", 4444);
 
-		// inputStream = new BufferedInputStream(socket.getInputStream());
-		// outputStream = new BufferedOutputStream(socket.getOutputStream());
-
+		 inputStream = new BufferedInputStream(socket.getInputStream());
+		 outputStream = new BufferedOutputStream(socket.getOutputStream());
 		System.out.println("socket created");
-		// InputStream socketInput = socket.getInputStream();
-		// objectInputStream = new ObjectInputStream(socketInput);
+		
 		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 		System.out.println("output stream created");
+		
 		objectInputStream = new ObjectInputStream(socket.getInputStream());
 		System.out.println("input stream created");
 	}
 
 	public List<UUID> getGamesList() throws ClassNotFoundException, IOException {
-		 List<UUID> games = (List<UUID>) objectInputStream.readObject();
+		 @SuppressWarnings("unchecked")
+		List<UUID> games = (List<UUID>) objectInputStream.readObject();
 		 return games;
 	}
 
@@ -60,7 +62,7 @@ public class Client {
 			e.printStackTrace();
 		}
 
-		System.out.println("other thing");
+		System.out.println("All set");
 
 	}
 

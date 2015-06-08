@@ -14,7 +14,9 @@ import java.util.UUID;
 public class Server implements GamesHandler {
 	Set<UUID> games = new HashSet<UUID>();
 	private List<UUID> playersList = new ArrayList<UUID>();
+	@SuppressWarnings("unused")
 	private Map<UUID, ClientHandler> players = new HashMap<UUID, ClientHandler>();
+	@SuppressWarnings("unused")
 	private Map<UUID, ClientHandler> hosts = new HashMap<UUID, ClientHandler>();
 
 	public static void main(String[] args) {
@@ -26,6 +28,7 @@ public class Server implements GamesHandler {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public void start(int port) throws IOException {
 		ServerSocket serverSocket;
 		serverSocket = new ServerSocket(port);
